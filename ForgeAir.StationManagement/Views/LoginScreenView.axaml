@@ -1,0 +1,27 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:ForgeAir.StationManagement.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="400"
+        x:Class="ForgeAir.StationManagement.LoginScreenView" 
+        x:DataType="vm:LoginScreenViewModel"
+        Title="LoginScreenView"
+        Width="700" Height="400">
+  
+  <Design.DataContext>
+    <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+    <vm:MainWindowViewModel/>
+  </Design.DataContext>
+  <Grid>
+    <Image Source="/Assets/Icons/lock-dynamic-color.png" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Left" Margin="20, 10, 0, 0" VerticalAlignment="Top" FontSize="34" FontStyle="Normal" FontWeight="Medium"/>
+    <TextBlock Text="{Binding CredentialPrompt}" HorizontalAlignment="Right" Margin="0, -50, 50, 50" VerticalAlignment="Center" FontSize="18" FontStyle="Normal" FontWeight="ExtraLight"/>
+    <TextBox AcceptsTab="False" AcceptsReturn="False" Watermark="Username" Margin="50, 30, 45, 50" VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="250"/>
+    <TextBox AcceptsTab="False" AcceptsReturn="False" Watermark="Password" Margin="50, 30, 45, -50" VerticalAlignment="Center" HorizontalAlignment="Right" MinWidth="250" PasswordChar="*"/>
+    <CheckBox Content="Show Password" IsChecked="False" Margin="50, 80, 160, -80" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+    <Button Content="Login" Margin="50, 150, 150, -110" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+  </Grid>  
+
+</Window>
