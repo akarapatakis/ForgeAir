@@ -6,4 +6,35 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="ini-parser" Version="2.5.2" />
+    <PackageReference Include="ManagedBass" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Aac" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Alac" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Asio" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Flac" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Fx" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Hls" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Mix" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Opus" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Sfx" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Vst" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Winamp" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Wma" Version="3.1.1" />
+    <PackageReference Include="ManagedBass.Wv" Version="3.1.1" />
+    <PackageReference Include="NAudio.Core" Version="2.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AudioEngine\Interfaces\" />
+    <Folder Include="AudioEngine\Calculators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Forge Plugin SDK">
+      <HintPath>..\..\out\sdk\net8.0\Forge Plugin SDK.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
