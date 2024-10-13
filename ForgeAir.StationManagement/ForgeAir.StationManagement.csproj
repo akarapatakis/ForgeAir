@@ -18,6 +18,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.1" />
     <PackageReference Include="Syncfusion.Licensing" Version="27.1.52" />
     <PackageReference Include="Syncfusion.SfGrid.WPF" Version="27.1.52" />
     <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="27.1.52" />
@@ -27,6 +29,11 @@
 
   <ItemGroup>
     <Folder Include="Assets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ForgeAir.Core\ForgeAir.Core.csproj" />
+    <ProjectReference Include="..\ForgeAir.Database\ForgeAir.Database.csproj" />
   </ItemGroup>
 
   <ItemGroup>
