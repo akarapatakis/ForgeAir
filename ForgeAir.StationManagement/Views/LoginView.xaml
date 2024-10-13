@@ -8,7 +8,7 @@
         xmlns:syncfusionskin= "clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
         syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=Windows11Dark}"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="387" Width="628">
+        Title="ForgeAir | Login" Height="387" Width="628">
 
     <Grid>
         <Image x:Name="image" HorizontalAlignment="Left" Width="508" Source="/Views/lock-iso-color.png" Height="440" VerticalAlignment="Center" Opacity="0.5" Margin="273,0,0,0"/>
