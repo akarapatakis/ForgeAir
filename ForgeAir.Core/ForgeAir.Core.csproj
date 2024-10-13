@@ -32,6 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ForgeAir.Database\ForgeAir.Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Forge Plugin SDK">
       <HintPath>..\..\out\sdk\net8.0\Forge Plugin SDK.dll</HintPath>
     </Reference>
