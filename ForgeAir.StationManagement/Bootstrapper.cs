@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using ForgeAir.StationManagement.Components.MediaLibrary.ViewModels;
 using ForgeAir.StationManagement.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,8 @@ namespace ForgeAir.StationManagement
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            await DisplayRootViewForAsync(typeof(LoginViewModel));
+            //await DisplayRootViewForAsync(typeof(LoginViewModel));
+            await DisplayRootViewForAsync(typeof(MediaLibraryMainViewModel));
         }
     }
 }
