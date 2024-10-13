@@ -39,10 +39,10 @@ namespace ForgeAir.Database.Config
                     .OnDelete(DeleteBehavior.Cascade)
                     );
 
-            builder.HasMany(t => t.TrackTags)
-                .WithOne(tt => tt.Track)
-                .HasForeignKey(tt => tt.TrackId)
-                .OnDelete(DeleteBehavior.Cascade);
+            //builder.HasMany(t => t.TrackTags)
+            //    .WithOne(tt => tt.Track)
+            //    .HasForeignKey(tt => tt.TrackId)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
 
 

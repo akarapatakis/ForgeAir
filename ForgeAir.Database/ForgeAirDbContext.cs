@@ -9,6 +9,10 @@ namespace ForgeAir.Database
         public DbSet<Track> Tracks { get; set; }
         public DbSet<Artist> Artists { get; set; }
 
+        public ForgeAirDbContext()
+        {
+
+        }
         public ForgeAirDbContext(DbContextOptions<ForgeAirDbContext> options) : base(options)
         {
         }
