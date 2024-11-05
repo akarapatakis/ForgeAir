@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ForgeAir.Core.AudioEngine.Enums;
+using ManagedBass;
 
 namespace ForgeAir.Core.Shared
 {
@@ -30,7 +31,7 @@ namespace ForgeAir.Core.Shared
         /// <summary>
         /// Can only be used in WaveOut/MME device initialization
         /// </summary>
-        public bool useDSound {  get; set; }
+        public bool useDSound { get; set; } = false;
 
         /// <summary>
         /// if no sampleRate is assigned, 44100hz is going to be the fallback option
@@ -40,8 +41,9 @@ namespace ForgeAir.Core.Shared
         /// <summary>
         /// if no audioChannels are assigned, 2 (Stereo) are going to be the fallback option (default in most setups)
         /// </summary>
-        public DeviceOutputAudioChannelsEnum audioChannels { get; set; } = DeviceOutputAudioChannelsEnum.Stereo;
+        public MMEDeviceOutputAudioChannelsEnum MMEaudioChannels { get; set; } = MMEDeviceOutputAudioChannelsEnum.Stereo;
 
+        public WASAPIDeviceOutputAudioChannelsEnum WASAPIaudioChannels { get; set; } = WASAPIDeviceOutputAudioChannelsEnum.Stereo;
         /// <summary>
         /// if no bitDepth is assigned, 16-bit is going to be the fallback option (default in most setups)
         /// </summary>
