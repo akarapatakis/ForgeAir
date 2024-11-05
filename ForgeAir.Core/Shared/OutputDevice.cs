@@ -17,6 +17,7 @@ namespace ForgeAir.Core.Shared
         public DeviceOutputMethodEnum deviceOutputMethod { get; set; }
 
         public int deviceIndex { get; set; }
+        public int deviceIndex { get; set; } = 0;
         public bool useDSound {  get; set; }
         public int sampleRate { get; set; } = 44100;
         public DeviceOutputAudioChannelsEnum audioChannels { get; set; } = DeviceOutputAudioChannelsEnum.Stereo;
