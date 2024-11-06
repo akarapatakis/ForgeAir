@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ForgePlugin;
-using ForgePlugin.Helpers;
+using ForgeAirPlugin;
+using ForgeAirPlugin.Helpers;
 
 namespace ForgeAir.Core.SDK.Interfaces
 {
-    public class IPluginConfigurationManager : ForgePlugin.Helpers.IConfigurationManager
+    public class IPluginConfigurationManager : ForgeAirPlugin.Helpers.IConfigurationManager
     {
 
         IPluginEntry? pluginEntry;

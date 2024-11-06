@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IniParser;
 using IniParser.Model;
-using ForgePlugin;
+using ForgeAirPlugin;
 
 namespace ForgeAir.Core.SDK
 {
