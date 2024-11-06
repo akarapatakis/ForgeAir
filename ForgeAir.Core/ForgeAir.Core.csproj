@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="AudioEngine\Calculators\" />
+    <Folder Include="AudioEngine\Events\" />
   </ItemGroup>
 
   <ItemGroup>

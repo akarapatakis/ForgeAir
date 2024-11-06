@@ -8,12 +8,13 @@ namespace ForgeAir.Core.AudioEngine.Interfaces
 {
     public interface IAudioPlayer
     {
-        void Play();
+        Task Play();
         void PlayNext();
         void Stop();
         void FadeStop();
         void Pause();
         void FadeNext();
         void Next();
+        void Restart();
     }
 }
