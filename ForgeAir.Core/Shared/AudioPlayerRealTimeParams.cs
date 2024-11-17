@@ -13,6 +13,10 @@ namespace ForgeAir.Core.Shared
         public int crossfadeTimeInMs { get; set; }
         public int fadeNextTimeInMs { get; set; }
         public int stopFadeTimeInMs { get; set; }
+        
+        public string? title { get; set; }
+        public string? artist { get; set; }
+        public event EventHandler? onTrackChanged;
 
         private static AudioPlayerRealTimeParams? instance;
         public static AudioPlayerRealTimeParams Instance
