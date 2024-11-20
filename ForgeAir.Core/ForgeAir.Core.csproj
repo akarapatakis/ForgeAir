@@ -31,9 +31,6 @@
   <ItemGroup>
     <Folder Include="AudioEngine\Calculators\" />
     <Folder Include="AudioEngine\Events\" />
-    <Folder Include="RDS\Encoders\" />
-    <Folder Include="RDS\Enums\" />
-    <Folder Include="RDS\Events\" />
   </ItemGroup>
 
   <ItemGroup>
