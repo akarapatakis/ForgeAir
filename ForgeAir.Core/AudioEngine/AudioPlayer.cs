@@ -8,6 +8,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ForgeAir.Core.Services.Models;
+using ForgeAir.Database.Models;
 using ManagedBass;
 using ManagedBass.Vst;
 using ManagedBass.Wasapi;
@@ -64,9 +66,11 @@ namespace ForgeAir.Core.AudioEngine
             return (int)(remainingSeconds * 1000); // Convert seconds to milliseconds and cast to int
         }
 
-        public async Task Play()
+        public async Task Play(Services.Models.Track track)
         {
-            Thread crossfade = new Thread(PlayNext);
+            Thread crossfade = new Thread(() => PlayNext(track));
+            
+            Shared.AudioPlayerRealTimeParams.Instance.audioFile = track.FilePath;
 
             stream = Bass.CreateStream(Shared.AudioPlayerRealTimeParams.Instance.audioFile, 0, 0, BassFlags.AutoFree);
 
@@ -75,14 +79,15 @@ namespace ForgeAir.Core.AudioEngine
             {
                 if (GetRemainingMilliseconds(stream) == Shared.AudioPlayerRealTimeParams.Instance.crossfadeTimeInMs)
                 {
-                    crossfade.Start();
                     Bass.ChannelSlideAttribute(stream, ChannelAttribute.Volume, 0, Shared.AudioPlayerRealTimeParams.Instance.crossfadeTimeInMs); // fade-out
+                    crossfade.Start();
                 }
             }
         }
 
-        public void PlayNext()
+        public void PlayNext(Services.Models.Track track) 
         {
+            Shared.AudioPlayerRealTimeParams.Instance.audioFile = track.FilePath;
             stream = Bass.CreateStream(Shared.AudioPlayerRealTimeParams.Instance.audioFile, 0, 0, BassFlags.AutoFree); // create next stream
             Bass.ChannelSetAttribute(stream, ChannelAttribute.Volume, 0); // settings its volume to 0
             Bass.ChannelPlay(stream, Shared.AudioPlayerRealTimeParams.Instance.repeatTrack); // play next stream
