@@ -4,6 +4,7 @@ using ForgeAir.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForgeAir.Database.Migrations
 {
     [DbContext(typeof(ForgeAirDbContext))]
-    partial class ForgeAirDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241121201042_AddStationInformation")]
+    partial class AddStationInformation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

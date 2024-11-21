@@ -8,6 +8,7 @@ namespace ForgeAir.Database
     {
         public DbSet<Track> Tracks { get; set; }
         public DbSet<Artist> Artists { get; set; }
+        public DbSet<Station> Stations { get; set; }
 
         public ForgeAirDbContext()
         {
@@ -21,6 +22,7 @@ namespace ForgeAir.Database
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ArtistTrackConfig());
+            modelBuilder.ApplyConfiguration(new StationConfig());
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
