@@ -7,9 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeAir.Database", "ForgeA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeAir.Core", "ForgeAir.Core\ForgeAir.Core.csproj", "{DA19B5C7-7D8A-43A2-A93F-8647BEE81922}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeAir.StationManagement", "ForgeAir.StationManagement\ForgeAir.StationManagement.csproj", "{BC28A195-B0AB-445A-857C-EB3D70CA4E4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeAir.StationManagement", "ForgeAir.StationManagement\ForgeAir.StationManagement.csproj", "{BC28A195-B0AB-445A-857C-EB3D70CA4E4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeAir.Playout", "ForgeAir.Playout\ForgeAir.Playout.csproj", "{29D654C5-E755-4C55-8E12-5B21E10C0FE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeAir.Playout", "ForgeAir.Playout\ForgeAir.Playout.csproj", "{29D654C5-E755-4C55-8E12-5B21E10C0FE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeAir.SetupWizard", "ForgeAir.SetupWizard\ForgeAir.SetupWizard.csproj", "{0B514DED-7B59-4353-9D58-3002BE664B11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeAir.UI.Core", "ForgeAir.UI.Core\ForgeAir.UI.Core.csproj", "{756A1D09-3667-4B4B-9C3E-A797777DA177}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{29D654C5-E755-4C55-8E12-5B21E10C0FE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29D654C5-E755-4C55-8E12-5B21E10C0FE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29D654C5-E755-4C55-8E12-5B21E10C0FE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B514DED-7B59-4353-9D58-3002BE664B11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B514DED-7B59-4353-9D58-3002BE664B11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B514DED-7B59-4353-9D58-3002BE664B11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B514DED-7B59-4353-9D58-3002BE664B11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{756A1D09-3667-4B4B-9C3E-A797777DA177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{756A1D09-3667-4B4B-9C3E-A797777DA177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{756A1D09-3667-4B4B-9C3E-A797777DA177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{756A1D09-3667-4B4B-9C3E-A797777DA177}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
