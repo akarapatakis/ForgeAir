@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HandyControl" Version="3.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ForgeAir.Core\ForgeAir.Core.csproj" />
+    <ProjectReference Include="..\ForgeAir.Database\ForgeAir.Database.csproj" />
+    <ProjectReference Include="..\ForgeAir.UI.Core\ForgeAir.UI.Core.csproj" />
+  </ItemGroup>
+
+</Project>

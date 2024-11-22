@@ -1,0 +1,26 @@
+﻿<hc:GlowWindow x:Class="ForgeAir.SetupWizard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:local="clr-namespace:ForgeAir.SetupWizard"
+        mc:Ignorable="d"
+        ActiveGlowColor="OrangeRed"
+        Style="{StaticResource WindowGlow}"
+        Title="MainWindow" Height="450" Width="800">
+    
+    <hc:SimpleStackPanel>
+        <hc:StepBar Name="step">
+            <hc:StepBarItem Content="Welcome"/>
+            <hc:StepBarItem Content="Database Setup"/>
+            <hc:StepBarItem Content="Station Metadata"/>
+            <hc:StepBarItem Content="Audio Setup"/>
+            <hc:StepBarItem Content="Internet Setup"/>
+            <hc:StepBarItem Content="RDS"/>
+            <hc:StepBarItem Content="Complete"/>
+        </hc:StepBar>
+        <hc:SimpleText HorizontalAlignment="Center" Height="41" Text="{StaticResource WelcomeHeaderText}" VerticalAlignment="Center" Width="800"/>
+
+    </hc:SimpleStackPanel>
+</hc:GlowWindow>
