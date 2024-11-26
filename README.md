@@ -7,4 +7,8 @@
 
 ### ForgeAir.Playout
 
-### FOrgeAir.StationManagement
+### ForgeAir.StationManagement
+
+### ForgeAir.UI.Core
+
+### ForgeAir.SetupWizard
