@@ -8,19 +8,26 @@
         mc:Ignorable="d"
         ActiveGlowColor="OrangeRed"
         Style="{StaticResource WindowGlow}"
-        Title="MainWindow" Height="450" Width="800">
-    
-    <hc:SimpleStackPanel>
-        <hc:StepBar Name="step">
-            <hc:StepBarItem Content="Welcome"/>
-            <hc:StepBarItem Content="Database Setup"/>
-            <hc:StepBarItem Content="Station Metadata"/>
-            <hc:StepBarItem Content="Audio Setup"/>
-            <hc:StepBarItem Content="Internet Setup"/>
-            <hc:StepBarItem Content="RDS"/>
-            <hc:StepBarItem Content="Complete"/>
-        </hc:StepBar>
-        <hc:SimpleText HorizontalAlignment="Center" Height="41" Text="{StaticResource WelcomeHeaderText}" VerticalAlignment="Center" Width="800"/>
+        Title="{StaticResource WindowTitle}" Height="450" Width="800">
 
-    </hc:SimpleStackPanel>
+    <Grid>
+        <hc:StepBar Name="step">
+            <hc:StepBarItem Content="{StaticResource WelcomeStepText}"/>
+            <hc:StepBarItem Content="{StaticResource DatabaseStepText}"/>
+            <hc:StepBarItem Content="{StaticResource MetadataStepText}"/>
+            <hc:StepBarItem Content="{StaticResource AudioStepText}"/>
+            <hc:StepBarItem Content="{StaticResource InternetStepText}"/>
+            <hc:StepBarItem Content="{StaticResource RDSStepText}"/>
+            <hc:StepBarItem Content="{StaticResource CompleteStepText}"/>
+        </hc:StepBar>
+
+        <Frame x:Name="pageViewer" Content="" NavigationUIVisibility="Hidden" BorderBrush="Transparent"/>
+
+        <hc:ButtonGroup HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Bottom">
+            <Button Content="{StaticResource PreviousButton}" IsEnabled="False"></Button>
+            <Button Content="{StaticResource NextButton}" Style="{StaticResource ButtonPrimary}"></Button>
+            <Button Content="{StaticResource CancelButton}"></Button>
+        </hc:ButtonGroup>
+
+    </Grid>
 </hc:GlowWindow>
