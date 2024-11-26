@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -8,13 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Icons\logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Assets\Logos.xaml" />
     <Page Remove="Strings\SetupWizard\el-gr.xaml" />
     <Page Remove="Strings\SetupWizard\en-us.xaml" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Icons\Logos.xaml" />
     <Resource Include="Strings\SetupWizard\el-gr.xaml" />
     <Resource Include="Strings\SetupWizard\en-us.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Icons\logo.ico" />
   </ItemGroup>
 
 </Project>

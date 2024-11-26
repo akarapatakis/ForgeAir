@@ -12,6 +12,7 @@
                 <hc:Theme SyncWithSystem="true"/>
 
                 <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Strings/SetupWizard/en-us.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Assets/Icons/Logos.xaml"/>
                 
             </ResourceDictionary.MergedDictionaries>
             
