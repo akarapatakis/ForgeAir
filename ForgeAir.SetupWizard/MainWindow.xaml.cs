@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using HandyControl.Controls;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,7 @@ namespace ForgeAir.SetupWizard
         public MainWindow()
         {
             InitializeComponent();
+            pageViewer.Content = new Pages.DummyLoadingPage();
         }
     }
 }
