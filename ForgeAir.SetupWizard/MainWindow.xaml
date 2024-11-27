@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         ActiveGlowColor="OrangeRed"
         Style="{StaticResource WindowGlow}"
-        Icon="{StaticResource 32x32LogoICO}"
+        Icon="{StaticResource 32x32LogoICO-new}"
         Title="{StaticResource WindowTitle}" Height="450" Width="800">
 
     <Grid>
