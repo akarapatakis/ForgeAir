@@ -18,4 +18,9 @@ namespace ForgeAir.Core.AudioEngine.Enums
         Mono = 1,
         Stereo = 2
     }
+    public enum GenericDeviceOutputAudioChannelsEnum
+    {
+        Mono = 1,
+        Stereo = 2
+    }
 }

@@ -2,4 +2,16 @@
    xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <BitmapImage x:Key="32x32LogoICO" x:Shared="True" UriSource="logo.ico"/>
     <BitmapImage x:Key="32x32LogoICO-new" x:Shared="True" UriSource="logo-demo.ico"/>
+
+    <BitmapImage x:Key="ForgeVision32x32" x:Shared="True" UriSource="forgevision32.ico"/>
+    <BitmapImage x:Key="dbIcon" x:Shared="True" UriSource="db-icon.png"/>
+    <BitmapImage x:Key="fileExtraIcon" x:Shared="True" UriSource="file-extra-icon.png"/>
+
+    <BitmapImage x:Key="mainOutputIcon" x:Shared="True" UriSource="main-output-icon.png"></BitmapImage>
+    <BitmapImage x:Key="musicIcon" x:Shared="True" UriSource="music-icon.png"></BitmapImage>
+    <BitmapImage x:Key="micIcon" x:Shared="True" UriSource="mic-icon.png"></BitmapImage>
+    <BitmapImage x:Key="headphonesIcon" x:Shared="True" UriSource="headphones-icon.png"></BitmapImage>
+
+    
+    
 </ResourceDictionary>

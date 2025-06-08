@@ -11,35 +11,46 @@ using System.Threading.Tasks;
 
 namespace ForgeAir.Database.Models
 {
+    [Table("Tracks")]
     public class Track : BaseEntity
     {
         [Required]
-        [MaxLength(200)]
+        [MaxLength(400)]
         public string? Title { get; set; }
 
         [Required]
-        [MaxLength(500)]
+        [MaxLength(191)]
         public string? FilePath { get; set; }
 
         public int? Bpm { get; set; }
 
-        [Column(TypeName = "double(11,5)")]
-        public double Duration { get; set; }
+        [Column(TypeName = "time(3)")]
+        public TimeSpan Duration { get; set; }
 
-        [Column(TypeName = "double(11,5)")]
-        public double? StartPoint { get; set; }
 
-        [Column(TypeName = "double(11,5)")]
-        public double? MixPoint { get; set; }
+        [Column(TypeName = "time(3)")]
+        public TimeSpan? StartPoint { get; set; }
 
-        [Column(TypeName = "double(11,5)")]
-        public double? EndPoint { get; set; }
 
-        [Column(TypeName = "double(11,5)")]
-        public double? HookInPoint { get; set; }
+        [Column(TypeName = "time(3)")]
+        public TimeSpan? MixPoint { get; set; }
 
-        [Column(TypeName = "double(11,5)")]
-        public double? HookOutPoint { get; set; }
+
+        [Column(TypeName = "time(3)")]
+        public TimeSpan? EndPoint { get; set; }
+
+        [Column(TypeName = "time(3)")]
+        public TimeSpan? Intro { get; set; }
+
+        [Column(TypeName = "time(3)")]
+        public TimeSpan? Outro { get; set; }
+
+        [Column(TypeName = "time(3)")]
+        public TimeSpan? HookInPoint { get; set; }
+
+
+        [Column(TypeName = "time(3)")]
+        public TimeSpan? HookOutPoint { get; set; }
 
         public DateTime? ReleaseDate { get; set; }
 
@@ -52,6 +63,8 @@ namespace ForgeAir.Database.Models
         [EnumDataType(typeof(TrackType))]
         public TrackType? TrackType { get; set; }
 
+
+
         [Required]
         [EnumDataType(typeof(TrackStatus))]
         public TrackStatus? TrackStatus { get; set; }
@@ -62,8 +75,30 @@ namespace ForgeAir.Database.Models
         public ICollection<ArtistTrack>? TrackArtists { get; set; }
         public ICollection<Category>? Categories { get; set; }
 
-        
+        [Required]
+        public bool containsVideoTrack { get; set; }
 
+
+        // video tracks specific
+
+        public bool containsSubtitles { get; set; }
+        public bool externalSubtitles { get; set; }
+        public string? externalSubtitlesPath { get; set; }
+
+        public bool zoomAspectRatio { get; set; }
+        public bool stretchAspectRatio { get; set; }
+
+        public string DisplayArtists
+        {
+            get
+            {
+                if (TrackArtists == null || !TrackArtists.Any())
+                    return string.Empty;
+
+                return string.Join(", ", TrackArtists.Select(ta => ta.Artist?.Name));
+            }
+        }
+        public string DisplayDuration => Duration.ToString(@"mm\:ss");
 
     }
 }

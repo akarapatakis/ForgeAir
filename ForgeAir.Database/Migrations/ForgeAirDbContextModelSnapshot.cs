@@ -18,23 +18,23 @@ namespace ForgeAir.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("CategoryTrack", b =>
+            modelBuilder.Entity("Categories_Tracks", b =>
                 {
-                    b.Property<int>("CategoriesId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TracksId")
+                    b.Property<int>("TrackId")
                         .HasColumnType("int");
 
-                    b.HasKey("CategoriesId", "TracksId");
+                    b.HasKey("CategoryId", "TrackId");
 
-                    b.HasIndex("TracksId");
+                    b.HasIndex("TrackId");
 
-                    b.ToTable("CategoryTrack");
+                    b.ToTable("Categories_Tracks");
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.Artist", b =>
@@ -43,16 +43,16 @@ namespace ForgeAir.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Artists");
+                    b.ToTable("Artists", (string)null);
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.ArtistTrack", b =>
@@ -70,7 +70,7 @@ namespace ForgeAir.Database.Migrations
 
                     b.HasIndex("TrackId");
 
-                    b.ToTable("Artists_Tracks");
+                    b.ToTable("Artists_Tracks", (string)null);
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.Category", b =>
@@ -79,32 +79,69 @@ namespace ForgeAir.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CategoryParentId")
-                        .HasColumnType("int");
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Color")
                         .HasMaxLength(7)
-                        .HasColumnType("nvarchar(7)");
+                        .HasColumnType("varchar(7)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryParentId");
+                    b.HasIndex("ParentId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
+                });
+
+            modelBuilder.Entity("ForgeAir.Database.Models.FX", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time(6)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("fxStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FX", (string)null);
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.Station", b =>
@@ -113,36 +150,36 @@ namespace ForgeAir.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
-                    b.Property<string>("Gerne")
+                    b.Property<string>("Genre")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Slogan")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("Telephone")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("Website")
                         .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("varchar(64)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Stations");
+                    b.ToTable("Stations", (string)null);
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.Track", b =>
@@ -151,57 +188,63 @@ namespace ForgeAir.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Album")
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<int?>("Bpm")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
                     b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<double>("Duration")
-                        .HasColumnType("double(11,5)");
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time(3)");
 
-                    b.Property<double?>("EndPoint")
-                        .HasColumnType("double(11,5)");
+                    b.Property<TimeSpan?>("EndPoint")
+                        .HasColumnType("time(3)");
 
                     b.Property<string>("FilePath")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(191)
+                        .HasColumnType("varchar(191)");
 
-                    b.Property<double?>("HookInPoint")
-                        .HasColumnType("double(11,5)");
+                    b.Property<TimeSpan?>("HookInPoint")
+                        .HasColumnType("time(3)");
 
-                    b.Property<double?>("HookOutPoint")
-                        .HasColumnType("double(11,5)");
+                    b.Property<TimeSpan?>("HookOutPoint")
+                        .HasColumnType("time(3)");
 
                     b.Property<string>("ISRC")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("longtext");
 
-                    b.Property<double?>("MixPoint")
-                        .HasColumnType("double(11,5)");
+                    b.Property<TimeSpan?>("Intro")
+                        .HasColumnType("time(3)");
+
+                    b.Property<TimeSpan?>("MixPoint")
+                        .HasColumnType("time(3)");
+
+                    b.Property<TimeSpan?>("Outro")
+                        .HasColumnType("time(3)");
 
                     b.Property<DateTime?>("ReleaseDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime(6)");
 
-                    b.Property<double?>("StartPoint")
-                        .HasColumnType("double(11,5)");
+                    b.Property<TimeSpan?>("StartPoint")
+                        .HasColumnType("time(3)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(400)
+                        .HasColumnType("varchar(400)");
 
                     b.Property<int>("TrackStatus")
                         .HasColumnType("int");
@@ -209,24 +252,146 @@ namespace ForgeAir.Database.Migrations
                     b.Property<int>("TrackType")
                         .HasColumnType("int");
 
+                    b.Property<bool>("containsSubtitles")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("containsVideoTrack")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("externalSubtitles")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("externalSubtitlesPath")
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("stretchAspectRatio")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("zoomAspectRatio")
+                        .HasColumnType("tinyint(1)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Tracks");
+                    b.HasIndex("FilePath");
+
+                    b.ToTable("Tracks", (string)null);
                 });
 
-            modelBuilder.Entity("CategoryTrack", b =>
+            modelBuilder.Entity("ForgeAir.Database.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("ForgeAir.Database.Models.Video", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<TimeSpan?>("AdBreakLength")
+                        .HasColumnType("time(3)");
+
+                    b.Property<TimeSpan?>("AdBreaks")
+                        .HasColumnType("time(3)");
+
+                    b.Property<string>("CustomAttributesJson")
+                        .HasColumnType("longtext")
+                        .HasColumnName("CustomAttributesJson");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<TimeSpan>("Duration")
+                        .HasColumnType("time(3)");
+
+                    b.Property<TimeSpan?>("EndPoint")
+                        .HasColumnType("time(3)");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasMaxLength(191)
+                        .HasColumnType("varchar(191)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(400)
+                        .HasColumnType("varchar(400)");
+
+                    b.Property<TimeSpan?>("StartPoint")
+                        .HasColumnType("time(3)");
+
+                    b.Property<int>("TVRating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TrackStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VideoType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("aspectRatio")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("playSubtitles")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilePath")
+                        .IsUnique();
+
+                    b.ToTable("Videos", (string)null);
+                });
+
+            modelBuilder.Entity("Categories_Tracks", b =>
                 {
                     b.HasOne("ForgeAir.Database.Models.Category", null)
                         .WithMany()
-                        .HasForeignKey("CategoriesId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_TrackCategories_CategoryId");
 
                     b.HasOne("ForgeAir.Database.Models.Track", null)
                         .WithMany()
-                        .HasForeignKey("TracksId")
+                        .HasForeignKey("TrackId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_TrackCategories_TrackId");
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.ArtistTrack", b =>
@@ -252,7 +417,7 @@ namespace ForgeAir.Database.Migrations
                 {
                     b.HasOne("ForgeAir.Database.Models.Category", "CategoryParent")
                         .WithMany("Subcategories")
-                        .HasForeignKey("CategoryParentId");
+                        .HasForeignKey("ParentId");
 
                     b.Navigation("CategoryParent");
                 });

@@ -43,6 +43,9 @@ namespace ForgeAir.Core.Shared
         /// </summary>
         public MMEDeviceOutputAudioChannelsEnum MMEaudioChannels { get; set; } = MMEDeviceOutputAudioChannelsEnum.Stereo;
 
+        /// <summary>
+        /// if no audioChannels are assigned, 2 (Stereo) are going to be the fallback option (default in most setups)
+        /// </summary>
         public WASAPIDeviceOutputAudioChannelsEnum WASAPIaudioChannels { get; set; } = WASAPIDeviceOutputAudioChannelsEnum.Stereo;
         /// <summary>
         /// if no bitDepth is assigned, 16-bit is going to be the fallback option (default in most setups)

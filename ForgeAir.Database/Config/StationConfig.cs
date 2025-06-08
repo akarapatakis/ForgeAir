@@ -18,7 +18,7 @@ namespace ForgeAir.Database.Config
             builder.Property(s => s.Slogan).IsRequired(false);
             builder.Property(s => s.Website).IsRequired(false);
             builder.Property(s => s.Email).IsRequired(false);
-            builder.Property(s => s.Gerne).IsRequired(false);
+            builder.Property(s => s.Genre).IsRequired(false);
         }
     }
 }

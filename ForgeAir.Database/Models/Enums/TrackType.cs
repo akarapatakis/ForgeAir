@@ -15,5 +15,16 @@ namespace ForgeAir.Database.Models.Enums
         Voicetrack = 5,
         Fx = 6,
         Other = 7,
+        Instant = 8,
+        Sweeper = 9,
+        Rebroadcast = 10,
+        Movie = 11,
+        Show = 12,
+        Newsreport = 13,
+        Ident = 14,
+        Bumper = 15,
+        MusicVideo = 16,
+
+
     }
 }

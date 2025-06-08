@@ -8,8 +8,8 @@ namespace ForgeAir.Core.AudioEngine.Interfaces
 {
     public interface IAudioPlayer
     {
-        Task Play(ForgeAir.Core.Services.Models.Track track);
-        void PlayNext(ForgeAir.Core.Services.Models.Track track);
+        Task Play();
+        void PlayNext();
         void Stop();
         void FadeStop();
         void Pause();

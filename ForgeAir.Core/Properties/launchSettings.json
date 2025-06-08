@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ForgeAir.Core": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

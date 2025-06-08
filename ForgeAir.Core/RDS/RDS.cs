@@ -8,6 +8,9 @@ using System.Timers;
 
 namespace ForgeAir.Core.RDS
 {
+    /// <summary>
+    /// use this for updating rds ps/rt
+    /// </summary>
     public class RDS
     {
         public RDS()

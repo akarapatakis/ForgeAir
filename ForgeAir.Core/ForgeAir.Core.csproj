@@ -1,40 +1,94 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿    <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+      <PropertyGroup>
+		  <TargetFramework>net8.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Platforms>AnyCPU;x64</Platforms>
+	      <UseWPF>true</UseWPF>
+		  <UseWindowsForms>true</UseWindowsForms>
+		  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ForgeAirPluginSDK" Version="1.0.0" />
-    <PackageReference Include="ini-parser" Version="2.5.2" />
-    <PackageReference Include="ManagedBass" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Aac" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Alac" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Asio" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Flac" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Fx" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Hls" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Mix" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Opus" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Sfx" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Vst" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Winamp" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Wma" Version="3.1.1" />
-    <PackageReference Include="ManagedBass.Wv" Version="3.1.1" />
-    <PackageReference Include="NAudio.Core" Version="2.2.1" />
-    <PackageReference Include="Tcp.NET.Core" Version="7.0.26" />
-  </ItemGroup>
+      <ItemGroup>
+        <None Remove="VideoEngine\Frame 2 1.png" />
+      </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="AudioEngine\Calculators\" />
-    <Folder Include="AudioEngine\Events\" />
-  </ItemGroup>
+      <ItemGroup>
+        <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
+          <WrapperTool>tlbimp</WrapperTool>
+          <VersionMinor>0</VersionMinor>
+          <VersionMajor>2</VersionMajor>
+          <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
+        </COMReference>
+        <COMReference Include="{bee4bfec-6683-3e67-9167-3c0cbc68f40a}">
+          <WrapperTool>tlbimp</WrapperTool>
+          <VersionMinor>0</VersionMinor>
+          <VersionMajor>2</VersionMajor>
+          <Guid>bee4bfec-6683-3e67-9167-3c0cbc68f40a</Guid>
+        </COMReference>
+      </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ForgeAir.Database\ForgeAir.Database.csproj" />
-  </ItemGroup>
+      <ItemGroup>
+        <PackageReference Include="FFME.Windows" Version="4.4.350" />
+        <PackageReference Include="ForgeAirPluginSDK" Version="1.0.0" />
+        <PackageReference Include="ini-parser" Version="2.5.2" />
+        <PackageReference Include="ManagedBass" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Aac" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Ac3" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Alac" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Asio" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Dsd" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Dts" Version="0.2.2" />
+        <PackageReference Include="ManagedBass.Flac" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Fx" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Hls" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Mix" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Opus" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Sfx" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Vst" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Winamp" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Wma" Version="3.1.1" />
+        <PackageReference Include="ManagedBass.Wv" Version="3.1.1" />
+        <PackageReference Include="MediaInfo.Core.Native" Version="21.9.1" />
+        <PackageReference Include="MediaInfo.DotNetWrapper" Version="1.0.7" />
+        <PackageReference Include="MediaInfo.Wrapper.Core" Version="21.9.3" />
+        <PackageReference Include="Microsoft.ML" Version="4.0.2" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3179.45" />
+        <PackageReference Include="NAudio.Core" Version="2.2.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="SharpDX" Version="4.2.0" />
+        <PackageReference Include="SharpDX.Direct3D9" Version="4.2.0" />
+        <PackageReference Include="SharpDX.DXGI" Version="4.2.0" />
+        <PackageReference Include="System.Management" Version="9.0.3" />
+        <PackageReference Include="TagLibSharp" Version="2.3.0" />
+        <PackageReference Include="Tcp.NET.Core" Version="7.0.26" />
+      </ItemGroup>
 
-</Project>
+      <ItemGroup>
+        <Folder Include="AudioEngine\Calculators\" />
+        <Folder Include="Database\" />
+        <Folder Include="Tracks\Exceptions\" />
+        <Folder Include="VideoEngine\VideoFeed\" />
+      </ItemGroup>
+
+
+      <ItemGroup>
+        <ProjectReference Include="..\ForgeAir.Database\ForgeAir.Database.csproj" />
+        <ProjectReference Include="..\ForgeAir.DTO\ForgeAir.DTO.csproj" />
+      </ItemGroup>
+
+
+      <ItemGroup>
+        <Reference Include="NDILibDotNet2">
+          <HintPath>C:\Users\choco\Bin\AnyCPU\Debug\net8.0-windows\NDILibDotNet2.dll</HintPath>
+        </Reference>
+      </ItemGroup>
+
+
+      <ItemGroup>
+        <Resource Include="VideoEngine\Frame 2 1.png" />
+      </ItemGroup>
+
+    </Project>

@@ -5,28 +5,152 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Icons\db-icon.png" />
+    <None Remove="Assets\Icons\file-extra-icon.png" />
+    <None Remove="Assets\Icons\forgevision32.ico" />
+    <None Remove="Assets\Icons\headphones-icon.png" />
     <None Remove="Assets\Icons\logo-demo.ico" />
     <None Remove="Assets\Icons\logo.ico" />
+    <None Remove="Assets\Icons\main-output-icon.png" />
+    <None Remove="Assets\Icons\mic-icon.png" />
+    <None Remove="Assets\Icons\music-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\48x48\charts48.png" />
+    <None Remove="Assets\Icons\playout\3d\48x48\favourite48.png" />
+    <None Remove="Assets\Icons\playout\3d\48x48\hat48.png" />
+    <None Remove="Assets\Icons\playout\3d\48x48\lock48.png" />
+    <None Remove="Assets\Icons\playout\3d\48x48\rds48.png" />
+    <None Remove="Assets\Icons\playout\3d\48x48\schedule48.png" />
+    <None Remove="Assets\Icons\playout\3d\48x48\sound48.png" />
+    <None Remove="Assets\Icons\playout\3d\add-directory-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\add-file-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\artist-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\calls-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\configuration-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\customize-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\directory-management-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\dislike-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\edit-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\favourite-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\file-management-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\fx-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\inbox-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\like-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\location-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\message-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\music-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\pilot-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\plugins-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\remote-app-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\remote-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\schedule-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\settings-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\sound-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\streaming-icon.png" />
+    <None Remove="Assets\Icons\playout\3d\user-icon.png" />
+    <None Remove="Assets\Icons\playout\amstereo.gif" />
+    <None Remove="Assets\Icons\playout\nocover_fallback.png" />
+    <None Remove="Assets\Icons\playout\novideocover_fallback.png" />
+    <None Remove="Assets\Icons\playout\rds_only_logo.png" />
+    <None Remove="Assets\Icons\playout\rds_only_logo_white.png" />
+    <None Remove="Assets\Icons\playout\VST.png" />
+    <None Remove="Assets\Icons\playout\vst64.png" />
+    <None Remove="Assets\Images\splash_background.png" />
+    <None Remove="Assets\Images\vision_splash_background.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="Assets\Icons\playout\playout.xaml" />
     <Page Remove="Assets\Logos.xaml" />
     <Page Remove="Strings\SetupWizard\el-gr.xaml" />
     <Page Remove="Strings\SetupWizard\en-us.xaml" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="audio-vu-meter" Version="1.0.1" />
+    <PackageReference Include="HandyControl" Version="3.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Drawing.Common">
+      <HintPath>..\libs\System.Drawing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <HintPath>..\libs\System.Windows.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms.Design">
+      <HintPath>..\libs\System.Windows.Forms.Design.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Icons\db-icon.png" />
+    <Resource Include="Assets\Icons\file-extra-icon.png" />
+    <Resource Include="Assets\Icons\forgevision32.ico" />
+    <Resource Include="Assets\Icons\headphones-icon.png" />
     <Resource Include="Assets\Icons\logo-demo.ico" />
     <Resource Include="Assets\Icons\Logos.xaml" />
+    <Resource Include="Assets\Icons\main-output-icon.png" />
+    <Resource Include="Assets\Icons\mic-icon.png" />
+    <Resource Include="Assets\Icons\music-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\fx-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\pilot-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\sound-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\48x48\charts48.png" />
+    <Resource Include="Assets\Icons\playout\3d\48x48\favourite48.png" />
+    <Resource Include="Assets\Icons\playout\3d\48x48\hat48.png" />
+    <Resource Include="Assets\Icons\playout\3d\48x48\lock48.png" />
+    <Resource Include="Assets\Icons\playout\3d\48x48\rds48.png" />
+    <Resource Include="Assets\Icons\playout\3d\48x48\schedule48.png" />
+    <Resource Include="Assets\Icons\playout\3d\48x48\sound48.png" />
+    <Resource Include="Assets\Icons\playout\3d\add-directory-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\add-file-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\artist-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\calls-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\configuration-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\customize-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\directory-management-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\dislike-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\edit-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\favourite-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\file-management-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\inbox-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\like-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\location-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\message-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\music-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\plugins-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\remote-app-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\remote-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\schedule-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\settings-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\streaming-icon.png" />
+    <Resource Include="Assets\Icons\playout\3d\user-icon.png" />
+    <Resource Include="Assets\Icons\playout\amstereo.gif" />
+    <Resource Include="Assets\Icons\playout\nocover_fallback.png" />
+    <Resource Include="Assets\Icons\playout\novideocover_fallback.png" />
+    <Resource Include="Assets\Icons\playout\playout.xaml" />
+    <Resource Include="Assets\Icons\playout\rds_only_logo.png" />
+    <Resource Include="Assets\Icons\playout\rds_only_logo_white.png" />
+    <Resource Include="Assets\Icons\playout\VST.png" />
+    <Resource Include="Assets\Icons\playout\vst64.png" />
+    <Resource Include="Assets\Images\splash_background.png" />
+    <Resource Include="Assets\Images\vision_splash_background.png" />
     <Resource Include="Strings\SetupWizard\el-gr.xaml" />
     <Resource Include="Strings\SetupWizard\en-us.xaml" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Assets\Icons\logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Controls\ClockControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

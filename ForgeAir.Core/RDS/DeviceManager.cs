@@ -1,6 +1,7 @@
 ﻿using ForgeAirPlugin;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -11,18 +12,18 @@ namespace ForgeAir.Core.RDS
     public class DeviceManager
     {
         private readonly string _pluginDirectory;
-        public List<IPluginEntry> encoders;
+        public List<IRDSDevice> encoders;
 
         public DeviceManager(string pluginDirectory)
         {
             _pluginDirectory = pluginDirectory;
-            encoders = new List<IPluginEntry>();
+            encoders = new List<IRDSDevice>();
         }
 
         /// <summary>
         /// Loads all dlls implementing IRDSDevice from the plugin directory.
         /// </summary>
-        public IEnumerable<IPluginEntry> FindEncoders()
+        public IEnumerable<IRDSDevice> FindEncoders()
         {
             if (!Directory.Exists(_pluginDirectory))
                 throw new DirectoryNotFoundException($"Plugin directory '{_pluginDirectory}' does not exist.");
@@ -38,7 +39,7 @@ namespace ForgeAir.Core.RDS
                                        typeof(IRDSDevice).IsAssignableFrom(type) &&
                                        !type.IsAbstract &&
                                        type.IsClass)
-                        .Select(type => Activator.CreateInstance(type) as IPluginEntry)
+                        .Select(type => Activator.CreateInstance(type) as IRDSDevice)
                         .Where(plugin => plugin != null);
 
                     encoders.AddRange(pluginInstances);
@@ -78,6 +79,7 @@ namespace ForgeAir.Core.RDS
             encoder.ShowAboutPage();
         }
         public void LoadEncoder(IRDSDevice encoder) {
+           // encoder.Initialize();
             encoder = Shared.RDSParams.Instance.rdsEncoder; // hooks loaded encoder dll to Shared
         }
     }

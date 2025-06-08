@@ -11,11 +11,16 @@ using System.Reflection.Metadata.Ecma335;
 using ForgeAir.Core.Shared;
 using ManagedBass.Vst;
 using System.Threading.Channels;
+using ManagedBass.Mix;
+using ForgeAir.Core.Helpers;
+using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
 
 namespace ForgeAir.Core.AudioEngine
 {
     public class DeviceManager
     {
+        GeneralHelpers generalHelper = new GeneralHelpers();
 
         private static DeviceInitFlags ProperbitDepthConvertor(DeviceOutputBitDepthEnum bitDepth) // used to explicit convert local enum to DeviceInitFlags enum
         {
@@ -53,14 +58,35 @@ namespace ForgeAir.Core.AudioEngine
         /// <param name="device">OutputDevice - contains properties of an output device in order to create flags and locate the device itself </param>
         /// <returns>BASS Init Result (0 = successful)</returns>
         /// <exception cref="Exception">Bass Init Failure Reason (from LastError)</exception>
-        private int LoadASIODevice(OutputDevice device)
+        /// 
+        private int LoadASIODevice(OutputDevice device) // fuck asio fuck asio FUCK ASIO! - most stupid output to implement and actually work
         {
+            
             
             if (BassAsio.Init(device.deviceIndex, AsioInitFlags.Thread) == false)
             {
-                throw new Exception(Bass.LastError.ToString());
+                if (!BassAsio.LastError.HasFlag(Errors.OK)) // piece of shit
+                {
+                    throw new Exception(Bass.LastError.ToString());
+                }
+                else
+                {
+                    Bass.Init();
+                }
             }
-            BassAsio.Start(device.bufferLength);
+
+            AsioDeviceInfo deviceInfo = BassAsio.GetDeviceInfo(device.deviceIndex);
+
+            AsioInfo asioInfo = BassAsio.Info;
+            Console.WriteLine($"ASIO Device Output Channels: {asioInfo.Outputs}");
+
+            if (!BassAsio.ChannelEnableBass(true,0, 0, false))
+            {
+                Console.WriteLine("Failed to enable ASIO channel 0: " + BassAsio.LastError);
+
+            } // this motherfucker returns nochannel, idk why - FIX
+
+
             return 0;
         }
 
@@ -72,11 +98,25 @@ namespace ForgeAir.Core.AudioEngine
         /// <exception cref="Exception">Bass Init Failure Reason (from LastError)</exception>
         private int LoadWASAPIOutDevice(OutputDevice device)
         {
-            if (BassWasapi.Init(device.deviceIndex, device.sampleRate, (int)device.WASAPIaudioChannels, Flags: WasapiInitFlags.Shared | WasapiInitFlags.Async | WasapiInitFlags.CategoryMedia | WasapiInitFlags.Buffer, Buffer: device.bufferLength) == false)
+            if (BassWasapi.Init(device.deviceIndex, device.sampleRate, (int)device.WASAPIaudioChannels, Flags: WasapiInitFlags.Shared | WasapiInitFlags.Async | WasapiInitFlags.CategoryMedia) == false)
+            {
+                throw new Exception(Bass.LastError.ToString());
+                return 0;
+            }
+            else
+            {
+                Bass.Init();
+            }
+
+            if (!BassWasapi.Start())
             {
                 throw new Exception(Bass.LastError.ToString());
             }
-            BassWasapi.Start();
+            Shared.AudioPlayerShared.Instance.currentMainBassMixerHandle = BassMix.CreateMixerStream(device.sampleRate, (int)device.WASAPIaudioChannels, BassFlags.Float | BassFlags.MixerNonStop);
+            // apply vst - remove after testing!
+          VSTEffectManager vstEffect = new VSTEffectManager();
+            
+            vstEffect.InitVSTEffectForHandle("vst_stereo_tool.dll");
             return 0;
         }
 
@@ -101,7 +141,7 @@ namespace ForgeAir.Core.AudioEngine
             {
                 throw new Exception(Bass.LastError.ToString());
             }
-            
+            Shared.AudioPlayerShared.Instance.currentMainBassMixerHandle = BassMix.CreateMixerStream(device.sampleRate, generalHelper.MMEToMixerChans(device.MMEaudioChannels), BassFlags.MixerNonStop | BassFlags.AutoFree | BassFlags.Float);
             return 0;
 
         }
@@ -126,7 +166,8 @@ namespace ForgeAir.Core.AudioEngine
             {
                 throw new Exception(Bass.LastError.ToString());
             }
-
+            Shared.AudioPlayerShared.Instance.currentMainBassMixerHandle = BassMix.CreateMixerStream(device.sampleRate, generalHelper.MMEToMixerChans(device.MMEaudioChannels), BassFlags.MixerNonStop | BassFlags.AutoFree | BassFlags.Float);
+            Debug.WriteLine(Bass.LastError.ToString());
             return 0;
         }
 
@@ -173,6 +214,10 @@ namespace ForgeAir.Core.AudioEngine
             int mmeDeviceIndex = 0;
             for (int i = 0; Bass.GetDeviceInfo(i, out DeviceInfo mmeInfo); i++)
             {
+                if (!mmeInfo.IsEnabled)
+                {
+                    continue;
+                }
                 devices[deviceIndex++] = $"MME:{mmeDeviceIndex++}:{mmeInfo.Name}";
             }
             // Trim the array to the actual number of devices
@@ -197,7 +242,7 @@ namespace ForgeAir.Core.AudioEngine
             for (int i = 0; BassWasapi.GetDeviceInfo(i, out WasapiDeviceInfo wasapiInfo); i++)
             {
                 // Skip unwanted devices
-                if (wasapiInfo.IsInput || wasapiInfo.IsDisabled || wasapiInfo.IsUnplugged || wasapiInfo.Type == WasapiDeviceType.Unknown || wasapiInfo.Type == WasapiDeviceType.LineLevel || wasapiInfo.Type == WasapiDeviceType.Microphone)
+                if (wasapiInfo.IsInput || wasapiInfo.IsDisabled || wasapiInfo.IsUnplugged ||  wasapiInfo.Type == WasapiDeviceType.Unknown || wasapiInfo.Type == WasapiDeviceType.LineLevel || wasapiInfo.Type == WasapiDeviceType.Microphone)
                 {
                     continue;
                 }
@@ -237,9 +282,9 @@ namespace ForgeAir.Core.AudioEngine
         /// </summary>
         /// <param name="device">Audio Driver (MME, WASAPI, DSound, ASIO)</param>
         ///
-        public string[] GetDevices(OutputDevice device)
+        public string[] GetDevices(DeviceOutputMethodEnum device)
         {
-            switch (device.deviceOutputMethod)
+            switch (device)
             {
                 case DeviceOutputMethodEnum.MME:
                     return getMMEOutDevices();

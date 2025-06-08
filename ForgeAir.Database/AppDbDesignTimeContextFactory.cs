@@ -10,12 +10,16 @@ namespace ForgeAir.Database
 {
     public class AppDbDesignTimeContextFactory : IDesignTimeDbContextFactory<ForgeAirDbContext>
     {
-        private readonly static string connectionString = "Server=localhost;User Id=sa;Database=forgeair_dev;TrustServerCertificate=True;";
+#if (DEBUG)
+        private readonly static string connectionString = "Server=localhost;Port=3307;Database=forgeair_dev;User=root;Password=ForgeAir;";
+#else
+        private readonly static string connectionString = $"Server=localhost;Port={Shared.DatabaseConnectionProperties.Instance.serverPort};Database={Shared.DatabaseConnectionProperties.Instance.dbName};User=root;Password={Shared.DatabaseConnectionProperties.Instance.password};";
+#endif
         public ForgeAirDbContext CreateDbContext(string[] args)
         {
             DbContextOptionsBuilder<ForgeAirDbContext> builder = new();
 
-            DbContextOptions<ForgeAirDbContext> options = builder.UseSqlServer(connectionString).Options;
+            DbContextOptions<ForgeAirDbContext> options = builder.UseMySql(connectionString, new MySqlServerVersion(new Version(9, 1, 0))).Options;
 
             return new ForgeAirDbContext(options);
 

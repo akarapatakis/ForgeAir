@@ -10,7 +10,7 @@ namespace ForgeAir.Core.RDS.VariableCollections
     public class DynamicVariables
     {
         public string currentTime => DateTime.Now.ToString("HH:mm");
-        public string currentSong => $"{RDSParams.Instance.currenttrackAnnouncement} {AudioPlayerRealTimeParams.Instance.artist} {RDSParams.Instance.currenttrackArtistTitleDivider} {AudioPlayerRealTimeParams.Instance.title}";
+        public string currentSong => $"{RDSParams.Instance.currenttrackAnnouncement} {RDSParams.Instance.currenttrackArtistTitleDivider} {AudioPlayerShared.Instance.currentTrack.Title}";
         public string currentDate => DateTime.Now.ToString("d");
 
         private static DynamicVariables? instance;

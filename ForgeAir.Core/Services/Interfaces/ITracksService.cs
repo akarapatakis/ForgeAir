@@ -9,8 +9,8 @@ namespace ForgeAir.Core.Services.Interfaces
 {
     public interface ITracksService
     {
-        Task<IEnumerable<Track>> GetTracks(int skip, int take);
-        Task<int> GetTrackCountAsync(string query = "");
-        Task<Track> GetTrack(int id);
+        Task<IEnumerable<Database.Models.Track>> GetTracks(int skip, int take);
+        int GetTrackCount();
+        Task<Database.Models.Track> GetTrack(int id);
     }
 }

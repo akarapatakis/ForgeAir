@@ -13,9 +13,8 @@ namespace ForgeAir.Database.Config
     {
         public void Configure(EntityTypeBuilder<Track> builder)
         {
-            //Soft deleted tracks should not be returned
-            builder.HasQueryFilter(t => t.DateDeleted == null);
 
+            builder.Property(t => t.DateDeleted).IsRequired(false);
             builder.Property(t => t.Album).IsRequired(false);
 
             builder.Property(t => t.ISRC).IsRequired(false);

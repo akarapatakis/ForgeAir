@@ -12,10 +12,11 @@ namespace ForgeAir.Core.Services.Models
 {
     public class Track
     {
+        public int Id { get; set; }
 
         public string? Title { get; }
 
-        public string? FilePath { get; }
+        public string? FilePath { get; set; }
 
         public int? Bpm { get; set; }
 
