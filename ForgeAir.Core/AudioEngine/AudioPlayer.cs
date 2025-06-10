@@ -279,7 +279,7 @@ namespace ForgeAir.Core.AudioEngine
                  _ = MonitorPlayback();
              }
             
-            AudioPlayerShared.Instance.RaiseOnTrackChanged();
+
         }
 
         public void PauseResumeHandler()
