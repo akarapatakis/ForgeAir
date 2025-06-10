@@ -28,6 +28,9 @@ using Track = ForgeAir.Database.Models.Track;
 
 namespace ForgeAir.Core.AudioEngine
 {
+
+    // TODO: GET RID OF 333MS AND ADD CUSTOMIZABLE DURATION!
+
     public class AudioPlayer : IDisposable
     {
         private readonly ForgeAir.Core.AudioEngine.TagReader _tagReader;
@@ -256,9 +259,8 @@ namespace ForgeAir.Core.AudioEngine
                      await FillQueue();
                  }
                  isPlaying = true;
-                 _ = MonitorPlayback();
-
-             }
+                _ = MonitorPlayback();
+            }
              else
              {
 
