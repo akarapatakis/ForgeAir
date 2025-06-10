@@ -79,14 +79,6 @@ namespace ForgeAir.Database.Models
         public bool containsVideoTrack { get; set; }
 
 
-        // video tracks specific
-
-        public bool containsSubtitles { get; set; }
-        public bool externalSubtitles { get; set; }
-        public string? externalSubtitlesPath { get; set; }
-
-        public bool zoomAspectRatio { get; set; }
-        public bool stretchAspectRatio { get; set; }
 
         public string DisplayArtists
         {
@@ -99,6 +91,19 @@ namespace ForgeAir.Database.Models
             }
         }
         public string DisplayDuration => Duration.ToString(@"mm\:ss");
+
+        public string? DisplayType => Enum.GetName(this.TrackType.Value) ?? null;
+
+        public string DisplayCategories
+        {
+            get
+            {
+                if (Categories == null || !Categories.Any())
+                    return string.Empty;
+
+                return string.Join("/", Categories.Select(ta => ta?.Name));
+            }
+        }
 
     }
 }
