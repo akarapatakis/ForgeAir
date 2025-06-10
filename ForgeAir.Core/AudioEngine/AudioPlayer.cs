@@ -448,6 +448,9 @@ namespace ForgeAir.Core.AudioEngine
                 AudioPlayerShared.Instance.currentAlbumArt = null;
 
                 WebEncoderNowPlaying.Instance.nowPlayingText = "";
+                new ButtEncoder().UpdateNowPlayingText();
+                return;
+            }
             if (AudioPlayerShared.Instance.currentTrack.TrackType == Database.Models.Enums.TrackType.Rebroadcast)
             {
                 AudioPlayerShared.Instance.currentAlbumArt = null;
