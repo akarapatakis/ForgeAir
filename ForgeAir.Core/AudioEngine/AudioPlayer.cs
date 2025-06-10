@@ -436,17 +436,25 @@ namespace ForgeAir.Core.AudioEngine
             BassMix.MixerRemoveChannel(_trackHandle);
             Bass.StreamFree(_trackHandle);
             _trackHandle = 0;
+
+            AudioPlayerShared.Instance.currentTrack = null;
+            AudioPlayerShared.Instance.RaiseOnTrackChanged();
         }
 
         private async Task UpdateMetadata() // add handling
         {
+            if (AudioPlayerShared.Instance.currentTrack == null)
+            {
+                AudioPlayerShared.Instance.currentAlbumArt = null;
 
+                WebEncoderNowPlaying.Instance.nowPlayingText = "";
             if (AudioPlayerShared.Instance.currentTrack.TrackType == Database.Models.Enums.TrackType.Rebroadcast)
             {
                 AudioPlayerShared.Instance.currentAlbumArt = null;
 
                 WebEncoderNowPlaying.Instance.nowPlayingText = "";
                 new ButtEncoder().UpdateNowPlayingText();
+                return;
             }
             else
             {
@@ -455,7 +463,7 @@ namespace ForgeAir.Core.AudioEngine
                 WebEncoderNowPlaying.Instance.nowPlayingText = await Task.Run(() => _nowPlayingWeb.CreateString());
                 // new ButtEncoder().UpdateNowPlayingText();
                 new TextOutputEncoder().UpdateNowPlayingText();
-
+                return;
             }
         }
 
