@@ -10,17 +10,11 @@ namespace ForgeAir.Core.AudioEngine.Enums
 {
     public enum MMEDeviceOutputAudioChannelsEnum
     {
-        Mono = DeviceInitFlags.Mono | 0,
-        Stereo = DeviceInitFlags.Stereo | 1
     }
     public enum WASAPIDeviceOutputAudioChannelsEnum
     {
-        Mono = 1,
-        Stereo = 2
     }
     public enum GenericDeviceOutputAudioChannelsEnum
     {
-        Mono = 1,
-        Stereo = 2
     }
 }
