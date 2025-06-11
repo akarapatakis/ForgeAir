@@ -70,10 +70,11 @@ namespace ForgeAir.Core.AudioEngine
 
         }
 
-        //public async Task<int> GetHandleWithSafety()
-       // {
-            //return handle
-        //}
+
+        /* todo: rewrite that piece of shit because it fucks cpu and the queue
+         * 
+         * thats why you shouldnt drink vodka while coding :(
+         */
 
         public async Task FillQueue()
         {
@@ -82,7 +83,7 @@ namespace ForgeAir.Core.AudioEngine
                 var track = await Task.Run(() => _randomPilot.selectRandomTrack());
                 if (track == null)
                 {
-                    continue;
+                    break;
                 }
                 if (!(track == AudioPlayerShared.Instance.currentTrack)) {
                     if (File.Exists(track.FilePath))
@@ -91,7 +92,7 @@ namespace ForgeAir.Core.AudioEngine
                         if (track.Intro != null && !track.containsVideoTrack)
                         {
                             Database.Models.Track sweeper;
-                            while (true)
+                            while (true && (AudioPlayerShared.Instance.currentTrack != track)) // if the track has started playing, no need to run anymore
                             {
                                 var newSweeper = await Task.Run(() => _randomPilot.selectRandomSweeper());
                                 if (newSweeper == null || newSweeper.TrackStatus == TrackStatus.Disabled ||
@@ -102,7 +103,8 @@ namespace ForgeAir.Core.AudioEngine
                                     SweeperShared.Instance.sweeper = null;
                                     SweeperShared.Instance.targetTrack = null;
                                     willPlaySweeper = false;
-                                    continue;
+                                    await Task.Delay(500);
+                                    break;
                                 }
                                 else
                                 {
@@ -113,7 +115,7 @@ namespace ForgeAir.Core.AudioEngine
                                     SweeperShared.Instance.RaiseOnSweeperChanged();
                                     break;
                                 }
-                            }
+                            } // no clue why the cpu usage dropped from 20% to 0.7% lol
                         }
 
                         if (AudioPlayerShared.Instance.trackQueue.Any())
@@ -122,7 +124,9 @@ namespace ForgeAir.Core.AudioEngine
                         }
                         return;
                     }
+                    else { await Task.Delay(500); continue; }
                 }
+                else { await Task.Delay(500); continue; }
             }
         }
 
@@ -134,7 +138,7 @@ namespace ForgeAir.Core.AudioEngine
             }
         }
 
-        public async Task<int> GetRemainingMilliseconds(int channel)
+        public Task<int> GetRemainingMilliseconds(int channel)
         {
             long length = Bass.ChannelGetLength(channel);
             double totalSeconds = Bass.ChannelBytes2Seconds(channel, length);
@@ -142,33 +146,34 @@ namespace ForgeAir.Core.AudioEngine
             long position = Bass.ChannelGetPosition(channel);
             double currentSeconds = Bass.ChannelBytes2Seconds(channel, position);
 
-            return (int)((totalSeconds - currentSeconds) * 1000);
+            return Task.FromResult((int)((totalSeconds - currentSeconds) * 1000));
         }
 
-        public async Task<TimeSpan> GetElapsedTime()
+        public Task<TimeSpan> GetElapsedTime()
         {
             if (AudioPlayerShared.Instance.currentMainBassMixerHandle == 0 ||
                 Bass.ChannelIsActive(_trackHandle) != PlaybackState.Playing)
             {
-                return TimeSpan.Zero;
+                return Task.FromResult(TimeSpan.Zero);
             }
 
             long position = Bass.ChannelGetPosition(_trackHandle);
-            return TimeSpan.FromSeconds(Bass.ChannelBytes2Seconds(_trackHandle, position));
+            return Task.FromResult(TimeSpan.FromSeconds(Bass.ChannelBytes2Seconds(_trackHandle, position)));
         }
-        public async Task SeekTo(TimeSpan time)
+        // get a better look at this because it is acting up when it is called by a trackbar
+        public void SeekTo(TimeSpan time)
         {
-            if (AudioPlayerShared.Instance.currentMainBassMixerHandle == 0)
+            if (AudioPlayerShared.Instance.currentMainBassMixerHandle == 0 || AudioPlayerShared.Instance.currentTrack == null)
             {
                 return;
             }
-            Task.Run(() => Bass.ChannelSetPosition(_trackHandle, Bass.ChannelSeconds2Bytes(_trackHandle, time.TotalSeconds)));
+            Bass.ChannelSetPosition(_trackHandle, Bass.ChannelSeconds2Bytes(_trackHandle, time.TotalSeconds));
 
             return;
         }
-        public async Task<double> GetTrackLengthInSecs()
+        public Task<double> GetTrackLengthInSecs()
         {
-            return Bass.ChannelBytes2Seconds(_trackHandle, Bass.ChannelGetLength(_trackHandle));
+            return Task.FromResult(Bass.ChannelBytes2Seconds(_trackHandle, Bass.ChannelGetLength(_trackHandle)));
         }
 
 
