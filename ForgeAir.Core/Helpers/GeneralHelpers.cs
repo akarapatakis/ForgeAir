@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MediaInfo;
+using Microsoft.Extensions.Logging;
 
 namespace ForgeAir.Core.Helpers
 {
@@ -88,13 +90,18 @@ namespace ForgeAir.Core.Helpers
         }
 
         
-        public bool isThisAnAudioFileSimple(string fileName)
+        public bool isThisAnAudioFile(string fileName)
         {
-            if (fileName.EndsWith(".mp3") || fileName.EndsWith(".wav") || fileName.EndsWith(".ogg") || fileName.EndsWith(".mp2") || fileName.EndsWith(".flac") || fileName.EndsWith(".wma") || fileName.EndsWith(".opus") || fileName.EndsWith(".m4a") || fileName.EndsWith(".aac") || fileName.EndsWith(".mp4") || fileName.EndsWith(".avi") || fileName.EndsWith(".fla") || fileName.EndsWith(".mpg") || fileName.EndsWith(".mov"))
+            using ILoggerFactory factory = LoggerFactory.Create(builder => { });
+            ILogger logger = factory.CreateLogger("Program");
+
+            var media = new MediaInfoWrapper(fileName, logger);
+            if (media.AudioStreams.Count > 0)
             {
                 return true;
             }
             return false;
+
         }
         public Database.Models.Track DTOToTrack(DTO.Track track)
         {
