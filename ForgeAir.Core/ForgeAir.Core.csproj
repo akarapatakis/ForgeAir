@@ -9,10 +9,7 @@
       </PropertyGroup>
 
       <ItemGroup>
-        <Compile Remove="AudioEngine\Calculators\**" />
-        <EmbeddedResource Remove="AudioEngine\Calculators\**" />
-        <None Remove="AudioEngine\Calculators\**" />
-        <Page Remove="AudioEngine\Calculators\**" />
+
       </ItemGroup>
 
       <ItemGroup>
@@ -52,13 +49,9 @@
         <PackageReference Include="MediaInfo.DotNetWrapper" Version="1.0.7" />
         <PackageReference Include="MediaInfo.Wrapper.Core" Version="21.9.3" />
         <PackageReference Include="Microsoft.ML" Version="4.0.2" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3179.45" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="NAudio.Core" Version="2.2.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="SharpDX" Version="4.2.0" />
-        <PackageReference Include="SharpDX.Direct3D9" Version="4.2.0" />
-        <PackageReference Include="SharpDX.DXGI" Version="4.2.0" />
         <PackageReference Include="System.Management" Version="9.0.3" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
         <PackageReference Include="Tcp.NET.Core" Version="7.0.26" />
@@ -73,7 +66,6 @@
 
       <ItemGroup>
         <ProjectReference Include="..\ForgeAir.Database\ForgeAir.Database.csproj" />
-        <ProjectReference Include="..\ForgeAir.DTO\ForgeAir.DTO.csproj" />
       </ItemGroup>
 
     </Project>
