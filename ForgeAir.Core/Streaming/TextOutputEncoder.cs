@@ -36,7 +36,7 @@ namespace ForgeAir.Core.WebEncoder
             {
                 File.WriteAllText(Shared.WebEncoderNowPlaying.Instance.NowPlayingTXT, WebEncoderNowPlaying.Instance.nowPlayingText);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return;
             }

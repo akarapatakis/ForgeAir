@@ -32,7 +32,7 @@ namespace ForgeAir.Core.Services
             };
         }
 
-        public async Task<bool> ArtistExists(Database.Models.Artist artist)
+        public async Task<bool> ArtistExists(DTO.ArtistDTO artist)
         {
             using var _context = _contextFactory.CreateDbContext();
             return await _context.Artists.AnyAsync(e => e.Name == artist.Name);
@@ -154,7 +154,7 @@ namespace ForgeAir.Core.Services
                     .ToListAsync() as List<T>,
 
                     ModelTypesEnum.Track => await _context.Tracks
-                    .Where(x => EF.Functions.Like(x.DisplayArtists, $"{name}%") || EF.Functions.Like(x.Title, $"{name}%"))
+                    .Where(x => EF.Functions.Like(x.Title, $"{name}%") || EF.Functions.Like(x.Title, $"{name}%"))
                     .ToListAsync() as List<T>,
 
                     ModelTypesEnum.Video => await _context.Videos
