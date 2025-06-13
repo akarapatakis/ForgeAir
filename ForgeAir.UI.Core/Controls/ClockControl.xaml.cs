@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ForgeVision.Playout.UserControls
 {
@@ -22,17 +23,17 @@ namespace ForgeVision.Playout.UserControls
     /// </summary>
     public partial class ClockControl : System.Windows.Controls.UserControl
     {
-        System.Timers.Timer clock = new System.Timers.Timer(1000);
+        DispatcherTimer clock = new DispatcherTimer();
         public ClockControl()
         {
-            clock.Enabled = true;
-            clock.Interval = 1000;
-            clock.Elapsed += UpdateTime;
+            clock.IsEnabled = true;
+            clock.Interval = TimeSpan.FromMilliseconds(1000);
+            clock.Tick += UpdateTime;
             clock.Start();
             InitializeComponent();
         }
 
-        private void UpdateTime(object sender, ElapsedEventArgs e)
+        private void UpdateTime(object sender, EventArgs e)
         {
             this.Dispatcher.Invoke(() =>
             {
