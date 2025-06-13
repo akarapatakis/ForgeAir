@@ -61,13 +61,13 @@ namespace ForgeAir.Database.Models
 
         [Required]
         [EnumDataType(typeof(TrackType))]
-        public TrackType? TrackType { get; set; }
+        public TrackType TrackType { get; set; }
 
 
 
         [Required]
         [EnumDataType(typeof(TrackStatus))]
-        public TrackStatus? TrackStatus { get; set; }
+        public TrackStatus TrackStatus { get; set; }
         public DateTime DateAdded { get; set; }
         public DateTime? DateModified { get; set; }
         public DateTime? DateDeleted { get; set; }
@@ -80,30 +80,6 @@ namespace ForgeAir.Database.Models
 
 
 
-        public string DisplayArtists
-        {
-            get
-            {
-                if (TrackArtists == null || !TrackArtists.Any())
-                    return string.Empty;
-
-                return string.Join(", ", TrackArtists.Select(ta => ta.Artist?.Name));
-            }
-        }
-        public string DisplayDuration => Duration.ToString(@"mm\:ss");
-
-        public string? DisplayType => Enum.GetName(this.TrackType.Value) ?? null;
-
-        public string DisplayCategories
-        {
-            get
-            {
-                if (Categories == null || !Categories.Any())
-                    return string.Empty;
-
-                return string.Join("/", Categories.Select(ta => ta?.Name));
-            }
-        }
 
     }
 }
