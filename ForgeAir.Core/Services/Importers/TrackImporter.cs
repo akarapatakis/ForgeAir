@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ForgeAir.Core.AudioEngine;
 using ForgeAir.Core.Services.Importers.Interfaces;
-using ForgeAir.Core.Services.Migrators;
+using ForgeAir.Core.Services.Importers.Migrators;
 using ForgeAir.Core.Tracks.Enums;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
@@ -59,8 +59,7 @@ namespace ForgeAir.Core.Services.Importers
             }
             else
             {
-                JZRadio2TagMigrator jZRadio2TagMigrator = new JZRadio2TagMigrator();
-                var jztrack = jZRadio2TagMigrator.GenerateTrackFromInfoTag(_tagReader.getComment(new Track { FilePath = filename }));
+                var jztrack = JZRadio2TagMigrator.GenerateTrackFromInfoTag(_tagReader.Comment);
 
                 track = new Track()
                 {
@@ -128,8 +127,7 @@ namespace ForgeAir.Core.Services.Importers
                 }
                 else
                 {
-                    JZRadio2TagMigrator jZRadio2TagMigrator = new JZRadio2TagMigrator();
-                    foreach (Artist artistName in jZRadio2TagMigrator.GenerateArtistFromInfoTag(_tagReader.getComment(new Track { FilePath = filename })))
+                    foreach (Artist artistName in JZRadio2TagMigrator.GenerateArtistFromInfoTag(_tagReader.Comment))
                     {
                         var existingArtist = await _dbContext.Artists
                             .FirstOrDefaultAsync(a => a.Name.ToLower() == artistName.Name.ToLower());
