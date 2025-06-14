@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ForgeAir.Core.Services.Interfaces
+namespace ForgeAir.Core.Services.Database.Interfaces
 {
     public interface ITracksService
     {
-        Task<IEnumerable<Database.Models.Track>> GetTracks(int skip, int take);
+        Task<IEnumerable<ForgeAir.Database.Models.Track>> GetTracks(int skip, int take);
         int GetTrackCount();
-        Task<Database.Models.Track> GetTrack(int id);
+        Task<ForgeAir.Database.Models.Track> GetTrack(int id);
     }
 }

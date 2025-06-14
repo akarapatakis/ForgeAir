@@ -1,5 +1,4 @@
-﻿using ForgeAir.Core.Services.Interfaces;
-using ForgeAir.Core.Tracks.Enums;
+﻿using ForgeAir.Core.Tracks.Enums;
 using ForgeAir.Database;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
@@ -8,12 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ForgeAir.Core.Services
+namespace ForgeAir.Core.Services.Database
 {
-    public class Repository<T> where T : class
+    public class RepositoryService<T> where T : class
     {
         private readonly IDbContextFactory<ForgeAirDbContext> _contextFactory;
-        public Repository(IDbContextFactory<ForgeAirDbContext> contextFactory)
+        public RepositoryService(IDbContextFactory<ForgeAirDbContext> contextFactory)
         {
             _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
         }

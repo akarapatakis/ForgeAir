@@ -1,5 +1,6 @@
 ﻿// it literally chooses random tracks based on nothing!
 
+using ForgeAir.Core.Services.Database;
 using ForgeAir.Core.Tracks.Enums;
 using ForgeAir.Database;
 using Microsoft.Identity.Client;
@@ -20,7 +21,7 @@ namespace ForgeAir.Core.Pilots
         {
 
             var factory = new ForgeAirDbContextFactory();
-            Services.Repository<Database.Models.Track> trackDb = new Services.Repository<Database.Models.Track>(factory);
+            RepositoryService<Database.Models.Track> trackDb = new RepositoryService<Database.Models.Track>(factory);
 
             Random random = new Random();
 
@@ -51,7 +52,7 @@ namespace ForgeAir.Core.Pilots
         {
             var factory = new ForgeAirDbContextFactory();
 
-            Services.Repository<Database.Models.Track> trackDb = new Services.Repository<Database.Models.Track>(factory);
+            RepositoryService<Database.Models.Track> trackDb = new RepositoryService<Database.Models.Track>(factory);
 
             Random random = new Random();
 

@@ -12,8 +12,7 @@ using MediaInfo;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using ForgeAir.Core.Services.Tags.Interfaces;
-
-namespace ForgeAir.Core.Services
+namespace ForgeAir.Core.Services.Tags
 {
     public class TagService : ITagService
     {
@@ -80,9 +79,9 @@ namespace ForgeAir.Core.Services
 
 
 
-        public Database.Models.Artist[] getArtists(Database.Models.Track track)
+        public ForgeAir.Database.Models.Artist[] getArtists(ForgeAir.Database.Models.Track track)
         {
-            var artists = new List<Database.Models.Artist>();
+            var artists = new List<ForgeAir.Database.Models.Artist>();
 
             try
             {
@@ -94,7 +93,7 @@ namespace ForgeAir.Core.Services
                     foreach (var performer in tfile.Tag.Performers)
                     {
                         if (!string.IsNullOrWhiteSpace(performer))
-                            artists.Add(new Database.Models.Artist { Name = performer.Trim() });
+                            artists.Add(new ForgeAir.Database.Models.Artist { Name = performer.Trim() });
                     }
                 }
 
@@ -107,7 +106,7 @@ namespace ForgeAir.Core.Services
                         var trimmed = name.Trim();
                         if (!string.IsNullOrEmpty(trimmed) && !artists.Any(a => a.Name == trimmed))
                         {
-                            artists.Add(new Database.Models.Artist { Name = trimmed });
+                            artists.Add(new ForgeAir.Database.Models.Artist { Name = trimmed });
                         }
                     }
                 }
@@ -115,20 +114,20 @@ namespace ForgeAir.Core.Services
                 // If still empty, add "Unknown Artist"
                 if (!artists.Any())
                 {
-                    artists.Add(new Database.Models.Artist { Name = "Unknown Artist" });
+                    artists.Add(new ForgeAir.Database.Models.Artist { Name = "Unknown Artist" });
                 }
             }
             catch (UnsupportedFormatException)
             {
-                artists.Add(new Database.Models.Artist { Name = "Unknown Artist" });
+                artists.Add(new ForgeAir.Database.Models.Artist { Name = "Unknown Artist" });
             }
 
             return artists.ToArray();
         }
 
-        public Database.Models.Artist getArtist(Database.Models.Track track) // fuck
+        public ForgeAir.Database.Models.Artist getArtist(ForgeAir.Database.Models.Track track) // fuck
         {
-            Database.Models.Artist artist = new Database.Models.Artist();
+            ForgeAir.Database.Models.Artist artist = new ForgeAir.Database.Models.Artist();
             string[] artists;
 
 

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ForgeAir.Core.Services.AudioPlayout.Players.Interfaces;
-using ForgeAir.Core.Services.Interfaces;
 
 namespace ForgeAir.Core.Services.AudioPlayout
 {

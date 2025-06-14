@@ -28,7 +28,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players.Interfaces
 
         void Resume();
 
-        Task PlayFX(Database.Models.FX fx);
+        Task PlayFX(ForgeAir.Database.Models.FX fx);
 
     }
 }

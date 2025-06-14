@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using ForgeAir.Core.Services.Importers.Interfaces;
 using ForgeAir.Core.Services.Importers.Migrators;
+using ForgeAir.Core.Services.Tags;
 using ForgeAir.Core.Tracks.Enums;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;

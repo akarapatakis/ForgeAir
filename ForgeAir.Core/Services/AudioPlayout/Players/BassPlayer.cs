@@ -90,7 +90,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
                 return;
             }
 
-            if (_currentTrack.Type != Database.Models.Enums.TrackType.Rebroadcast)
+            if (_currentTrack.Type != ForgeAir.Database.Models.Enums.TrackType.Rebroadcast)
             {
                 _trackHandle = Bass.CreateStream(
                     _currentTrack.FilePath, 0, 0,
@@ -163,7 +163,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
 
         private async Task MonitorPlayback()
         {
-            if (_currentTrack.Type == Database.Models.Enums.TrackType.Rebroadcast)
+            if (_currentTrack.Type == ForgeAir.Database.Models.Enums.TrackType.Rebroadcast)
             {
                 PlaybackState isBuffering = Bass.ChannelIsActive(_trackHandle);
 
@@ -255,7 +255,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             if (_currentTrack == null) return;
 
 
-            if (_currentTrack.Type != Database.Models.Enums.TrackType.Rebroadcast)
+            if (_currentTrack.Type != ForgeAir.Database.Models.Enums.TrackType.Rebroadcast)
             {
                 _trackHandle = Bass.CreateStream(_currentTrack.FilePath, 0, 0, BassFlags.Decode | BassFlags.Prescan | BassFlags.AsyncFile | BassFlags.Float);
 
