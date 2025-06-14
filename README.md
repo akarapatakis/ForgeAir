@@ -5,8 +5,6 @@
 
 ### ForgeAir.Database
 
-### ForgeAir.InstallationWizard
-
 ### ForgeAir.Playout
 
 ### ForgeAir.StationManagement
