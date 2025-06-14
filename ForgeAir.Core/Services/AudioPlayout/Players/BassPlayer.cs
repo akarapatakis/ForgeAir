@@ -33,7 +33,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
 
         private int _trackHandle;
 
-        private BassDeviceModel _device;
+        private BassDevice _device;
 
         private CancellationTokenSource _crossfadeCts = new();
         private bool isPaused = false;
@@ -43,7 +43,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
 
         private int _crossfadeDuration = 0;
 
-        public BassPlayer(BassDeviceModel device)
+        public BassPlayer(BassDevice device)
         {
             _device = device;
 

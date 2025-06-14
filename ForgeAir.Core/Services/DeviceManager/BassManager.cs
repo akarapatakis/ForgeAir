@@ -16,16 +16,11 @@ namespace ForgeAir.Core.Services.DeviceManager
 {
     public class BassManager : Interfaces.IDeviceManager
     {
-        GeneralHelpers generalHelper;
+        BassDevice device;
 
-        BassDeviceModel device;
-
-        public BassManager(BassDeviceModel _device) {
-
+        public BassManager(BassDevice _device) {
             this.device = _device;
-            generalHelper = new GeneralHelpers();
         }
-
 
         ///
         /// Device Loading Part
@@ -41,8 +36,6 @@ namespace ForgeAir.Core.Services.DeviceManager
         /// 
         private int LoadASIODevice() // fuck asio fuck asio FUCK ASIO! - most stupid output to implement and actually work
         {
-
-
             if (BassAsio.Init(device.TargetDevice.Index, AsioInitFlags.Thread) == false)
             {
                 if (!BassAsio.LastError.HasFlag(Errors.OK)) // piece of shit
@@ -113,7 +106,7 @@ namespace ForgeAir.Core.Services.DeviceManager
             {
                 throw new Exception(Bass.LastError.ToString());
             }
-            device.Handle = BassMix.CreateMixerStream(device.TargetDevice.SampleRate, generalHelper.MMEToMixerChans(device.TargetDevice.MMEaudioChannels), BassFlags.MixerNonStop | BassFlags.AutoFree | BassFlags.Float);
+            device.Handle = BassMix.CreateMixerStream(device.TargetDevice.SampleRate, GeneralHelpers.MMEToMixerChans(device.TargetDevice.MMEaudioChannels), BassFlags.MixerNonStop | BassFlags.AutoFree | BassFlags.Float);
             return 0;
 
         }
@@ -134,7 +127,7 @@ namespace ForgeAir.Core.Services.DeviceManager
             {
                 throw new Exception(Bass.LastError.ToString());
             }
-            device.Handle = BassMix.CreateMixerStream(device.TargetDevice.SampleRate, generalHelper.MMEToMixerChans(device.TargetDevice.MMEaudioChannels), BassFlags.MixerNonStop | BassFlags.AutoFree | BassFlags.Float);
+            device.Handle = BassMix.CreateMixerStream(device.TargetDevice.SampleRate, GeneralHelpers.MMEToMixerChans(device.TargetDevice.MMEaudioChannels), BassFlags.MixerNonStop | BassFlags.AutoFree | BassFlags.Float);
             Debug.WriteLine(Bass.LastError.ToString());
             return 0;
         }

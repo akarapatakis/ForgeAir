@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ForgeAir.Core.Models
 {
-    public class NAudioDeviceModel
+    public class BassDevice
     {
-        public OutputDevice TargetDevice { get; set; }
+        public required OutputDevice TargetDevice { get; set; }
 
-        
+        public int Handle { get; set; }
+
     }
 }
