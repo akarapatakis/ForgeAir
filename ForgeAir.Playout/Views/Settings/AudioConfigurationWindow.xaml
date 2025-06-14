@@ -1,0 +1,47 @@
+﻿<hc:Window x:Class="ForgeAir.Playout.Views.Settings.AudioConfigurationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ForgeAir.Playout.Views.Settings"
+        mc:Ignorable="d"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        Title="Audio Setup" Height="450" Width="800">
+    <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="212*"/>
+            <ColumnDefinition Width="589*"/>
+        </Grid.ColumnDefinitions>
+        <hc:Watermark Mark="ForgeAir" FontSize="32" FontWeight="UltraLight" Opacity="0.5"/>
+
+        <hc:SideMenu x:Name="sideMenu" BorderThickness="1" HorizontalAlignment="Left" Width="210" SelectionChanged="sideMenu_SelectionChanged">
+            <hc:Interaction.Triggers>
+                <hc:EventTrigger EventName="SelectionChanged">
+                    <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />
+                </hc:EventTrigger>
+            </hc:Interaction.Triggers>
+            <hc:SideMenuItem x:Name="devicesItem" Header="Devices" IsSelected="True">
+                <hc:SideMenuItem.Icon>
+                    <Image Source="{StaticResource soundIcon48}" Width="24" Height="24"/>
+                </hc:SideMenuItem.Icon>
+
+            </hc:SideMenuItem>
+            <hc:SideMenuItem x:Name="vstItem" Header="VST">
+                <hc:SideMenuItem.Icon>
+                    <Image Source="{StaticResource vstIcon64}" Width="24" Height="24"/>
+                </hc:SideMenuItem.Icon>
+            </hc:SideMenuItem>
+            <hc:SideMenuItem x:Name="audioTweaksItem" Header="Audio Tweaks">
+                <hc:SideMenuItem.Icon>
+                    <Image Source="{StaticResource customizeIcon}" Width="24" Height="24"/>
+                </hc:SideMenuItem.Icon>
+            </hc:SideMenuItem>
+
+
+        </hc:SideMenu>
+        
+        <TextBlock Text="Audio Setup" Height="61" Margin="210,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" FontSize="36" FontWeight="Light" TextWrapping="Wrap"/>
+        <Frame x:Name="pageViewer" Margin="0,66,0,0" Grid.Column="1" HorizontalAlignment="Left" Width="588" NavigationUIVisibility="Hidden"/>
+    </Grid>
+</hc:Window>

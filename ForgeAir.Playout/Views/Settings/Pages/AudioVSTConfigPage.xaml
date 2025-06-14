@@ -1,0 +1,47 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:local="clr-namespace:ForgeAir.Playout.Views.Settings.Pages"
+    xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
+    x:Class="ForgeAir.Playout.Views.Settings.Pages.AudioVSTConfigPage"
+    mc:Ignorable="d" 
+    d:DesignHeight="368" d:DesignWidth="588"
+    Title="AudioVSTConfigPage">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MinHeight="111"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="89"/>
+                <RowDefinition Height="46"/>
+            </Grid.RowDefinitions>
+
+            <CheckBox x:Name="useVSTCheckbox" Content="Use VST Effect" Click="useVSTCheckbox_Checked" Height="16" Margin="0,-36,0,0" VerticalAlignment="Top"/>
+
+            <TextBlock Grid.Row="1" Text="VST Plugin Path" Foreground="White" Margin="0,0,0,5"/>
+
+            <Grid Grid.Row="2" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox x:Name="pluginPath" Grid.Column="0" IsReadOnly="True" Height="35" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <Button x:Name="selctVSTbtn" Grid.Column="1" Content="Select" Width="85" Height="35" Click="selctVSTbtn_Click"/>
+            </Grid>
+
+            <Button x:Name="openEditorVST" Grid.Row="3" Content="Configure Plugin" Width="150" Height="35" Click="openEditorVST_Click" Margin="0,50,0,0" VerticalAlignment="Top"/>
+            <Button x:Name="applyBtn" Grid.Row="4" Content="Apply" HorizontalAlignment="Stretch" Margin="448,24,10,-6" VerticalAlignment="Stretch" Click="applyBtn_Click"/>
+        </Grid>
+    </Grid>
+</Page>

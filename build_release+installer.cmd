@@ -1,0 +1,1 @@
+dotnet build ForgeAir -c Release

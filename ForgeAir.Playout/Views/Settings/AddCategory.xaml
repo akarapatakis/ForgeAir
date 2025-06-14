@@ -1,0 +1,17 @@
+﻿<hc:Window x:Class="ForgeAir.Playout.Views.AddCategory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ForgeAir.Playout.Views"
+           xmlns:hc="https://handyorg.github.io/handycontrol"
+        mc:Ignorable="d"
+        Title="AddCategory" Height="450" Width="800">
+    <Grid>
+        <hc:TextBox x:Name="titleBox" HorizontalAlignment="Left" Margin="10,81,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="208"/>
+        <hc:TextBox x:Name="descriptionBox" HorizontalAlignment="Left" Margin="10,151,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="208"/>
+        <hc:ColorPicker x:Name="colorPicker" HorizontalAlignment="Left" Margin="532,0,0,0" VerticalAlignment="Center" Height="292" Width="258"/>
+        <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="24,384,0,0" VerticalAlignment="Top" Width="102" Click="button_Click"/>
+
+    </Grid>
+</hc:Window>
