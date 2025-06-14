@@ -10,9 +10,9 @@ using ManagedBass;
 
 namespace ForgeAir.Core.Helpers
 {
-    public class GeneralHelpers
+    public static class GeneralHelpers
     {
-        public DeviceOutputMethodEnum? ToDeviceOutputMethodEnum(string input)
+        public static DeviceOutputMethodEnum? ToDeviceOutputMethodEnum(string input)
         {
             if (input == null || input == "") { return null; }
 
@@ -32,7 +32,7 @@ namespace ForgeAir.Core.Helpers
             return null;
         }
 
-        public GenericDeviceOutputAudioChannelsEnum? ToGenericDeviceOutputAudioChannelsEnum(string input)
+        public static GenericDeviceOutputAudioChannelsEnum? ToGenericDeviceOutputAudioChannelsEnum(string input)
         {
             if (input == null || input == "") { return null; }
 
@@ -46,7 +46,7 @@ namespace ForgeAir.Core.Helpers
             return null;
         }
 
-        public WASAPIDeviceOutputAudioChannelsEnum? ToWASAPIDeviceOutputAudioChannelsEnum(string input)
+        public static WASAPIDeviceOutputAudioChannelsEnum? ToWASAPIDeviceOutputAudioChannelsEnum(string input)
         {
             if (input == null || input == "") { return null; }
 
@@ -61,7 +61,7 @@ namespace ForgeAir.Core.Helpers
             return null;
         }
 
-        public MMEDeviceOutputAudioChannelsEnum? ToMMEDeviceOutputAudioChannelsEnum(string input)
+        public static MMEDeviceOutputAudioChannelsEnum? ToMMEDeviceOutputAudioChannelsEnum(string input)
         {
             if (input == null || input == "") { return null; }
 
@@ -78,7 +78,7 @@ namespace ForgeAir.Core.Helpers
             return null;
         }
 
-        public int MMEToMixerChans(MMEDeviceOutputAudioChannelsEnum chans)
+        public static int MMEToMixerChans(MMEDeviceOutputAudioChannelsEnum chans)
         {
             switch (chans)
             {
@@ -94,7 +94,7 @@ namespace ForgeAir.Core.Helpers
         {
             return (DeviceInitFlags)bitDepth;
         }
-        public bool isThisAnAudioFile(string fileName)
+        public static bool isThisAnAudioFile(string fileName)
         {
             using ILoggerFactory factory = LoggerFactory.Create(builder => { });
             ILogger logger = factory.CreateLogger("Program");
