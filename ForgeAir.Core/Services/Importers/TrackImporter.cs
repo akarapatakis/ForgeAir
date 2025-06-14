@@ -5,7 +5,6 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using ForgeAir.Core.AudioEngine;
 using ForgeAir.Core.Services.Importers.Interfaces;
 using ForgeAir.Core.Services.Importers.Migrators;
 using ForgeAir.Core.Tracks.Enums;
@@ -20,36 +19,36 @@ namespace ForgeAir.Core.Services.Importers
 {
     public class TrackImporter : ITrackImporter
     {
-        private readonly TagReader _tagReader;
+        private TagService _tagReader;
         private readonly ForgeAirDbContext _dbContext;
 
         public TrackImporter() { 
-            _tagReader = new TagReader();
+
             _dbContext = new ForgeAirDbContext();
         }
         public async Task<Track> createTrackAsync(string filename, TrackType type, TimeSpan crossfadeTime, bool isVideo = false, string? artistString = null)
         {
             _dbContext.ChangeTracker.Clear(); // καθαρισμος της γαμημένης entity γιατι καυλανταει με ερρορς για διπλά entries ενώ γίνεται κανονικά το τσεκ
             Track track;
+            _tagReader = new TagService(new DTO.TrackDTO() { FilePath = filename });
 
-
-            if (!_tagReader.getComment(new Track { FilePath = filename }).Contains("Jazler 2.0.x InfoTag Radio Automation (www.jazler.com)")) {
+            if (!_tagReader.Comment.Contains("Jazler 2.0.x InfoTag Radio Automation (www.jazler.com)")) {
 
                 track = new Track()
                 {
                     FilePath = filename,
-                    Title = _tagReader.getTitle(new Track { FilePath = filename }),
-                    Album = _tagReader.getAlbum(new Track { FilePath = filename }),
-                    ISRC = _tagReader.getISRC(new Track { FilePath = filename }),
+                    Title = _tagReader.Title,
+                    Album = _tagReader.Album,
+                    ISRC = _tagReader.ISRC,
                     DateAdded = DateTime.UtcNow,
                     DateModified = DateTime.UtcNow,
                     Bpm = 0,
                     StartPoint = TimeSpan.Zero,
-                    Duration = _tagReader.getDuration(new Track { FilePath = filename }),
-                    EndPoint = _tagReader.getDuration(new Track { FilePath = filename }),
-                    MixPoint = _tagReader.getDuration(new Track { FilePath = filename }) - crossfadeTime,
+                    Duration = _tagReader.AudioDuration,
+                    EndPoint = _tagReader.AudioDuration,
+                    MixPoint = _tagReader.AudioDuration - crossfadeTime,
                     TrackStatus = TrackStatus.Enabled,
-                    ReleaseDate = _tagReader.getYear(new Track { FilePath = filename }),
+                    ReleaseDate = _tagReader.ReleaseDate,
                     containsVideoTrack = isVideo,
                     TrackType = type,
                     Categories = new List<Category>(),
@@ -66,16 +65,16 @@ namespace ForgeAir.Core.Services.Importers
                     FilePath = filename,
                     Title = jztrack.Title,
                     Album = jztrack.Album,
-                    ISRC = _tagReader.getISRC(new Track { FilePath = filename }),
+                    ISRC = _tagReader.ISRC,
                     DateAdded = DateTime.UtcNow,
                     DateModified = DateTime.UtcNow,
                     Bpm = 0,
                     StartPoint = TimeSpan.Zero,
-                    Duration = _tagReader.getDuration(new Track { FilePath = filename }),
-                    EndPoint = _tagReader.getDuration(new Track { FilePath = filename }),
-                    MixPoint = _tagReader.getDuration(new Track { FilePath = filename }) - crossfadeTime,
+                    Duration = _tagReader.AudioDuration ,
+                    EndPoint = _tagReader.AudioDuration,
+                    MixPoint = _tagReader.AudioDuration - crossfadeTime,
                     TrackStatus = TrackStatus.Enabled,
-                    ReleaseDate = _tagReader.getYear(new Track { FilePath = filename }),
+                    ReleaseDate = _tagReader.ReleaseDate,
                     TrackType = type,
                     Categories = new List<Category>(),
                     TrackArtists = new List<ArtistTrack>() // σημαντικό
@@ -88,7 +87,7 @@ namespace ForgeAir.Core.Services.Importers
 
             if (artistString == null)
             {
-                if (!_tagReader.getComment(new Track { FilePath = filename }).Contains("Jazler 2.0.x InfoTag Radio Automation (www.jazler.com)"))
+                if (!_tagReader.Comment.Contains("Jazler 2.0.x InfoTag Radio Automation (www.jazler.com)"))
                 {
                     foreach (Artist artistName in _tagReader.getArtists(track))
                     {
