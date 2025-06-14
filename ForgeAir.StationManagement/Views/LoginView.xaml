@@ -1,0 +1,26 @@
+﻿<Window x:Class="ForgeAir.StationManagement.Views.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ForgeAir.StationManagement.Views"
+        xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
+        xmlns:syncfusionskin= "clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
+        syncfusionskin:SfSkinManager.Theme="{syncfusionskin:SkinManagerExtension ThemeName=Windows11Dark}"
+        mc:Ignorable="d"
+        Title="ForgeAir | Login" Height="387" Width="628">
+
+    <Grid>
+        <Image x:Name="image" HorizontalAlignment="Left" Width="508" Source="/Views/lock-iso-color.png" Height="440" VerticalAlignment="Center" Opacity="0.5" Margin="273,0,0,0"/>
+
+        <TextBox x:Name="textBox" Margin="0,0,25,236" TextWrapping="Wrap" Text="" HorizontalAlignment="Right" Width="220" Height="30" VerticalAlignment="Bottom"/>
+
+        <PasswordBox x:Name="textBox_Copy" Margin="0,0,25,159" HorizontalAlignment="Right" Width="220" Height="30" VerticalAlignment="Bottom" />
+        <Button x:Name="button" Content="Login" HorizontalAlignment="Right" Margin="0,0,25,100" Width="100" Height="30" VerticalAlignment="Bottom"/>
+
+
+        <Label x:Name="username_label" Content="Username" Margin="0,0,163,266" HorizontalAlignment="Right" Width="82" Height="26" VerticalAlignment="Bottom"/>
+        <Label x:Name="label" Content="Password" Margin="0,0,163,189" HorizontalAlignment="Right" Width="82" Height="26" VerticalAlignment="Bottom"/>
+        <Label x:Name="label1" Content="Login" Margin="20,10,336,0" Height="80" VerticalAlignment="Top" FontFamily="Segoe UI Light" FontSize="26"/>
+    </Grid>
+</Window>

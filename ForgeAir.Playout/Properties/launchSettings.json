@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "ForgeAir.Playout": {
-      "commandName": "Project",
-      "nativeDebugging": true
-    }
-  }
-}
