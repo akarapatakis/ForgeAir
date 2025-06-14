@@ -22,7 +22,7 @@ namespace ForgeAir.Core.Models
         /// <summary>
         /// MME, WASAPI, DirectSound, ASIO
         /// </summary>
-        public DeviceOutputMethodEnum API { get; set; }
+        public DeviceOutputMethodEnum API { get; set; } = DeviceOutputMethodEnum.MME;
 
         /// <summary>
         /// Index can be obtained through GetDevices(DeviceOutputMethodEnum driver) method in the Devices class, with 'driver' argument, the driver engine is going to be initialized.
