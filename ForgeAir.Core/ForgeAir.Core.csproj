@@ -58,7 +58,6 @@
       </ItemGroup>
 
       <ItemGroup>
-        <Folder Include="Database\" />
         <Folder Include="Services\AudioPlayout\Players\Enums\" />
         <Folder Include="Tracks\Exceptions\" />
       </ItemGroup>

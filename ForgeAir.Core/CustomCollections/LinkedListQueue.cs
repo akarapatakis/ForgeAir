@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ForgeAir.Core.CustomDataTypes
+namespace ForgeAir.Core.CustomCollections
 {
     public class LinkedListQueue<T> : IEnumerable<T>
     {

@@ -8,11 +8,10 @@ namespace ForgeAir.Core.Models
 {
     class LinkedListQueueItem
     {
-        public int Place { get; set; }
-        public Database.Models.Track Track { get; set; }
+        public required int Place { get; set; }
+        public required DTO.TrackDTO Track { get; set; }
 
         public string DisplayTitle => Track.Title;
-
 
     }
 }

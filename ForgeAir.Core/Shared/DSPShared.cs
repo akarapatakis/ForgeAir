@@ -14,7 +14,7 @@ namespace ForgeAir.Core.Shared
         public bool usingAM { get; set; } = false;
         public bool usingAMStereo { get; set; } = false;
         public bool usingFM { get; set; } = false;
-        public BuiltInDSP dspEngine { get; set; }
+      //  public BuiltInDSP dspEngine { get; set; }
 
         private static DSPShared? instance;
         public static DSPShared Instance

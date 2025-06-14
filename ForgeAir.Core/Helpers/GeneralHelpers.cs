@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MediaInfo;
 using Microsoft.Extensions.Logging;
+using ManagedBass;
 
 namespace ForgeAir.Core.Helpers
 {
@@ -89,7 +90,10 @@ namespace ForgeAir.Core.Helpers
             return 0;
         }
 
-        
+        public static DeviceInitFlags ProperbitDepthConvertor(DeviceOutputBitDepthEnum bitDepth) // used to explicit convert local enum to DeviceInitFlags enum
+        {
+            return (DeviceInitFlags)bitDepth;
+        }
         public bool isThisAnAudioFile(string fileName)
         {
             using ILoggerFactory factory = LoggerFactory.Create(builder => { });
@@ -102,17 +106,6 @@ namespace ForgeAir.Core.Helpers
             }
             return false;
 
-        }
-        public Database.Models.Track DTOToTrack(DTO.Track track)
-        {
-            return new Database.Models.Track()
-            {
-                Id = track.Id,
-                Title = track.Title,
-                FilePath = track.FilePath,
-                Album = track.Album,
-                Duration = track.Duration,
-            };
         }
     }
 }

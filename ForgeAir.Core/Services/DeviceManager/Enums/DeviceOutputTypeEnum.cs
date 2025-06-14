@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ForgeAir.Core.AudioEngine.Enums
 {
+    // dev note: use on frontend please - will move to it someday
     public enum DeviceOutputTypeEnum
     {
         [Description("Main")]

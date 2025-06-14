@@ -1,5 +1,4 @@
 ﻿using ForgeAir.Core.AudioEngine;
-using ForgeAir.Core.CustomDataTypes;
 using ForgeAir.Core.Services.Models;
 using System;
 using System.Collections.Generic;
@@ -30,11 +29,6 @@ namespace ForgeAir.Core.Shared
 
  
         public void RaiseOnQueueChanged() { onQueueChanged.Invoke(this, EventArgs.Empty); updateQueueUI?.Invoke(this, EventArgs.Empty); }
-
-
-        public DeviceManager deviceManager { get; set; }
-
-
 
         public bool autoStart { get; set; }
 
