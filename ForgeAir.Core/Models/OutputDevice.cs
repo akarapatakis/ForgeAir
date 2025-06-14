@@ -21,6 +21,7 @@ namespace ForgeAir.Core.Models
 
         /// <summary>
         /// MME, WASAPI, DirectSound, ASIO
+        /// if no API is specified, MME/WaveOut will be the fallback option
         /// </summary>
         public DeviceOutputMethodEnum API { get; set; } = DeviceOutputMethodEnum.MME;
 
@@ -46,11 +47,13 @@ namespace ForgeAir.Core.Models
 
         /// <summary>
         /// Should be CPU-dependent. While most recent CPUs/Sound Cards can achieve as low as 50ms, there should be anyway a customizable BufferLength for special cases & older machines
+        /// NAudio is pretty picky about that in order to set the gap between tracks
         /// </summary>
         public int BufferLength { get; set; } = 333;
 
         /// <summary>
-        /// if no bitDepth is assigned, 16-bit is going to be the fallback option (default in most setups)
+        /// BASS ONLY: if no bitDepth is assigned, 16-bit is going to be the fallback option (default in most setups)
+        /// NAudio will use the sound card's highest
         /// </summary>
         public DeviceOutputBitDepthEnum BitDepth { get; set; } = DeviceOutputBitDepthEnum.SixteenBit;
 
