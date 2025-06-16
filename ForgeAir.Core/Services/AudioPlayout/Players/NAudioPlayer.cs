@@ -15,14 +15,24 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
 {
     class NAudioPlayer : IPlayer
     {
-        private WaveOutEvent outputDevice;
+        private IWavePlayer outputDevice;
         private MixingSampleProvider mixer;
         private List<TrackItem> activeTracks = new();
 
+        public NAudioPlayer(NAudioDevice device)
+        {
+            object? api = device.GetAPI();
 
-        public NAudioPlayer(OutputDevice device) {
-            outputDevice = new WaveOutEvent();
-            mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
+            if (api is IWavePlayer player)
+            {
+                outputDevice = player;
+            }
+            else
+            {
+                throw new InvalidOperationException("API is null or not an IWavePlayer");
+            }
+
+            mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(device.TargetDevice.SampleRate, device.TargetDevice.Channels))
             {
                 ReadFully = true
             };
