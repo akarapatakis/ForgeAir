@@ -13,21 +13,6 @@
       </ItemGroup>
 
       <ItemGroup>
-        <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
-          <WrapperTool>tlbimp</WrapperTool>
-          <VersionMinor>0</VersionMinor>
-          <VersionMajor>2</VersionMajor>
-          <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
-        </COMReference>
-        <COMReference Include="{bee4bfec-6683-3e67-9167-3c0cbc68f40a}">
-          <WrapperTool>tlbimp</WrapperTool>
-          <VersionMinor>0</VersionMinor>
-          <VersionMajor>2</VersionMajor>
-          <Guid>bee4bfec-6683-3e67-9167-3c0cbc68f40a</Guid>
-        </COMReference>
-      </ItemGroup>
-
-      <ItemGroup>
         <PackageReference Include="ForgeAirPluginSDK" Version="1.0.0" />
         <PackageReference Include="ManagedBass" Version="3.1.1" />
         <PackageReference Include="ManagedBass.Aac" Version="3.1.1" />
