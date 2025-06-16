@@ -13,7 +13,7 @@ using ForgeAir.Core.DTO;
 
 namespace ForgeAir.Core.Services.AudioPlayout.Players
 {
-    class NAudioPlayer : IPlayer
+    public class NAudioPlayer : IPlayer
     {
         private IWavePlayer outputDevice;
         private MixingSampleProvider mixer;
