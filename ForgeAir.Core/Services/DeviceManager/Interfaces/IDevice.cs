@@ -7,10 +7,8 @@ using ForgeAir.Core.AudioEngine.Enums;
 
 namespace ForgeAir.Core.Services.DeviceManager.Interfaces
 {
-    public interface IDeviceManager
+    public interface IDevice
     {
-        int InitDevice();
-        int FreeDevice();
-        extern string[] ListDevicesByAPI(DeviceOutputMethodEnum api);
+        public DeviceTypeEnum Type { get; set; }
     }
 }

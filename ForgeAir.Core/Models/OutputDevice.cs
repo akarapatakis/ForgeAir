@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 using ForgeAir.Core.AudioEngine.Enums;
+using ForgeAir.Core.Services.DeviceManager.Interfaces;
 using ManagedBass;
 
 namespace ForgeAir.Core.Models
@@ -11,8 +13,18 @@ namespace ForgeAir.Core.Models
     /// <summary>
     /// Declares an Output Device so it can be easily initialized with the audio engine for an 'infinite' amount of Output devices for any use case
     /// </summary>
-    public class OutputDevice
+    public class OutputDevice : IDevice
     {
+
+        /// <summary>
+        /// Mainly for ASIO
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// The use of device (is it for FX, a mic, a line out?)
+        /// </summary>
+        public DeviceTypeEnum Type { get; set; }
 
         /// <summary>
         /// This boolean is for use by DeviceManager. Do not modify it elsewhere

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ForgeAir.Core.AudioEngine.Enums
 {
 
-    public enum DeviceOutputTypeEnum
+    public enum DeviceTypeEnum
     {
         [Description("Main")]
         Main =  0,
@@ -19,5 +19,7 @@ namespace ForgeAir.Core.AudioEngine.Enums
         Instants = 2,
         [Description("Main + FX")]
         MainInstantsMix = 3,
+        [Description("MPX")]
+        MPX = 4,
     }
 }
