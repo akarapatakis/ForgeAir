@@ -41,13 +41,12 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             outputDevice.Play();
         }
 
-
-        void IPlayer.Pause()
+        public void Pause()
         {
             throw new NotImplementedException();
         }
 
-        async Task IPlayer.Play(DTO.TrackDTO? track, LinkedListQueue<TrackDTO>? list)
+        public async Task Play(DTO.TrackDTO? track, LinkedListQueue<TrackDTO>? list)
         {
             var reader = new AudioFileReader(track?.FilePath);
             var fader = new FadeInOutSampleProvider(reader, true);
@@ -71,7 +70,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             });
         }
 
-        async Task IPlayer.PlayFX(FX fx)
+        public async Task PlayFX(FX fx)
         {
             foreach (var activeTrack in activeTracks.ToList())
             {
@@ -92,7 +91,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             }
         }
 
-        Task IPlayer.PlayNextTrack()
+        public Task PlayNextTrack()
         {
             throw new NotImplementedException();
         }
