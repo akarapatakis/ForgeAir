@@ -47,7 +47,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
         {
             _device = device;
 
-            Bass.CurrentDevice = device.Handle;
+           // Bass.CurrentDevice = device.TargetDevice.Index; <- fix later
             _crossfadeDuration = device.TargetDevice.BufferLength;
         }
 
