@@ -52,7 +52,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             var fader = new FadeInOutSampleProvider(reader, true);
             fader.BeginFadeIn(2000);
 
-            mixer.AddMixerInput(fader);
+            mixer.AddMixerInput(new WdlResamplingSampleProvider(fader, mixer.WaveFormat.SampleRate));
 
             foreach (var activeTrack in activeTracks.ToList())
             {
