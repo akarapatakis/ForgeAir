@@ -97,13 +97,19 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
                     BassFlags.Decode | BassFlags.Prescan | BassFlags.AsyncFile | BassFlags.Float
                 );
 
-                _crossfadeDuration = (int)(_currentTrack.EndPoint.Value.TotalMilliseconds - _currentTrack.MixPoint?.TotalMilliseconds ?? 0);
-                if (_crossfadeDuration == 0 || _crossfadeDuration == null)
+                if (_currentTrack.EndPoint == null && _currentTrack.MixPoint == null && _currentTrack.StartPoint == null)
                 {
                     _crossfadeDuration = 333;
                 }
+                else { _crossfadeDuration = (int)(_currentTrack.EndPoint.Value.TotalMilliseconds - _currentTrack.MixPoint?.TotalMilliseconds ?? 0); }
+
+                if (_crossfadeDuration == 0 || _crossfadeDuration == null)
+                {
+                    _crossfadeDuration = 333;
+                    _currentTrack.StartPoint = TimeSpan.Zero;
+                }
                 Bass.ChannelSetAttribute(_trackHandle, ChannelAttribute.Volume, 0);
-                Bass.ChannelSetPosition(_trackHandle, Bass.ChannelSeconds2Bytes(_trackHandle, _currentTrack.StartPoint.Value.TotalSeconds), PositionFlags.Bytes); // set start position
+                Bass.ChannelSetPosition(_trackHandle, Bass.ChannelSeconds2Bytes(_trackHandle, _currentTrack.StartPoint?.TotalSeconds ?? TimeSpan.Zero.TotalSeconds), PositionFlags.Bytes); // set start position
                 BassMix.MixerAddChannel(_device.Handle, _trackHandle, BassFlags.Default | BassFlags.Float);
                 Bass.ChannelPlay(_device.Handle);
                 track = _currentTrack;
