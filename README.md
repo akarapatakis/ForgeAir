@@ -10,3 +10,5 @@
 ### ForgeAir.StationManagement
 
 ### ForgeAir.UI.Core
+
+### ForgeAir.TestingConsoleApp
