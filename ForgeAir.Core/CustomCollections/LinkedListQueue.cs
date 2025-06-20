@@ -34,9 +34,6 @@ namespace ForgeAir.Core.CustomCollections
                 list.AddBefore(current, item);
             }
         }
-
-
-
         public T Dequeue()
         {
             if (list.Count == 0)

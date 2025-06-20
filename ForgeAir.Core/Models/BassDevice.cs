@@ -12,5 +12,7 @@ namespace ForgeAir.Core.Models
 
         public int Handle { get; set; }
 
+        public int vstHandle { get; set; }
+
     }
 }

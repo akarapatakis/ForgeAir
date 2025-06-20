@@ -23,5 +23,11 @@ namespace ForgeAir.Core.Models
         /// </summary>
         public required string Path { get; set; }
 
+
+        /// <summary>
+        /// Get/Set the .conf file that contains user's preferences
+        /// </summary>
+        public required string ConfigurationPath { get; set; }
+
     }
 }

@@ -19,6 +19,7 @@ namespace ForgeAir.Core.Models
 
         public AsioOut? AsioOutAPI { get; set; }
 
+        public ISampleProvider AudioStream { get; set; }
         public object? GetAPI() // non-static here because it needs to be used with each declared model specifically
         {
             switch (TargetDevice.API)
