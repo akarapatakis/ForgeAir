@@ -13,7 +13,30 @@ namespace ForgeAir.Core.CustomCollections
 
         public void EnqueueAtBottom(T item) => list.AddLast(item);
         public void EnqueueAtTop(T item) => list.AddFirst(item);
-        //public void EnqueuAt(T item, int index) => list.AddAfter(list.ElementAt(index), item);
+
+        public void EnqueueAt(T item, int index)
+        {
+            if (index < 0 || index > list.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            if (index == list.Count)
+            {
+                list.AddLast(item);
+            }
+            else
+            {
+                var current = list.First;
+                for (int i = 0; i < index; i++)
+                {
+                    current = current.Next;
+                }
+
+                list.AddBefore(current, item);
+            }
+        }
+
+
+
         public T Dequeue()
         {
             if (list.Count == 0)
