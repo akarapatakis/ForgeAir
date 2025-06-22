@@ -3,29 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ForgeAirPlugin;
+using ForgeAir.Core.SDK.Interfaces;
+using ForgePlugin;
 
 namespace ForgeAir.Core.SDK
 {
-    public class PluginConfigurationManager
+    public class PluginConfigurationManager : ForgePlugin.Helpers.IConfigurationManager
     {
-        Helpers.ConfigurationManager configurationManager;
+        Helpers.ConfigurationManager _configurationManager;
         string? configFile;
 
-        public string RetreiveString(string category, string key, string iniSafeFileName)
+        public PluginConfigurationManager(string? configFile)
         {
-            configFile = String.Format("{0}.ini", iniSafeFileName);
-            configurationManager = new Helpers.ConfigurationManager(configFile);
+            this.configFile = configFile;
 
-            return configurationManager.Get(category, key);
+            if (configFile == null) { return; }
+            if (configFile != null && !File.Exists(configFile))
+            {
+                File.Create(configFile);
+            }
+            
+
+            _configurationManager = new Helpers.ConfigurationManager(configFile);
         }
-        public void SetString(string category, string key, string value, string iniSafeFileName)
-        {
-            configFile = String.Format("{0}.ini", iniSafeFileName);
-            configurationManager = new Helpers.ConfigurationManager(configFile);
 
-            configurationManager.Set(category, key, value);
-            return;
+
+
+        public bool GetBool(string key)
+        {
+            return _configurationManager.GetBool("", key);
+        }
+
+        public int GetInt(string key)
+        {
+            return _configurationManager.GetInt("", key);
+        }
+
+        public string GetString(string key)
+        {
+            return _configurationManager.GetString("", key);
+        }
+
+        public void SetSetting(string key, string value)
+        {
+            _configurationManager.Set("", key, value);
         }
     }
 }

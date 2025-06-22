@@ -23,7 +23,7 @@ namespace ForgeAir.Core.RDS.Helpers
             await foreach (var chunk in chunker.ChunkPS(text))
             {
                 Shared.RDSParams.Instance.chunkedPS = chunk;
-                Shared.RDSParams.Instance.rdsEncoder.UpdatePSText(chunk);
+                Shared.RDSParams.Instance.rdsEncoder.UpdatePS(chunk);
             }
         }
 
@@ -33,7 +33,7 @@ namespace ForgeAir.Core.RDS.Helpers
             await foreach (var chunk in chunker.ChunkRT(text))
             {
                 Shared.RDSParams.Instance.chunkedRT = chunk;
-                Shared.RDSParams.Instance.rdsEncoder.UpdateRTText(chunk);
+                Shared.RDSParams.Instance.rdsEncoder.UpdateRT(chunk);
             }
         }
 

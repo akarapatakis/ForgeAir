@@ -67,6 +67,11 @@ namespace ForgeAir.Core.Services.AudioPlayout.DSP.VST
             }
         }
 
+        public void ShowConfigurationWindow(nint targetWindowHandle)
+        {
+            BassVst.EmbedEditor(_targetDevice.vstHandle, targetWindowHandle);
+        }
+
         ~BassVSTService() { 
             this.Dispose();
         }

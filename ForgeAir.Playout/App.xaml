@@ -1,8 +1,26 @@
 ﻿<Application x:Class="ForgeAir.Playout.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ForgeAir.Playout">
+             xmlns:local="clr-namespace:ForgeAir.Playout"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             Startup="AppBootstrapper.cs">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
+                <hc:Theme SyncWithSystem="true"/>
+
+
+                <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Strings/SetupWizard/en-us.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Assets/Icons/Logos.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Assets/Images/Images.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Assets/Icons/playout/playout.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+
+            <system:UInt32 x:Key="BlurGradientValue">0x99FFFFFF</system:UInt32>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

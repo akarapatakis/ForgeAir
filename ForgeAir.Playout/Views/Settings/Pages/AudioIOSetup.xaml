@@ -1,0 +1,22 @@
+﻿<Page x:Class="ForgeAir.Playout.Views.Settings.Pages.AudioIOSetup"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ForgeAir.Playout.Views.Settings.Pages"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
+      mc:Ignorable="d" 
+      d:DesignHeight="368" d:DesignWidth="588"
+      Title="AudioIOSetup">
+
+    <Grid>
+        <TextBlock Text="Main Output" VerticalAlignment="Top" Foreground="White" FontSize="22" Margin="0,42,0,0"/>
+        <hc:ComboBox Margin="10,94,10,0" VerticalAlignment="Top" x:Name="devicesCombo"/>
+        <hc:ComboBox Margin="10,137,0,0" VerticalAlignment="Top" x:Name="sampleRateCombo" HorizontalAlignment="Left" Width="126"/>
+        <hc:ComboBox Margin="0,137,382,0" VerticalAlignment="Top" x:Name="channelsCombo" HorizontalAlignment="Right" Width="55"/>
+        <CheckBox x:Name="dSoundBox" Content="(For MME) Use DirectSound" HorizontalAlignment="Left" Margin="10,184,0,0" VerticalAlignment="Top"/>
+        <Button Content="Apply" x:Name="applyBtn" HorizontalAlignment="Right" Margin="0,313,10,27" VerticalAlignment="Stretch" Click="applyBtn_Click" Width="89"/>
+
+    </Grid>
+</Page>

@@ -6,10 +6,59 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>app-icon-orig.ico</ApplicationIcon>
+    <StartupObject>ForgeAir.Playout.App</StartupObject>
+    <UseWindowsForms>False</UseWindowsForms>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="bass.dll" />
+    <None Remove="bassalac.dll" />
+    <None Remove="bassasio.dll" />
+    <None Remove="basshls.dll" />
+    <None Remove="bassmix.dll" />
+    <None Remove="bassopus.dll" />
+    <None Remove="basswasapi.dll" />
+    <None Remove="basswebm.dll" />
+    <None Remove="basswma.dll" />
+    <None Remove="basswv.dll" />
+    <None Remove="bass_aac.dll" />
+    <None Remove="bass_ac3.dll" />
+    <None Remove="bass_fx.dll" />
+    <None Remove="bass_vst.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="app-icon-orig.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Caliburn.Micro" Version="4.0.230" />
+    <PackageReference Include="HandyControl" Version="3.5.1" />
+    <PackageReference Include="HandyControl.Lang.en" Version="3.5.1" />
+    <PackageReference Include="ksemenenko.ColorThief" Version="1.1.1.4" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ForgeAir.Core\ForgeAir.Core.csproj" />
     <ProjectReference Include="..\ForgeAir.UI.Core\ForgeAir.UI.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
