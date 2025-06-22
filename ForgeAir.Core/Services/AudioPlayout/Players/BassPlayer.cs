@@ -12,6 +12,8 @@ using System.Diagnostics;
 using ForgeAir.Core.Models;
 using ForgeAir.Core.CustomCollections;
 using ForgeAir.Core.DTO;
+using ForgeAir.Core.Helpers.Interfaces;
+using ForgeAir.Core.Events;
 /*
     IMPORTANT!
 
@@ -30,7 +32,6 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
     {
         private LinkedListQueue<TrackDTO> _queue { get; set; }
 
-
         private int _trackHandle;
 
         private BassDevice _device;
@@ -43,12 +44,16 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
 
         private int _crossfadeDuration = 0;
 
-        public BassPlayer(BassDevice device)
+        private readonly IEventAggregator _eventAggregator;
+
+        public BassPlayer(BassDevice device, IEventAggregator eventAggregator)
         {
             _device = device;
 
            // Bass.CurrentDevice = device.TargetDevice.Index; <- fix later
             _crossfadeDuration = device.TargetDevice.BufferLength;
+
+            _eventAggregator = eventAggregator;
         }
 
 
@@ -143,7 +148,10 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             return Task.FromResult(Bass.ChannelBytes2Seconds(_trackHandle, Bass.ChannelGetLength(_trackHandle)));
         }
 
-
+        public void OnTrackChanged(TrackDTO newTrack)
+        {
+            _eventAggregator.Publish(new TrackChangedEvent(newTrack));
+        }
         public Task<int> GetRemainingMilliseconds(int channel)
         {
             long length = Bass.ChannelGetLength(channel);
@@ -332,5 +340,6 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
         {
            //
         }
+
     }
 }

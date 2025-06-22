@@ -10,6 +10,8 @@ using ForgeAir.Core.Services.AudioPlayout.Players.Interfaces;
 using ForgeAir.Database.Models;
 using ForgeAir.Core.CustomCollections;
 using ForgeAir.Core.DTO;
+using ForgeAir.Core.Helpers.Interfaces;
+using ForgeAir.Core.Events;
 
 namespace ForgeAir.Core.Services.AudioPlayout.Players
 {
@@ -18,8 +20,10 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
         private IWavePlayer outputDevice;
         private MixingSampleProvider mixer;
         private List<TrackItem> activeTracks = new();
+        private readonly IEventAggregator _eventAggregator;
 
-        public NAudioPlayer(NAudioDevice device)
+
+        public NAudioPlayer(NAudioDevice device, IEventAggregator eventAggregator)
         {
             object? api = device.GetAPI();
 
@@ -44,6 +48,12 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
         public void Pause()
         {
             throw new NotImplementedException();
+        }
+
+
+        public void OnTrackChanged(TrackDTO newTrack)
+        {
+            _eventAggregator.Publish(new TrackChangedEvent(newTrack));
         }
 
         public async Task Play(DTO.TrackDTO? track, LinkedListQueue<TrackDTO>? list)

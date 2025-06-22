@@ -12,12 +12,6 @@ namespace ForgeAir.Core.Shared
     {
         public List<ForgeAir.Database.Models.Track> tracks;
 
-
-        public string server { get; set; } = "localhost";
-        public int port { get; set; } = 3306;
-        public string dbName { get; set; } = "ForgeVision";
-
-
         public EventHandler dbModified;
         public void RaiseDBModified() { dbModified?.Invoke(this, EventArgs.Empty); }
         private static DatabaseSharedData? instance;

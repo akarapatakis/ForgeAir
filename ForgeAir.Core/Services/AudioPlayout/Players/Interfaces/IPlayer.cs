@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ForgeAir.Core.CustomCollections;
 using ForgeAir.Core.DTO;
+using ForgeAir.Core.Helpers.Interfaces;
 using ManagedBass.Fx;
 
 namespace ForgeAir.Core.Services.AudioPlayout.Players.Interfaces
@@ -21,7 +22,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players.Interfaces
         /// <returns>Nothing - passes into PlayNextInList() automatically</returns>
         Task Play(DTO.TrackDTO? track=null, LinkedListQueue<TrackDTO>? list=null);
         Task PlayNextTrack();
-
+        void OnTrackChanged(TrackDTO newTrack);
         Task Stop();
 
         void Pause();

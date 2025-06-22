@@ -1,4 +1,5 @@
-﻿using ForgeAirPlugin;
+﻿using ForgePlugin;
+using ForgePlugin.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
