@@ -3,12 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:local="clr-namespace:ForgeVision.Playout.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <hc:SimpleStackPanel Background="#FF171819">
+    <StackPanel Background="#FF171819">
         <TextBlock x:Name="clockBlock" TextWrapping="Wrap" Text="00:00:00" VerticalAlignment="Bottom" FontSize="24" TextAlignment="Center" FontWeight="Bold" Foreground="White"/>
         <TextBlock x:Name="textBlock_Copy" TextWrapping="Wrap" Text="Monday 5th March 2025" FontSize="16" Margin="0,5,0,0" Height="32" VerticalAlignment="Top" TextAlignment="Center" Foreground="White"/>
-    </hc:SimpleStackPanel>
+    </StackPanel>
 </UserControl>

@@ -24,5 +24,15 @@ namespace ForgeAir.UI.Core.Controls
         {
             InitializeComponent();
         }
+
+        public double Level
+        {
+            get { return (double)GetValue(LevelProperty); }
+            set { SetValue(LevelProperty, value); }
+        }
+
+       
+        public static readonly DependencyProperty LevelProperty =
+            DependencyProperty.Register("Level", typeof(double), typeof(VUMeter), new PropertyMetadata(0d));
     }
 }

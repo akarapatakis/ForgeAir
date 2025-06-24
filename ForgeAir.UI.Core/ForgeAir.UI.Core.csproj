@@ -70,23 +70,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="audio-vu-meter" Version="1.0.1" />
-    <PackageReference Include="HandyControl" Version="3.5.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Drawing.Common">
-      <HintPath>..\libs\System.Drawing.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <HintPath>..\libs\System.Windows.Forms.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms.Design">
-      <HintPath>..\libs\System.Windows.Forms.Design.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="Assets\Icons\db-icon.png" />
     <Resource Include="Assets\Icons\file-extra-icon.png" />
     <Resource Include="Assets\Icons\forgevision32.ico" />
@@ -148,9 +131,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Controls\ClockControl.xaml.cs">
+    <Compile Update="UserControls\ClockControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ForgeAir.UI.Win32\ForgeAir.UI.Win32.csproj" />
   </ItemGroup>
 
 </Project>
