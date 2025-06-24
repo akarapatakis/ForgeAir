@@ -17,7 +17,7 @@ namespace ForgeAir.Core.CustomCollections
         public void EnqueueAt(T item, int index)
         {
             if (index < 0 || index > list.Count)
-                throw new ArgumentOutOfRangeException(nameof(index));
+                EnqueueAtBottom(item);
 
             if (index == list.Count)
             {
@@ -56,7 +56,7 @@ namespace ForgeAir.Core.CustomCollections
             LinkedListNode<T> node = list.Find(value);
 
             if (node == null)
-                Core.Shared.AudioPlayerShared.Instance.RaiseOnQueueChanged();
+                return default(T);
 
             list.Remove(node);
             return node.Value;
