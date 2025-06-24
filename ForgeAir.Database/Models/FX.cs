@@ -29,6 +29,6 @@ namespace ForgeAir.Database.Models
         public TimeSpan Duration { get; set; }
 
         [Required]
-        public TrackStatus fxStatus { get; set; }
+        public TrackStatus Status { get; set; }
     }
 }
