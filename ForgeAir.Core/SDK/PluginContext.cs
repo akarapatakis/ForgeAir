@@ -16,6 +16,9 @@ namespace ForgeAir.Core.SDK
 
         public IRDSDevice? RDSEncoder { get; set; }
 
+        public IAudioPlayer AudioPlayer { get; set; }
+
+
         public PluginContext(IClientCalls client, IConfigurationManager config, ILogger logger)
         {
             Client = client;
@@ -26,6 +29,11 @@ namespace ForgeAir.Core.SDK
         public void SetRdsEncoder(IRDSDevice device)
         {
             RDSEncoder = device;
+        }
+
+        public void SetAudioPlayer(IAudioPlayer audioPlayer)
+        {
+            AudioPlayer = audioPlayer;
         }
     }
 

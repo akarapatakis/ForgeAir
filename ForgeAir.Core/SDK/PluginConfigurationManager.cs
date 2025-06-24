@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ForgeAir.Core.SDK.Interfaces;
 using ForgePlugin;
 
 namespace ForgeAir.Core.SDK
@@ -41,7 +40,7 @@ namespace ForgeAir.Core.SDK
 
         public string GetString(string key)
         {
-            return _configurationManager.GetString("", key);
+            return _configurationManager.Get("", key);
         }
 
         public void SetSetting(string key, string value)
