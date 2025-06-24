@@ -26,12 +26,12 @@ namespace ForgeAir.Core.DTO
         public TimeSpan? Outro { get; set; }
         public TimeSpan? HookInPoint { get; set; }
         public TimeSpan? HookOutPoint { get; set; }
-        public TrackType Type { get; set; }
-        public TrackStatus Status { get; set; }
+        public TrackType TrackType { get; set; }
+        public TrackStatus TrackStatus { get; set; }
         public DateTime DateAdded { get; set; }
         public DateTime? DateModified { get; set; }
         public DateTime? DateDeleted { get; set; }
-        public ICollection<ArtistTrackDTO> Artists { get; set; }
+        public ICollection<ArtistTrackDTO> TrackArtists { get; set; }
 
         public ICollection<CategoryDTO> Categories { get; set; }
 
@@ -40,15 +40,15 @@ namespace ForgeAir.Core.DTO
         {
             get
             {
-                if (Artists == null || !Artists.Any())
+                if (TrackArtists == null || !TrackArtists.Any())
                     return string.Empty;
 
-                return string.Join(", ", Artists.Select(ta => ta.ArtistName));
+                return string.Join(", ", TrackArtists.Select(ta => ta.ArtistName));
             }
         }
         public string DisplayDuration => Duration.ToString(@"mm\:ss");
 
-        public string? DisplayType => Enum.GetName(this.Type) ?? null;
+        public string? DisplayType => Enum.GetName(this.TrackType) ?? null;
 
         public string DisplayCategories
         {
@@ -67,8 +67,8 @@ namespace ForgeAir.Core.DTO
             var dto = new TrackDTO
             {
                 Id = track.Id,
-                Type = track.TrackType,
-                Status = track.TrackStatus,
+                TrackType = track.TrackType,
+                TrackStatus = track.TrackStatus,
                 Title = track.Title,
                 Duration = track.Duration,
                 StartPoint = track.StartPoint,
@@ -86,7 +86,7 @@ namespace ForgeAir.Core.DTO
                 DateAdded = track.DateAdded,
                 DateModified = track.DateModified,
                 DateDeleted = track.DateDeleted,
-                Artists = track.TrackArtists != null ?
+                TrackArtists = track.TrackArtists != null ?
                     track.TrackArtists.Select(ta => ArtistTrackDTO.FromEntity(ta)).ToList() : new(),
 
                 Categories = track.Categories != null ?
@@ -100,13 +100,13 @@ namespace ForgeAir.Core.DTO
             return new Track
             {
                 Id = dto.Id,
-                TrackArtists = dto.Artists != null ? dto.Artists.Select(a => ArtistTrackDTO.ToEntity(a)).ToList() : null,
+                TrackArtists = dto.TrackArtists != null ? dto.TrackArtists.Select(a => ArtistTrackDTO.ToEntity(a)).ToList() : null,
                 Categories = dto.Categories != null ? dto.Categories.Select(c => CategoryDTO.ToEntity(c)).ToList() : null,
                 StartPoint = dto.StartPoint,
                 EndPoint = dto.EndPoint,
                 MixPoint = dto.MixPoint,
-                TrackType = dto.Type,
-                TrackStatus = dto.Status,
+                TrackType = dto.TrackType,
+                TrackStatus = dto.TrackStatus,
                 Title = dto.Title,
                 Duration = dto.Duration,
                 ReleaseDate = dto.ReleaseDate,
