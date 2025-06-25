@@ -146,6 +146,14 @@ namespace ForgeAir.Core.Services.Database
             using var _context = _contextFactory.CreateDbContext();
             try
             {
+                if (Int32.TryParse(name, out int id)) // search by id
+                {
+                    if (await GetSpecificById(model, id) is T t && t != null)
+                    {
+                        return new List<T> { t };
+                    }
+                }
+
                 return model switch
                 {
                     ModelTypesEnum.Artist => await _context.Artists
