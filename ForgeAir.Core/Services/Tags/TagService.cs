@@ -5,13 +5,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ForgeAir.Core.Shared;
 using ManagedBass;
 using TagLib;
 using MediaInfo;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using ForgeAir.Core.Services.Tags.Interfaces;
+using ForgeAir.Core.DTO;
 namespace ForgeAir.Core.Services.Tags
 {
     public class TagService : ITagService
@@ -79,9 +79,9 @@ namespace ForgeAir.Core.Services.Tags
 
 
 
-        public ForgeAir.Database.Models.Artist[] getArtists(ForgeAir.Database.Models.Track track)
+        public ArtistDTO[] getArtists(TrackDTO track)
         {
-            var artists = new List<ForgeAir.Database.Models.Artist>();
+            var artists = new List<ArtistDTO>();
 
             try
             {
@@ -93,7 +93,7 @@ namespace ForgeAir.Core.Services.Tags
                     foreach (var performer in tfile.Tag.Performers)
                     {
                         if (!string.IsNullOrWhiteSpace(performer))
-                            artists.Add(new ForgeAir.Database.Models.Artist { Name = performer.Trim() });
+                            artists.Add(new ArtistDTO { Name = performer.Trim() });
                     }
                 }
 
@@ -106,7 +106,7 @@ namespace ForgeAir.Core.Services.Tags
                         var trimmed = name.Trim();
                         if (!string.IsNullOrEmpty(trimmed) && !artists.Any(a => a.Name == trimmed))
                         {
-                            artists.Add(new ForgeAir.Database.Models.Artist { Name = trimmed });
+                            artists.Add(new ArtistDTO { Name = trimmed });
                         }
                     }
                 }
@@ -114,20 +114,20 @@ namespace ForgeAir.Core.Services.Tags
                 // If still empty, add "Unknown Artist"
                 if (!artists.Any())
                 {
-                    artists.Add(new ForgeAir.Database.Models.Artist { Name = "Unknown Artist" });
+                    artists.Add(new ArtistDTO { Name = "Unknown Artist" });
                 }
             }
             catch (UnsupportedFormatException)
             {
-                artists.Add(new ForgeAir.Database.Models.Artist { Name = "Unknown Artist" });
+                artists.Add(new ArtistDTO { Name = "Unknown Artist" });
             }
 
             return artists.ToArray();
         }
 
-        public ForgeAir.Database.Models.Artist getArtist(ForgeAir.Database.Models.Track track) // fuck
+        public ArtistDTO getArtist(TrackDTO track) // fuck
         {
-            ForgeAir.Database.Models.Artist artist = new ForgeAir.Database.Models.Artist();
+            ArtistDTO artist = new ArtistDTO();
             string[] artists;
 
 
