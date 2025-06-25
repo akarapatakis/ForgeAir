@@ -46,5 +46,10 @@ namespace ForgeAir.Core.Services.AudioPlayout
         {
             Task.Run(() => _player.PlayNextTrack());
         }
+
+        public float[] GetLevels()
+        {
+            return _player.GetLevels();
+        }
     }
 }

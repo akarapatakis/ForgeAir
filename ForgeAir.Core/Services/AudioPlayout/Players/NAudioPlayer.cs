@@ -115,6 +115,12 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
         {
             throw new NotImplementedException();
         }
+
+        public float[] GetLevels()
+        {
+            return new float[] { leftVolumeLevel, rightVolumeLevel };
+        }
+
     }
     internal class TrackItem
     {

@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace ForgeAir.Core.Services.AudioPlayout.Interfaces
 {
-    interface IAudioService
+    public interface IAudioService
     {
         void Initialize();
         void Stop();
         void Play();
         void Pause();
         void Next();
+
+        float[] GetLevels();
     }
 }

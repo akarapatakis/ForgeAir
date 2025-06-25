@@ -341,5 +341,9 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
            //
         }
 
+        public float[] GetLevels()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

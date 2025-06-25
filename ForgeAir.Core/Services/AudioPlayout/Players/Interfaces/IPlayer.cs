@@ -30,6 +30,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players.Interfaces
         void Resume();
 
         Task PlayFX(ForgeAir.Database.Models.FX fx);
+        float[] GetLevels();
 
     }
 }
