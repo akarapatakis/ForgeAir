@@ -1,5 +1,7 @@
-﻿using ForgeAir.Core.Tracks.Enums;
+﻿using ForgeAir.Core.DTO;
+using ForgeAir.Core.Tracks.Enums;
 using ForgeAir.Database;
+using ForgeAir.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using MySqlConnector;
 using System;
@@ -92,6 +94,7 @@ namespace ForgeAir.Core.Services.Database
                 ModelTypesEnum.Category => await _context.Category
                     .AsNoTracking()
                     .ToListAsync() as List<T>,
+
                 ModelTypesEnum.FX => await _context.Fx
                     .AsNoTracking()
                     .ToListAsync() as List<T>,
@@ -161,7 +164,7 @@ namespace ForgeAir.Core.Services.Database
                     .ToListAsync() as List<T>,
 
                     ModelTypesEnum.Track => await _context.Tracks
-                    .Where(x => EF.Functions.Like(x.Title, $"{name}%") || EF.Functions.Like(x.Title, $"{name}%"))
+                    .Where(x => EF.Functions.Like(x.Title, $"{name}%") || EF.Functions.Like(x.TrackArtists.FirstOrDefault(), $"{name}%") || EF.Functions.IsMatch(x.FilePath, $"{name}%", MySqlMatchSearchMode.NaturalLanguage))
                     .ToListAsync() as List<T>,
 
                     ModelTypesEnum.Video => await _context.Videos
@@ -171,8 +174,48 @@ namespace ForgeAir.Core.Services.Database
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error searching: {ex.Message}");
                 return new List<T>();
+            }
+        }
+
+        public async Task<List<TrackDTO>> GetTracksByCategoryAsync(CategoryDTO category)
+        {
+            using var _context = _contextFactory.CreateDbContext();
+            var trackDTOs = new List<TrackDTO>();
+
+            try
+            {
+                ICollection<Track> tracks = await _context.Tracks.Where(x => x.Categories.Any(c => c.Name == category.Name)).ToListAsync();
+                foreach (var track in tracks)
+                {
+                    trackDTOs.Add(TrackDTO.FromEntity(track));
+                }
+                return trackDTOs;
+            
+            }
+            catch (Exception ex)
+            {
+                return new List<TrackDTO>();
+            }
+        }
+        public async Task<List<TrackDTO>> GetTracksByArtistAsync(ArtistDTO artist)
+        {
+            using var _context = _contextFactory.CreateDbContext();
+            var trackDTOs = new List<TrackDTO>();
+
+            try
+            {
+                ICollection<Track> tracks = await _context.Tracks.Where(x => x.TrackArtists.Any(c => c.Artist.Name == artist.Name)).ToListAsync();
+                foreach (var track in tracks)
+                {
+                    trackDTOs.Add(TrackDTO.FromEntity(track));
+                }
+                return trackDTOs;
+
+            }
+            catch (Exception ex)
+            {
+                return new List<TrackDTO>();
             }
         }
     }
