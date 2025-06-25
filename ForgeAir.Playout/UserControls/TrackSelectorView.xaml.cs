@@ -1,7 +1,6 @@
 ﻿using ForgeAir.Core.AudioEngine;
 using ForgeAir.Core.DTO;
 using ForgeAir.Core.Helpers;
-using ForgeAir.Core.Shared;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
 using ForgeAir.Playout.UserControls.ViewModels;
@@ -33,19 +32,14 @@ namespace ForgeAir.Playout.UserControls
         {
             InitializeComponent();
 
-            // Resolve dependencies manually or inject via a factory/service locator
-            var sp = ((App)Application.Current).ServiceProvider;
 
-            ViewModel = sp.GetRequiredService<TrackSelectorViewModel>();
-
-            DataContext = ViewModel;
         }
 
         private void UserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (listView.SelectedItem is TrackDTO track)
             {
-                ViewModel.AddTrackToQueue(track);
+
             }
         }
     }

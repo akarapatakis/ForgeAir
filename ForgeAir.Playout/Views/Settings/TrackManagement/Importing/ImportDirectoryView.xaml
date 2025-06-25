@@ -1,0 +1,41 @@
+﻿<hc:GlowWindow x:Class="ForgeAir.Playout.Views.ImportDirectoryView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ForgeAir.Playout.Views"
+        mc:Ignorable="d"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        Title="Import Directory" Height="450" Width="800">
+    <Grid>
+        <hc:Watermark Mark="ForgeAir" FontSize="32" FontWeight="UltraLight" Opacity="0.5"/>
+        <GroupBox x:Name="groupBox" Header="Add Track Directory...">
+            <Grid>
+                <hc:Watermark Mark="ForgeAir" FontSize="32" FontWeight="UltraLight" Opacity="0.5"/>
+                <hc:TextBox x:Name="DirectoryBox" Margin="10,58,105,0" TextWrapping="Wrap" IsReadOnly="True" Height="24" VerticalAlignment="Top"/>
+                <hc:NumericUpDown x:Name="CrossFadeUpDown" HorizontalAlignment="Left" Margin="10,181,0,0" Height="28" VerticalAlignment="Top"/>
+                <hc:ButtonGroup Margin="0,0,19,10" Style="{StaticResource ButtonGroupSolid}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="230">
+                    <Button x:Name="Add" Content="Add" IsDefault="True" Style="{StaticResource ButtonDefault}" HorizontalAlignment="Right" Width="100"/>
+                    <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right" Width="100"/>
+                </hc:ButtonGroup>
+                <Button x:Name="DirSelect" Content="Select..." HorizontalAlignment="Right" Margin="0,58,15,0" VerticalAlignment="Top" Width="85"/>
+                <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,160,0,0" TextWrapping="Wrap" Text="Crossfade Seconds" VerticalAlignment="Top"/>
+                <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="10,37,0,0" TextWrapping="Wrap" Text="Directory" VerticalAlignment="Top"/>
+                <CheckBox x:Name="OverrideArtistCheck" Content="Override all files in the directory with a specific artist" Margin="0,168,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="324"></CheckBox>
+                <RadioButton x:Name="SongRadioButton" Content="Song" HorizontalAlignment="Left" Margin="10,0,0,127" VerticalAlignment="Bottom"/>
+                <RadioButton x:Name="JingleRadioButton" Content="Jingle" HorizontalAlignment="Left" Margin="10,0,0,106" VerticalAlignment="Bottom" Height="16"/>
+                <RadioButton x:Name="SweeperRadioButton" Content="Sweeper" HorizontalAlignment="Left" Margin="10,0,0,85" VerticalAlignment="Bottom"/>
+                <RadioButton x:Name="OtherTrackRadioButton" Content="Other" HorizontalAlignment="Left" Margin="10,0,0,64" VerticalAlignment="Bottom"/>
+                <RadioButton x:Name="VoicetrackRadioButton" Content="Voice Track" HorizontalAlignment="Left" Margin="114,0,0,127" VerticalAlignment="Bottom"/>
+                <RadioButton x:Name="CommercialRadioButton" Content="Commercial" HorizontalAlignment="Left" Margin="114,0,0,106" VerticalAlignment="Bottom"/>
+
+                <hc:AutoCompleteTextBox x:Name="ArtistAutoCompleteBox" Width="260" HorizontalAlignment="Right" Margin="0,195,10,0" ItemsSource="{Binding Items}" Text="{Binding SearchText}" DisplayMemberPath="Name" Height="28" VerticalAlignment="Top"/>
+                <TextBlock x:Name="textBlock1" Margin="0,201,275,0" TextWrapping="Wrap" Text="Artist:" HorizontalAlignment="Right" Width="36" Height="16" VerticalAlignment="Top"/>
+
+            </Grid>
+
+        </GroupBox>
+
+
+    </Grid>
+</hc:GlowWindow>

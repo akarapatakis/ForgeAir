@@ -13,8 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ForgeAir.Core.DTO;
 using ForgeAir.Core.Services;
-using ForgeAir.Core.Shared;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
 using MahApps.Metro.Controls;
@@ -28,7 +28,7 @@ namespace ForgeAir.Playout.UserControls
     {
 
         private readonly ForgeAirDbContextFactory factory;
-        public List<FX> FXTiles { get; set; } = new List<FX>();
+        public List<FxDTO> FXTiles { get; set; } = new List<FxDTO>();
         public Core.Services.Database.RepositoryService<FX> repository;
         public FXSelectorControl()
         {
@@ -38,7 +38,6 @@ namespace ForgeAir.Playout.UserControls
 
             InitializeComponent();
             this.DataContext = this;
-            DatabaseSharedData.Instance.dbModified += RefreshFX;
 
             _FXSelectorControl();
         }
@@ -47,7 +46,7 @@ namespace ForgeAir.Playout.UserControls
             FXTiles.Clear();
             foreach (var tile in (await Task.Run(() => repository.GetAll(Core.Tracks.Enums.ModelTypesEnum.FX))))
             {
-                FXTiles.Add(tile);
+                FXTiles.Add(FxDTO.FromEntity(tile));
             }
         }
         public async void _FXSelectorControl()
@@ -55,7 +54,7 @@ namespace ForgeAir.Playout.UserControls
 
             foreach (var tile in (await Task.Run(() => repository.GetAll(Core.Tracks.Enums.ModelTypesEnum.FX))))
             {
-                FXTiles.Add(tile);
+                FXTiles.Add(FxDTO.FromEntity(tile));
             }
         }
 
@@ -63,7 +62,7 @@ namespace ForgeAir.Playout.UserControls
         {
             if (sender is Tile clickedTile && clickedTile.DataContext is FX fxTile)
             {
-                Task.Run(() => AudioPlayerShared.Instance.audioPlayer.PlayFX(fxTile));
+                // Task.Run(() => AudioPlayerShared.Instance.audioPlayer.PlayFX(fxTile));
 
             }
         }

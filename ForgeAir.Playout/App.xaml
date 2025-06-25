@@ -3,15 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ForgeAir.Playout"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             xmlns:hc="https://handyorg.github.io/handycontrol"
-             Startup="AppBootstrapper.cs">
+             xmlns:hc="https://handyorg.github.io/handycontrol">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
                 <hc:Theme SyncWithSystem="true"/>
-
+                <ResourceDictionary>
+                    <local:Bootstrapper x:Key="Bootstrapper" />
+                </ResourceDictionary>
 
                 <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Strings/SetupWizard/en-us.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Assets/Icons/Logos.xaml"/>

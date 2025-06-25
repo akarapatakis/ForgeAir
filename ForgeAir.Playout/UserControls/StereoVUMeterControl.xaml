@@ -1,0 +1,15 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ForgeAir.Playout.UserControls"
+             xmlns:Controls="clr-namespace:ForgeAir.UI.Core.Controls;assembly=ForgeAir.UI.Core" xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="ForgeAir.Playout.UserControls.StereoVUMeterControl"
+             mc:Ignorable="d" Height="262" Width="115">
+    <Grid>
+        <Controls:VUMeter x:Name="leftVU" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" />
+        <Controls:VUMeter x:Name="rightVU" HorizontalAlignment="Right" Margin="0,4,10,0" VerticalAlignment="Top" />
+        <TextBlock Margin="24,209,80,24" TextWrapping="Wrap" Text="L" FontSize="24"/>
+        <TextBlock Margin="78,209,23,24" TextWrapping="Wrap" Text="R" FontSize="24"/>
+    </Grid>
+</UserControl>
