@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ForgeAir.Core.RDS.Enums;
 
+
 namespace ForgeAir.Core.Models
 {
     class RDSBlock
@@ -15,7 +16,7 @@ namespace ForgeAir.Core.Models
         public required RDSGroupsEnum Group { get; set; }
 
         /// <summary>
-        /// The data that will be sent to the encoder
+        /// The chunked data that will be sent to the encoder
         /// </summary>
         public required string Data { get; set; }
 
