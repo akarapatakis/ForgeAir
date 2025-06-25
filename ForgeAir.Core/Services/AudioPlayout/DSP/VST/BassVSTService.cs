@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ForgeAir.Core.Models;
 using ForgeAir.Core.Services.AudioPlayout.DSP.VST.Interfaces;
-using ForgeAir.Core.Shared;
 using ManagedBass;
 using ManagedBass.Vst;
 

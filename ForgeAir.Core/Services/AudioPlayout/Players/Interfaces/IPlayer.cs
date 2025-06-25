@@ -17,10 +17,9 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players.Interfaces
         /// Plays either a list containing "Track" or a Track 
         /// if track is null and the list is null, then nothing will play
         /// </summary>
-        /// <param name="track">A Database.Models.Track - nullable</param>
-        /// <param name="list">A LinkedListQueue by Database.Models.Track - nullable</param>
+        /// <param name="track">The track to play</param>
         /// <returns>Nothing - passes into PlayNextInList() automatically</returns>
-        Task Play(DTO.TrackDTO? track=null, LinkedListQueue<TrackDTO>? list=null);
+        Task Play();
         Task PlayNextTrack();
         void OnTrackChanged(TrackDTO newTrack);
         Task Stop();
@@ -29,7 +28,9 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players.Interfaces
 
         void Resume();
 
-        Task PlayFX(ForgeAir.Database.Models.FX fx);
+        Task PlayFX(FxDTO fx);
+
+        void OnPlaybackStopped();
         float[] GetLevels();
 
     }
