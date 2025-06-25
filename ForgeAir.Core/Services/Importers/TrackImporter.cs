@@ -5,6 +5,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using ForgeAir.Core.DTO;
+using ForgeAir.Core.Models;
+using ForgeAir.Core.Services.Database;
 using ForgeAir.Core.Services.Importers.Interfaces;
 using ForgeAir.Core.Services.Importers.Migrators;
 using ForgeAir.Core.Services.Tags;
@@ -22,38 +25,77 @@ namespace ForgeAir.Core.Services.Importers
     {
         private TagService _tagReader;
         private readonly ForgeAirDbContext _dbContext;
-
+        private RepositoryService<Track> RepositoryService;
         public TrackImporter() { 
 
             _dbContext = new ForgeAirDbContext();
+            RepositoryService = new RepositoryService<Track>(new ForgeAirDbContextFactory());
         }
-        public async Task<Track> createTrackAsync(string filename, TrackType type, TimeSpan crossfadeTime, bool isVideo = false, string? artistString = null)
+
+        public async Task<Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum>> createNetStreamTrack(TrackImportModel stream)
         {
             _dbContext.ChangeTracker.Clear(); // καθαρισμος της γαμημένης entity γιατι καυλανταει με ερρορς για διπλά entries ενώ γίνεται κανονικά το τσεκ
-            Track track;
-            _tagReader = new TagService(new DTO.TrackDTO() { FilePath = filename });
+            TrackDTO track = new TrackDTO();
 
+            track.FilePath = stream.FilePath;
+            track.Title = stream.StreamDisplayTitle ?? stream.FilePath;
+            track.Album = "";
+            track.ISRC = "";
+            track.DateAdded = DateTime.UtcNow;
+            track.DateModified = DateTime.UtcNow;
+            track.Bpm = _tagReader.BPM;
+            track.Duration = TimeSpan.Zero;
+            track.MixPoint = track.Duration;
+            track.TrackStatus = ForgeAir.Database.Models.Enums.TrackStatus.Enabled;
+            track.ReleaseDate = DateTime.UtcNow;
+            track.TrackType = ForgeAir.Database.Models.Enums.TrackType.Rebroadcast;
+
+            track.Duration = TimeSpan.Zero;
+            track.Outro = track.Duration;
+            track.Intro = track.Duration;
+
+            try
+            {
+                await _dbContext.Tracks.AddAsync(TrackDTO.ToEntity(track));
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum> { { ImportTrackStatusEnum.Error, ImportTrackErrorsEnum.DbError } };
+            }
+
+
+            return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum> { { ImportTrackStatusEnum.Imported, ImportTrackErrorsEnum.NoError } };
+        }
+        public async Task<Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum>> createTrackAsync(TrackImportModel trackImport)
+        {
+            _dbContext.ChangeTracker.Clear(); // καθαρισμος της γαμημένης entity γιατι καυλανταει με ερρορς για διπλά entries ενώ γίνεται κανονικά το τσεκ
+            TrackDTO track;
+            _tagReader = new TagService(new DTO.TrackDTO() { FilePath = trackImport.FilePath });
+
+            if (!File.Exists(trackImport.FilePath)) {
+                return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum> { { ImportTrackStatusEnum.Error, ImportTrackErrorsEnum.TrackFileNotFound } };
+            }
             if (!_tagReader.Comment.Contains("Jazler 2.0.x InfoTag Radio Automation (www.jazler.com)")) {
 
-                track = new Track()
+                track = new TrackDTO()
                 {
-                    FilePath = filename,
+                    FilePath = trackImport.FilePath,
                     Title = _tagReader.Title,
                     Album = _tagReader.Album,
                     ISRC = _tagReader.ISRC,
                     DateAdded = DateTime.UtcNow,
                     DateModified = DateTime.UtcNow,
-                    Bpm = 0,
+                    Bpm = _tagReader.BPM,
                     StartPoint = TimeSpan.Zero,
                     Duration = _tagReader.AudioDuration,
                     EndPoint = _tagReader.AudioDuration,
-                    MixPoint = _tagReader.AudioDuration - crossfadeTime,
+                    MixPoint = _tagReader.AudioDuration - trackImport.CrossfadeTime,
                     TrackStatus = TrackStatus.Enabled,
                     ReleaseDate = _tagReader.ReleaseDate,
-                    containsVideoTrack = isVideo,
-                    TrackType = type,
-                    Categories = new List<Category>(),
-                    TrackArtists = new List<ArtistTrack>() // σημαντικό
+                    TrackType = trackImport.TrackType,
+                    Categories = new List<CategoryDTO>(),
+                    TrackArtists = new List<ArtistTrackDTO>() // σημαντικό
 
                 };
             }
@@ -61,47 +103,53 @@ namespace ForgeAir.Core.Services.Importers
             {
                 var jztrack = JZRadio2TagMigrator.GenerateTrackFromInfoTag(_tagReader.Comment);
 
-                track = new Track()
+                track = new TrackDTO()
                 {
-                    FilePath = filename,
+                    FilePath = trackImport.FilePath,
                     Title = jztrack.Title,
                     Album = jztrack.Album,
                     ISRC = _tagReader.ISRC,
                     DateAdded = DateTime.UtcNow,
                     DateModified = DateTime.UtcNow,
-                    Bpm = 0,
+                    Bpm = _tagReader.BPM,
                     StartPoint = TimeSpan.Zero,
                     Duration = _tagReader.AudioDuration ,
                     EndPoint = _tagReader.AudioDuration,
-                    MixPoint = _tagReader.AudioDuration - crossfadeTime,
+                    MixPoint = _tagReader.AudioDuration - trackImport.CrossfadeTime,
                     TrackStatus = TrackStatus.Enabled,
                     ReleaseDate = _tagReader.ReleaseDate,
-                    TrackType = type,
-                    Categories = new List<Category>(),
-                    TrackArtists = new List<ArtistTrack>() // σημαντικό
+                    TrackType = trackImport.TrackType,
+                    Categories = new List<CategoryDTO>(),
+                    TrackArtists = new List<ArtistTrackDTO>() // σημαντικό
                 };
             }
 
 
-            await _dbContext.Tracks.AddAsync(track);
+            await _dbContext.Tracks.AddAsync(TrackDTO.ToEntity(track));
             await _dbContext.SaveChangesAsync(); 
 
-            if (artistString == null)
+            if (trackImport.OverrideArtistString == null)
             {
                 if (!_tagReader.Comment.Contains("Jazler 2.0.x InfoTag Radio Automation (www.jazler.com)"))
                 {
-                    foreach (Artist artistName in _tagReader.getArtists(track))
+                    foreach (ArtistDTO artistName in _tagReader.getArtists(track))
                     {
-
                         var existingArtist = await _dbContext.Artists
                             .FirstOrDefaultAsync(a => a.Name.ToLower() == artistName.Name.ToLower());
 
-                        Artist artist = existingArtist ?? artistName;
+                        ArtistDTO artist = ArtistDTO.FromEntity(existingArtist) ?? artistName;
 
                         if (artist.Id == 0)
                         {
-                            await _dbContext.Artists.AddAsync(artist);
-                            await _dbContext.SaveChangesAsync();
+                            try
+                            {
+                                await _dbContext.Artists.AddAsync(ArtistDTO.ToEntity(artist));
+                                await _dbContext.SaveChangesAsync();
+                            }
+                            catch (Exception ex)
+                            {
+                                return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum> { { ImportTrackStatusEnum.Error, ImportTrackErrorsEnum.DbError } };
+                            }
                         }
 
                         bool alreadyTracked = _dbContext.ChangeTracker
@@ -120,7 +168,14 @@ namespace ForgeAir.Core.Services.Importers
                                     ArtistId = artist.Id,
                                     TrackId = track.Id,
                                 };
-                                await _dbContext.ArtistTracks.AddAsync(artistTrack);
+                                try
+                                {
+                                    await _dbContext.ArtistTracks.AddAsync(artistTrack);
+                                }
+                                catch (Exception ex)
+                                {
+                                    return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum> { { ImportTrackStatusEnum.Error, ImportTrackErrorsEnum.DbError } };
+                                }
                             }
                         }
                     }
@@ -136,8 +191,14 @@ namespace ForgeAir.Core.Services.Importers
 
                         if (artist.Id == 0)
                         {
-                            await _dbContext.Artists.AddAsync(artist);
-                            await _dbContext.SaveChangesAsync();
+                            try
+                            {
+                                await _dbContext.Artists.AddAsync(artist);
+                                await _dbContext.SaveChangesAsync();
+                            }
+                            catch (Exception ex) {
+                                return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum> { { ImportTrackStatusEnum.Error, ImportTrackErrorsEnum.DbError } };
+                            }
                         }
 
                         bool alreadyTracked = _dbContext.ChangeTracker
@@ -167,12 +228,19 @@ namespace ForgeAir.Core.Services.Importers
             else
             {
                 Artist artist = await _dbContext.Artists
-    .FirstOrDefaultAsync(a => a.Name.ToLower() == artistString.ToLower()) as Artist ?? new Artist() { Name = artistString };
+    .FirstOrDefaultAsync(a => a.Name.ToLower() == trackImport.OverrideArtistString.ToLower()) as Artist ?? new Artist() { Name = trackImport.OverrideArtistString };
 
                 if (artist.Id == 0)
                 {
-                    await _dbContext.Artists.AddAsync(artist);
-                    await _dbContext.SaveChangesAsync();
+                    try
+                    {
+                        await _dbContext.Artists.AddAsync(artist);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                    catch (Exception ex) {
+                        return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum> { { ImportTrackStatusEnum.Error, ImportTrackErrorsEnum.DbError } };
+
+                    }
                 }
 
                 var artistTrack = new ArtistTrack
@@ -181,7 +249,15 @@ namespace ForgeAir.Core.Services.Importers
                     TrackId = track.Id,
                 };
 
-                await _dbContext.ArtistTracks.AddAsync(artistTrack);
+                try
+                {
+                    await _dbContext.ArtistTracks.AddAsync(artistTrack);
+                }
+                catch (Exception ex)
+                {
+                    return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum> { { ImportTrackStatusEnum.Error, ImportTrackErrorsEnum.DbError } };
+
+                }
             }
 
             // Outro / Intro λογική
@@ -195,11 +271,19 @@ namespace ForgeAir.Core.Services.Importers
                 track.Intro = TimeSpan.FromSeconds(10);
                 track.Outro = track.Duration - TimeSpan.FromSeconds(10);
             }
+            try
+            {
+                await _dbContext.SaveChangesAsync(); // Αποθήκευση των artistTracks
+                _dbContext.ChangeTracker.Clear(); // καθαρισμος της γαμημένης entity γιατι καυλανταει με ερρορς για διπλά entries ενώ γίνεται κανονικά το τσεκ
 
-            await _dbContext.SaveChangesAsync(); // Αποθήκευση των artistTracks
-            _dbContext.ChangeTracker.Clear(); // καθαρισμος της γαμημένης entity γιατι καυλανταει με ερρορς για διπλά entries ενώ γίνεται κανονικά το τσεκ
+            }
+            catch (Exception ex) {
+                return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum> { { ImportTrackStatusEnum.Error, ImportTrackErrorsEnum.DbError } };
 
-            return track;
+            }
+
+            return new Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum>{ { ImportTrackStatusEnum.Imported, ImportTrackErrorsEnum.NoError }};
+
         }
 
         public async Task<bool> LinkArtistToTrackAsync(Track track)
@@ -216,8 +300,15 @@ namespace ForgeAir.Core.Services.Importers
                 {
                     existingArtist = trackArtist.Artist;
                     
-                    await _dbContext.Artists.AddAsync(existingArtist);
-                    await _dbContext.SaveChangesAsync();
+                    try
+                    {
+                        await _dbContext.Artists.AddAsync(existingArtist);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                    catch
+                    {
+                        return false;
+                    }
                 }
 
                 bool alreadyLinked = await _dbContext.ArtistTracks
