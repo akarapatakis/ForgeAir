@@ -20,8 +20,6 @@ namespace ForgeAir.Core.Models
         
         public IVSTService VSTService { get; set; }
 
-        public LinkedListQueue<DTO.TrackDTO> TrackQueue { get; set; }
-
         public ICollection<IPlugin> LoadedPlugins { get; set; }
 
         public DatabaseCredentials DatabaseCredentials { get; set; }
@@ -35,6 +33,21 @@ namespace ForgeAir.Core.Models
                 if (_currentTrack != value)
                 {
                     _currentTrack = value;
+                    OnPropertyChanged();
+                    OnTrackChanged?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        private LinkedListQueue<TrackDTO> _trackQueue;
+        public LinkedListQueue<TrackDTO> TrackQueue
+        {
+            get => _trackQueue;
+            set
+            {
+                if (_trackQueue != value)
+                {
+                    _trackQueue = value;
                     OnPropertyChanged();
                     OnTrackChanged?.Invoke(this, EventArgs.Empty);
                 }
