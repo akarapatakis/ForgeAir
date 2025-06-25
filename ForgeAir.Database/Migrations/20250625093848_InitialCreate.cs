@@ -71,11 +71,29 @@ namespace ForgeAir.Database.Migrations
                     DateModified = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     DateDeleted = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     Duration = table.Column<TimeSpan>(type: "time(6)", nullable: false),
-                    fxStatus = table.Column<int>(type: "int", nullable: false)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FX", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PlaylistsToWatch",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    DisplayName = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FilePath = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    isWatching = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlaylistsToWatch", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -133,17 +151,31 @@ namespace ForgeAir.Database.Migrations
                     DateAdded = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     DateModified = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     DateDeleted = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    containsVideoTrack = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    containsSubtitles = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    externalSubtitles = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    externalSubtitlesPath = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    zoomAspectRatio = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    stretchAspectRatio = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    containsVideoTrack = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tracks", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Username = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Password = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    FullName = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Role = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -176,6 +208,31 @@ namespace ForgeAir.Database.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Videos", x => x.Id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "PlaylistToWatchCategories",
+                columns: table => new
+                {
+                    DesiredCategoriesId = table.Column<int>(type: "int", nullable: false),
+                    PlaylistToWatchId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlaylistToWatchCategories", x => new { x.DesiredCategoriesId, x.PlaylistToWatchId });
+                    table.ForeignKey(
+                        name: "FK_PlaylistToWatchCategories_Category_DesiredCategoriesId",
+                        column: x => x.DesiredCategoriesId,
+                        principalTable: "Category",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PlaylistToWatchCategories_PlaylistsToWatch_PlaylistToWatchId",
+                        column: x => x.PlaylistToWatchId,
+                        principalTable: "PlaylistsToWatch",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -246,6 +303,16 @@ namespace ForgeAir.Database.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PlaylistsToWatch_FilePath",
+                table: "PlaylistsToWatch",
+                column: "FilePath");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlaylistToWatchCategories_PlaylistToWatchId",
+                table: "PlaylistToWatchCategories",
+                column: "PlaylistToWatchId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tracks_FilePath",
                 table: "Tracks",
                 column: "FilePath");
@@ -270,7 +337,13 @@ namespace ForgeAir.Database.Migrations
                 name: "FX");
 
             migrationBuilder.DropTable(
+                name: "PlaylistToWatchCategories");
+
+            migrationBuilder.DropTable(
                 name: "Stations");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Videos");
@@ -279,10 +352,13 @@ namespace ForgeAir.Database.Migrations
                 name: "Artists");
 
             migrationBuilder.DropTable(
+                name: "Tracks");
+
+            migrationBuilder.DropTable(
                 name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Tracks");
+                name: "PlaylistsToWatch");
         }
     }
 }

@@ -13,7 +13,7 @@ namespace ForgeAir.Database
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Station> Stations { get; set; }
         public DbSet<Category> Category { get; set; }
-
+        public DbSet<PlaylistToWatch> PlaylistsToWatch { get; set; }
         public DbSet<FX> Fx { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Video> Videos { get; set; }
@@ -35,12 +35,13 @@ namespace ForgeAir.Database
             modelBuilder.ApplyConfiguration(new TrackConfig());
             modelBuilder.ApplyConfiguration(new CategoryConfig());
             modelBuilder.ApplyConfiguration(new VideoConfig());
-
+            modelBuilder.ApplyConfiguration(new PlaylistToWatchConfig());
 
             modelBuilder.Entity<Track>().ToTable("Tracks");
             modelBuilder.Entity<Artist>().ToTable("Artists");
             modelBuilder.Entity<Category>().ToTable("Category");
             modelBuilder.Entity<ArtistTrack>().ToTable("Artists_Tracks");
+            modelBuilder.Entity<PlaylistToWatch>().ToTable("PlaylistsToWatch");
             modelBuilder.Entity<Video>().ToTable("Videos");
             modelBuilder.Entity<FX>().ToTable("FX");
             modelBuilder.Entity<Station>().ToTable("Stations");

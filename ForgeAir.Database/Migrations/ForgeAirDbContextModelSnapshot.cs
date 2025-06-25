@@ -37,6 +37,21 @@ namespace ForgeAir.Database.Migrations
                     b.ToTable("Categories_Tracks");
                 });
 
+            modelBuilder.Entity("CategoryPlaylistToWatch", b =>
+                {
+                    b.Property<int>("DesiredCategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlaylistToWatchId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DesiredCategoriesId", "PlaylistToWatchId");
+
+                    b.HasIndex("PlaylistToWatchId");
+
+                    b.ToTable("PlaylistToWatchCategories", (string)null);
+                });
+
             modelBuilder.Entity("ForgeAir.Database.Models.Artist", b =>
                 {
                     b.Property<int>("Id")
@@ -136,12 +151,37 @@ namespace ForgeAir.Database.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("fxStatus")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("FX", (string)null);
+                });
+
+            modelBuilder.Entity("ForgeAir.Database.Models.PlaylistToWatch", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<bool>("isWatching")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilePath");
+
+                    b.ToTable("PlaylistsToWatch", (string)null);
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.Station", b =>
@@ -377,6 +417,21 @@ namespace ForgeAir.Database.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK_TrackCategories_TrackId");
+                });
+
+            modelBuilder.Entity("CategoryPlaylistToWatch", b =>
+                {
+                    b.HasOne("ForgeAir.Database.Models.Category", null)
+                        .WithMany()
+                        .HasForeignKey("DesiredCategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ForgeAir.Database.Models.PlaylistToWatch", null)
+                        .WithMany()
+                        .HasForeignKey("PlaylistToWatchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.ArtistTrack", b =>

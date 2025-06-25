@@ -13,6 +13,7 @@ namespace ForgeAir.Database.Config
     {
         public void Configure(EntityTypeBuilder<Track> builder)
         {
+            builder.HasKey(t => t.Id);
 
             builder.Property(t => t.DateDeleted).IsRequired(false);
             builder.Property(t => t.Album).IsRequired(false);
