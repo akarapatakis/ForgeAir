@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ForgeAir.Core.DTO;
 
 namespace ForgeAir.Core.CustomCollections
 {
@@ -79,4 +80,23 @@ namespace ForgeAir.Core.CustomCollections
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
+
+    public class LinkedListQueueItem
+    {
+        public int Place { get; set; }
+        public TrackDTO Track { get; set; }
+        public string DisplayTitle => Track.Title;
+        public string DisplayArtists
+        {
+            get
+            {
+                if (Track.TrackArtists == null || !Track.TrackArtists.Any())
+                        return string.Empty;
+                return string.Join(", ", Track.TrackArtists.Select(ta => ta.ArtistName));
+            }
+        }
+        public string Background => "#70" + Core.Helpers.TrackTypeColorGen.Generate(Track.TrackType).Substring(1); // add 0.7 opacity to have readable foreground because i thought that burning a person's eyes is a good idea :/
+        public string? Foreground => Track.Categories.FirstOrDefault()?.Color ?? "White";
+        public string DisplayDuration => Track.Duration.ToString(@"mm\:ss");
+    }
 }
