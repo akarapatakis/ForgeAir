@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace ForgeAir.Core.Helpers
 {
-    public class ConfigurationManager
+    public class ConfigurationManager : Interfaces.IConfigurationManager
     {
         private Dictionary<string, Dictionary<string, string>> data = new();
         private string filePath;
