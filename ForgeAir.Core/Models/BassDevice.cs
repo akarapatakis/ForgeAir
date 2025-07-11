@@ -10,9 +10,9 @@ namespace ForgeAir.Core.Models
     {
         public required OutputDevice TargetDevice { get; set; }
 
-        public int Handle { get; set; }
+        public int Handle { get; set; } = 0;
 
-        public int vstHandle { get; set; }
+        public int vstHandle { get; set; } = 0;
 
     }
 }
