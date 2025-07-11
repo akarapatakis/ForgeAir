@@ -10,8 +10,8 @@ namespace ForgeAir.UI.Win32.Controls
     public class DirectoryBrowser : IDirectoryBrowser
     {
         private FolderBrowserDialog _dialog;
-        public string Title { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Environment.SpecialFolder RootDirectory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Title { get; set; } = "Select Directory";
+        public Environment.SpecialFolder RootDirectory { get; set; } = Environment.SpecialFolder.MyComputer;
         public string SelectedPath { get => _dialog.SelectedPath ?? String.Empty; }
         
         public DirectoryBrowser() {
@@ -21,7 +21,7 @@ namespace ForgeAir.UI.Win32.Controls
             _dialog.RootFolder = RootDirectory;
             _dialog.UseDescriptionForTitle = true;
             _dialog.ShowPinnedPlaces = true;
-            _dialog.AutoUpgradeEnabled = true;
+            _dialog.AutoUpgradeEnabled = false;
             
         }
 
