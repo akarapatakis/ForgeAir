@@ -12,18 +12,28 @@ using Microsoft.Extensions.Logging;
 using System.Globalization;
 using ForgeAir.Core.Services.Tags.Interfaces;
 using ForgeAir.Core.DTO;
+using static System.Net.Mime.MediaTypeNames;
 namespace ForgeAir.Core.Services.Tags
 {
     public class TagService : ITagService
     {
 
         private DTO.TrackDTO track;
+        private string filePath;
 
         TagLib.File _tag;
 
         public TagService(DTO.TrackDTO _track) {
-            _tag = TagLib.File.Create(_track.FilePath);
+            try
+            {
+                filePath = Encoding.UTF8.GetString(Encoding.Default.GetBytes(_track.FilePath));
+                _tag = TagLib.File.Create(Encoding.UTF8.GetString(Encoding.Default.GetBytes(_track.FilePath)));
+            }
 
+            catch
+            {
+                return;
+            }
 
         }
 
@@ -74,7 +84,7 @@ namespace ForgeAir.Core.Services.Tags
             }
         }
 
-        public string Title { get => _tag.Tag.Title ?? Path.GetFileNameWithoutExtension(track.FilePath); }
+        public string Title { get => _tag.Tag.Title ?? Path.GetFileNameWithoutExtension(filePath); }
 
 
 
