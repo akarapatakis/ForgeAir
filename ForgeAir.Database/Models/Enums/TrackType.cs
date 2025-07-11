@@ -8,6 +8,7 @@ namespace ForgeAir.Database.Models.Enums
 {
     public enum TrackType
     {
+        None = 0,
         Song = 1,
         Jingle = 2,
         Commercial = 3,
