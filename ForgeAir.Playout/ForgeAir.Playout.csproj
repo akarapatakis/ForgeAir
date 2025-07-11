@@ -35,6 +35,7 @@
     <PackageReference Include="HandyControl.Lang.en" Version="3.5.1" />
     <PackageReference Include="ksemenenko.ColorThief" Version="1.1.1.4" />
     <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MahApps.Metro.IconPacks.RemixIcon" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +46,28 @@
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Shared\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Ico\main.ico" />
+    <Resource Include="Assets\Ico\metro.ico" />
+    <Resource Include="Resources\import-icon.png" />
+    <Resource Include="Views\PlayoutWindows\splashscreen.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Assets.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Assets.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Assets.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Assets.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
