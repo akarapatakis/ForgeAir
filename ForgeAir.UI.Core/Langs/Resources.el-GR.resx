@@ -123,4 +123,7 @@
   <data name="addTrackString" xml:space="preserve">
     <value>Προσθήκη Κομματιού...</value>
   </data>
+  <data name="ActivityCenter" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
