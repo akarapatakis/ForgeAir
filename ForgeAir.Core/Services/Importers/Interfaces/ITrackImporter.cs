@@ -13,7 +13,7 @@ namespace ForgeAir.Core.Services.Importers.Interfaces
 {
     public interface ITrackImporter
     {
-        Task<Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum>> createTrackAsync(TrackImportModel trackImport);
-        Task<Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum>> createNetStreamTrack(TrackImportModel stream);
+        Task<Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum>> CreateTrackAsync(TrackImportModel trackImport);
+        Task<Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum>> CreateNetStreamTrack(TrackImportModel stream);
     }
 }
