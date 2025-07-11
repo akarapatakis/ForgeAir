@@ -13,7 +13,7 @@ using ForgeAir.Database.Models;
 
 namespace ForgeAir.Core.Services.TrackSelector
 {
-    class RandomTrackSelector : ITrackSelectorService
+    public class RandomTrackSelector : ITrackSelector
     {
         private readonly RepositoryService<TrackDTO> trackRepository;
         private readonly Random random = new();

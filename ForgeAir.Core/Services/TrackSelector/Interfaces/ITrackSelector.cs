@@ -9,7 +9,7 @@ using ForgeAir.Database;
 
 namespace ForgeAir.Core.Services.TrackSelector.Interfaces
 {
-    public interface ITrackSelectorService
+    public interface ITrackSelector
     {
         Task<TrackDTO> GetBestTrackAsync(ClockItem item, DateTime time);
     }

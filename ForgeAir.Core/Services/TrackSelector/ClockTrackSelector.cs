@@ -12,11 +12,11 @@ using ForgeAir.Core.Tracks.Enums;
 
 namespace ForgeAir.Core.Services.TrackSelector
 {
-    public class TrackSelectorService : ITrackSelectorService
+    public class ClockTrackSelector : ITrackSelector
     {
         private readonly RepositoryService<TrackDTO> _trackRepository;
 
-        public TrackSelectorService(RepositoryService<TrackDTO> trackRepository)
+        public ClockTrackSelector(RepositoryService<TrackDTO> trackRepository)
         {
             _trackRepository = trackRepository;
         }

@@ -14,10 +14,10 @@ namespace ForgeAir.Core.Services.AudioPlayout
     public class QueueService : IQueueService
     {
         private LinkedListQueue<TrackDTO> _queue;
-        private ITrackSelectorService _selector;
+        private ITrackSelector _selector;
 
         public event EventHandler QueueChanged;
-        public QueueService(LinkedListQueue<TrackDTO> queue, ITrackSelectorService selector) {
+        public QueueService(LinkedListQueue<TrackDTO> queue, ITrackSelector selector) {
             _queue = queue;
             _selector = selector;
         }
