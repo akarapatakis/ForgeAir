@@ -5,15 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="40" Width="40" Height="200">
-
     <Grid>
+        <!-- Background border -->
+        <Border Background="#222" CornerRadius="4" BorderBrush="#555" BorderThickness="1" />
 
-        <!-- ProgressBar rotated vertical -->
-        <ProgressBar x:Name="vuBar" Minimum="0" Maximum="100" Value="{Binding Level, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                     Orientation="Vertical" Height="Auto" Width="20"
-                     VerticalAlignment="Stretch"
-                     IsIndeterminate="False" 
-                     Foreground="{StaticResource VUGradientBrush}" />
+        <!-- The colored bar -->
+        <Rectangle x:Name="FillBar" VerticalAlignment="Bottom" Width="20" RadiusY="4" RadiusX="4" />
 
         <!-- Optional ticks or marks -->
         <Canvas IsHitTestVisible="False" Margin="8,8,8,8">
@@ -24,12 +21,4 @@
             <Line X1="0" Y1="130" X2="10" Y2="130" Stroke="White" StrokeThickness="1" />
         </Canvas>
     </Grid>
-
-    <UserControl.Resources>
-        <LinearGradientBrush x:Key="VUGradientBrush" StartPoint="0,1" EndPoint="0,0">
-            <GradientStop Color="Green" Offset="0" />
-            <GradientStop Color="Yellow" Offset="0.7" />
-            <GradientStop Color="Red" Offset="1" />
-        </LinearGradientBrush>
-    </UserControl.Resources>
 </UserControl>
