@@ -89,18 +89,18 @@ namespace ForgeAir.Core.Services.Tags
 
 
 
-        public ArtistDTO[] getArtists(TrackDTO track)
+        public ObservableCollection<ArtistDTO> getArtists()
         {
-            var artists = new List<ArtistDTO>();
+            var artists = new ObservableCollection<ArtistDTO>();
 
             try
             {
-                var tfile = TagLib.File.Create(track.FilePath);
+
 
                 // First: Add performers from TagLib
-                if (tfile.Tag.Performers != null && tfile.Tag.Performers.Length > 0)
+                if (_tag.Tag.Performers != null && _tag.Tag.Performers.Length > 0)
                 {
-                    foreach (var performer in tfile.Tag.Performers)
+                    foreach (var performer in _tag.Tag.Performers)
                     {
                         if (!string.IsNullOrWhiteSpace(performer))
                             artists.Add(new ArtistDTO { Name = performer.Trim() });
@@ -108,7 +108,7 @@ namespace ForgeAir.Core.Services.Tags
                 }
 
                 // Optional: Add from getArtist if needed (not clear what it does)
-                var fallbackName = getArtist(track)?.Name;
+                var fallbackName = getArtist()?.Name;
                 if (!string.IsNullOrWhiteSpace(fallbackName))
                 {
                     foreach (var name in fallbackName.Split(";"))
@@ -132,10 +132,10 @@ namespace ForgeAir.Core.Services.Tags
                 artists.Add(new ArtistDTO { Name = "Unknown Artist" });
             }
 
-            return artists.ToArray();
+            return artists;
         }
 
-        public ArtistDTO getArtist(TrackDTO track) // fuck
+        public ArtistDTO getArtist() // fuck
         {
             ArtistDTO artist = new ArtistDTO();
             string[] artists;
@@ -143,15 +143,14 @@ namespace ForgeAir.Core.Services.Tags
 
             try
             {
-                var tfile = TagLib.File.Create(track.FilePath);
-                if (tfile.Tag.Performers == null)
+                if (_tag.Tag.Performers == null)
                 {
                     artist.Name = "Unknown Artist";
                     return artist;
                 }
                 else
                 {
-                    artist.Name = string.Concat(tfile.Tag.Performers);
+                    artist.Name = string.Concat(_tag.Tag.Performers);
                     return artist;
                 }
             }
