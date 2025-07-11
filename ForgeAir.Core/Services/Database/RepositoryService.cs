@@ -48,6 +48,7 @@ namespace ForgeAir.Core.Services.Database
                 ModelTypesEnum.Track => await _context.Tracks
                     .Include(t => t.TrackArtists)
                         .ThenInclude(ta => ta.Artist)
+                    .Include(t => t.Categories)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(t => t.Id == id) as T,
 
@@ -80,6 +81,7 @@ namespace ForgeAir.Core.Services.Database
                 ModelTypesEnum.Track => await _context.Tracks
                     .Include(t => t.TrackArtists)
                     .ThenInclude(ta => ta.Artist)
+                    .Include(t => t.Categories)
                     .AsNoTracking()
                     .ToListAsync() as List<T>,
 
