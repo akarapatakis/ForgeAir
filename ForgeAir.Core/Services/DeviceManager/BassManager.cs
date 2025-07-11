@@ -20,6 +20,10 @@
 
             public BassManager(BassDevice _device) {
                 this.device = _device;
+                if (_device != null)
+                {
+                    InitDevice();
+                }
             }
 
             ///
