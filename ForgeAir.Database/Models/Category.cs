@@ -23,7 +23,7 @@ namespace ForgeAir.Database.Models
 
         public Category? CategoryParent { get; set; }
 
-        [MaxLength(7)]
+        [MaxLength(20)]
         public string? Color { get; set; }
 
         public ICollection<Category>? Subcategories { get; set; }
