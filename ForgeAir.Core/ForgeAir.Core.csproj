@@ -9,6 +9,8 @@
       </PropertyGroup>
 
       <ItemGroup>
+        <PackageReference Include="DotNetEnv" Version="3.1.1" />
+        <PackageReference Include="m3uParser.NET" Version="1.0.17" />
         <PackageReference Include="ManagedBass" Version="3.1.1" />
         <PackageReference Include="ManagedBass.Aac" Version="3.1.1" />
         <PackageReference Include="ManagedBass.Ac3" Version="3.1.1" />
@@ -32,6 +34,7 @@
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="NAudio.Core" Version="2.2.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="OpenSky.Core" Version="1.0.1" />
         <PackageReference Include="Sonora" Version="1.0.0" />
         <PackageReference Include="System.Management" Version="9.0.6" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
