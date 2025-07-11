@@ -60,7 +60,9 @@ namespace ForgeAir.Core.DTO
                 return string.Join("/", Categories.Select(ta => ta?.Name));
             }
         }
-
+        // differs from queue opacity
+        public string Background => "#40" + Core.Helpers.TrackTypeColorGen.Generate(TrackType).Substring(1); // add 0.7 opacity to have readable foreground because i thought that burning a person's eyes is a good idea :/
+        public string? Foreground => Categories.FirstOrDefault()?.Color ?? "White";
 
         public static TrackDTO FromEntity(Track track)
         {
