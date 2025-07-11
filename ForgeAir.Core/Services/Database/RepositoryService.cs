@@ -26,7 +26,6 @@ namespace ForgeAir.Core.Services.Database
             {
                 ModelTypesEnum.Track => await _context.Tracks.CountAsync(),
                 ModelTypesEnum.Artist => await _context.Artists.CountAsync(),
-                ModelTypesEnum.ArtistTrack => await _context.ArtistTracks.CountAsync(),
                 ModelTypesEnum.Category => await _context.Category.CountAsync(),
                 ModelTypesEnum.Video => await _context.Videos.CountAsync(),
                 _ => 0,
@@ -47,13 +46,12 @@ namespace ForgeAir.Core.Services.Database
             {
                 ModelTypesEnum.Track => await _context.Tracks
                     .Include(t => t.TrackArtists)
-                        .ThenInclude(ta => ta.Artist)
+                    .ThenInclude(a => a.Artist)
                     .Include(t => t.Categories)
                     .AsNoTracking()
                     .FirstOrDefaultAsync(t => t.Id == id) as T,
 
                 ModelTypesEnum.Artist => await _context.Artists.FindAsync(id) as T,
-                ModelTypesEnum.ArtistTrack => await _context.ArtistTracks.FirstOrDefaultAsync(p => p.TrackId == id) as T,
                 ModelTypesEnum.Category => await _context.Category.FindAsync(id) as T,
                 ModelTypesEnum.Video => await _context.Videos.FindAsync(id) as T,
                 _ => null,
@@ -90,8 +88,8 @@ namespace ForgeAir.Core.Services.Database
                     .ToListAsync() as List<T>,
 
                 ModelTypesEnum.ArtistTrack => await _context.ArtistTracks
-                    .AsNoTracking()
-                    .ToListAsync() as List<T>,
+                .Include(at => at.Artist)
+                .ToListAsync() as List<T>,
 
                 ModelTypesEnum.Category => await _context.Category
                     .AsNoTracking()
