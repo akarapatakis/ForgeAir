@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using ManagedBass;
 using TagLib;
-using MediaInfo;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using ForgeAir.Core.Services.Tags.Interfaces;
@@ -37,27 +36,7 @@ namespace ForgeAir.Core.Services.Tags
 
         }
 
-        public MediaInfo.Model.CoverInfo? GetPictureMI()
-        {
-            try
-            {
-                using ILoggerFactory factory = LoggerFactory.Create(builder => { });
-                ILogger logger = factory.CreateLogger("Program");
-                var media = new MediaInfoWrapper(track.FilePath, logger);
 
-                if (media.Tags.Covers.FirstOrDefault() == null)
-                {
-                    return null;
-                } else
-                {
-                    return media.Tags.Covers.FirstOrDefault();
-                }
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
         public IPicture? GetPicture() {
             try
             {
@@ -193,12 +172,7 @@ namespace ForgeAir.Core.Services.Tags
             }
             catch (UnsupportedFormatException)
             {
-                using ILoggerFactory factory = LoggerFactory.Create(builder => { });
-                ILogger logger = factory.CreateLogger("Program");
-                var media = new MediaInfoWrapper(track.FilePath, logger);
-
-                if (media.HasVideo)return true;
-
+                return false;
             }
             return false;
         }
