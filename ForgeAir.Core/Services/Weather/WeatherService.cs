@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Melanchall.DryWetMidi.Interaction;
 using Newtonsoft.Json.Linq;
 using OpenSky.Core.Configuration;
 using OpenSky.Core.Service;

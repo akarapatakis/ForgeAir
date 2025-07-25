@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ForgeAir.Core.Models;
-using ForgeAir.Core.Shared;
 using ForgeAir.Database.Models;
 
 namespace ForgeAir.Core.AudienceRequests.Helpers
@@ -18,13 +17,13 @@ namespace ForgeAir.Core.AudienceRequests.Helpers
 
             TrackRequest request = new TrackRequest();
             request.SourceRequest.SourceNumber = parts[0];
-            Regex regex = new Regex(SMSRequestsShared.Instance.RequestModelRegex);
+            Regex regex = new Regex(@"(.*)\sby\s(.*)");
             Match match = regex.Match(parts[1]);
           //  request.name = match.Groups[3].Value;
             request.RequestedTrack = new Database.Models.Track();
 
             request.RequestedTrack.Title = match.Groups[1].Value;
-            request.RequestedTrack.TrackArtists = new List<ArtistTrack>() { new ArtistTrack() { Artist = new Artist() { Name = match.Groups[2].Value } } };
+         //   request.RequestedTrack.TrackArtists = new List<ArtistTrack>() { new ArtistTrack() { Artist = new Artist() { Name = match.Groups[2].Value } } };
             return request;
         }
     }
