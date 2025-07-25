@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MediaInfo;
 using Microsoft.Extensions.Logging;
 using ManagedBass;
 
@@ -99,8 +98,9 @@ namespace ForgeAir.Core.Helpers
             using ILoggerFactory factory = LoggerFactory.Create(builder => { });
             ILogger logger = factory.CreateLogger("Program");
 
-            var media = new MediaInfoWrapper(fileName, logger);
-            if (media.AudioStreams.Count > 0)
+            var media = TagLib.File.Create(fileName);
+
+            if (media.Properties.AudioChannels > 0) // should work but i doubt if it is reliable enough
             {
                 return true;
             }
