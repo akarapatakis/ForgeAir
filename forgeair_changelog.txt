@@ -1,0 +1,291 @@
+- ForgeAir v.1.0a is a version series that will set-up the most basic features set that will enable me personally to run my radio station through ForgeAir. Later versions will include automation, clocks etc - be patient :))
+
+ForgeAir v.1.0a.1003
+-no changelog present-
+
+ForgeAir v1.0a.1004 Changelog
+- Added Save/Load methods for configuration of VST plugin
+- Moved VST Plugin Editor button in Settings
+- *New: Video Output (HD)
+- *New: Audio Tweaks for broadcasting needs (AM/AM Stereo/FM)
+- Fixed now playing banner at studio window not loading after coverart management (coverart is still broken)
+
+Bugs/Issues:
+- Playback randomly stops
+- Delay at startup (by VST Initialization) (resolved in 1006)
+- Video Playback has some miliseconds unsynced with audio (resolved in 1007)
+- VST load/unload circle (doesn't affect anything other than the editor that freezes) (resolved in 1005)
+- VST processing is bypassed while crossfading (resolved in 1005)
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+ForgeAir v1.0a.1005 Changelog
+
+- *New: Manual Track Selection
+- VST applied device-wide by using a mixer (fixes any VST issues that existed in 1004)
+- Fixed a bug where it would display the fallback cover image on the now playing section even the track contains one
+- Fixed a bug where it wouldn't display the track's filepath in import process
+- Fixed a bug where if there was not any title found in tags for a track, it used track's filepath instead of its safe filename
+- Fixed constant annoying audio speed shifting, popping and clicking
+- Improved VST Editor loading times
+- Fixed a bug where pressing stop would skip the track instead of terminating the audio handle
+- Made colors on the now playing section more "calm" to make reading it easier
+
+Bugs/Issues: 
+- Scrolling through the tracks causes slowdown at everything, so be wise with it until it's fixed
+- Not multithreaded code
+- "Play Instant" button is unavailable because of the migration of FXs to the database
+- Fade-to-next button is unavailable because of some critical changes in the audio engine (resolved in 1007)
+- There are some small memory leaks because of improper management of streams (blame killed crossfade) (resolved in 1006)
+- Startup is really slowed down due to the changes in the audio engine (resolved in 1007)
+- Video playback is some SECONDS late from audio playback (resolved in 1006)
+- Crossfade is broken (resolved in 1006)
+- "Next" button freezes UI (resolved in 1007)
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+ForgeAir v1.0a.1006 Changelog
+- Fixed crossfade (it's a bit slow but it is fixable)
+- Loading times are a bit faster (it can be even faster)
+- Changed completely the way ForgeAir reads data from the database (at least 50% speed improvement in database i/o)
+- Did better handling of processes for multi-tasking
+- Fixed a bug where scrolling through the tracks causes slowdown at everything
+- Added specific debug flags at database connection string 
+- Fixed audio glitching at track events/manipulation
+- Fixed a bug where "start auto" doesn't start the first time
+- Video Output now requires 1280x720 at minimum with 1920x1080 being the best scaling option
+- Added live refresh at the track list when a track (or a bunch of tracks) has been added to the database
+- Added elapsed/total timers at current track
+- Fixed the delay between audio and video playback
+- Properly sized "Place" column in queue
+
+Bugs/Issues:
+- Studio Window is hard to move (resolved in 1007)
+- Studio Controls do not often update at track change (resolved in 1007)
+- "Play Instant" button is unavailable because of the migration of FXs to the database
+- Album art cover is pixelizing at tracks with hi-res cover arts (resolved in 1007)
+- Bad text encoding when sending now playing data to BUTT
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+ForgeAir v1.0a.1007 Changelog
+! ForgeAir v1.0a.1007 is a game-changing version that adds a lot of features that are essential for a radio station and opens a new world of customization
+
+- *New: Experimental support for NDI® and BlackMagic DeckLink video output
+- *New: Intro/Outro fields in tracks
+- *New: pseudo-Direct3D-based Video Output (customizable resolution, refresh rate, colors etc)!
+- *New: Video Output is connected with ffmpeg - you will be able to stream the video output and record programe - ffmpeg needs to be downloaded
+- *New: Added MediaInfo as an alternative way to retreive metadata where TagLib fails to (at video files, MediaInfo will be the way to do it)
+- *New: Video Overlay creator tool & library in the sdk
+- *New: Video Output Configuration (for now you can customize logo, overlay, display adapter and some basic behavioral settings)
+- *New: Official BUTT Streaming encoder text passsthru (BUTT executable path must be specified in configuration)
+- *New: Skip To Track feature (buggy as hell)
+- *New: Ability to remember preferences (through ini for now - later at ui)
+- *New: Now Playing overlay is based in WebView2. This opens a world of customizability by simple html/css/js
+- Fixed video initialization window drawing at incorrect resolutions
+- Fixed MME/DSound mono playback when using VST effects
+- Fixed small memory leaks in playback
+- New initialization script! (faster startup times)
+- Fixed a bug where on audio-only tracks, video would randomly jump in a position that is not the same as audio
+- Ability to stretch 4:3 videos to 16:9
+- Fixed SampleError error when using DirectSound
+- Improved album art scaling (pixalization is gone at high-dpi screens)
+- Now Playing metadata are now retreived by the database instead of reading the tags where is not needed
+- Fixed next button locking the UI
+- JSON file for video overlays
+- Video Output Customization (Overlay, logo, clock, behavioral settings)
+- Added splashscreen while the initialization script is being executed
+- Added option to autoplay in startup at system logon
+- Fixed light theme applied to window after migration
+- Fixed random database exceptions at startup that was caused due to bad multithread management (blame me)
+- Fixed timing issues between video overlay and studio ui (causes video overlay to report no track whereas the studio ui reports normally)
+- Added handling when the video duration on some h264 files would be 0 (happens with some "youtube to mp4" tools or when the source file is corrupted at the headers) - fixable with ffmpeg
+- Fixed a bug where the import track window would hang the whole program randomly
+- Fixed a bug where the video overlay would be displayed in advertisements
+- Added a check to skip adding to the queue files that don't exist
+- Fixed a bug when auto start is triggered and the play/skip button the program crashes
+- Improved the way the video logo would render in the output
+- Fixed a bug where videos do not play after audio-only tracks (added specific rule)
+- Fixed streams play overlapping each other (was a dumb bug, fixed in one line)
+- Fixed noticable slowdowns in crossfade
+- Added/forced some audio engine flags that may improve playback quality and resolve minor issues that are not related to ForgeAir
+- Fixed a bug where sometimes playback would stop after a track had finished and the auto pilot button has to be pressed again in order to resume (sometimes this could make 2 streams play overlapping each other and the elapsed timer going up when nothing's playing)
+- Added a check to ignore queueing as next tracks that are currently playing
+- Fixed a bug where when a track hadn't any comment set, its album name wouldn't be retreived
+- Changed no album fallback text in track from "-" to "Unknown Album"
+- Added support for year tag in track import
+- Updated video engine to support the new overlay sdk
+- Added overlay display at track intro/outro respectively
+- Added support for a plethora of video codecs and extensions (H265/HEVC, VP9, VOB, QuickTime MOV, MPEG-2 etc) - fixes black screen when playing a file of unsupported video codec
+- Added handling on missing configuration ini
+- Added AC3 audio support
+- Fixed a bug where at some cases, when importing a track, its selected type wouldn't be followed and it would auto-select as "Song" instead of the selected type
+- Changed fallback track type from "Song" to "Other"
+- Fixed a bug where when stop is pressed, the video track would continue playback
+- Added a workaround that consists of silent video resync with audio every 15 seconds to avoid any desyncrhonization
+- Build flag is set from 'Any CPU' to x64 providing better support and performance (support for 32-bit/x86 CPUs has been dropped - was already semi-broken)
+- Fixed a bug where the required calculated crossfade time would be retreived at a wrong place causing incorrect timing
+- Fixed a bug where on videos the remaining time in milliseconds would not be zero at the ending causing the playback to be stalled. Fixed it by adding a remaining 500ms threshold
+- Added VSync support in the video output for specific use cases
+
+
+Bugs/Issues:
+- files that contain raw PCM audio don't play - bass related issue (dev note: quick re-encode to flac before playback)
+- If a track is added during crossfade or its preparation it will either crash the program or have catastrophical effects (dev note: block queue in that period)
+- Pre-defined effects are not working 
+- Sometimes now playing metadata won't be updated (again)
+- Audio clicking/popping again under heavy load (eg 4k video rendering or having a 5400rpm hdd OR RUNNING DEBUG BUILDS LIKE ME)
+- When a track contains multiple artists, the seperator is ignored causing the artists to be not separated
+- Bad text encoding when sending now playing data with Greek/unicode characters to BUTT
+- Video window is not resizable
+- UI margined at right - low priority
+
+To-Dos:
+
+- *New: Completely Manual Pilot
+- Ability to delete track in tracks list window
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+Announcement 7/4/2025:
+! ForgeAir's video functionallity gets splitted in a seperate project called "ForgeVision" 
+
+ForgeVision v.1.0a.1008 Changelog
+- (ForgeVision)Changed product name references from ForgeAir to ForgeVision
+- (ForgeVision)*New: Lottie animations support (not yet implemented in Playout)
+- (ForgeVision)Ditched BASS support, replaced it with ffmpeg, limited but more stable and has better compatibility
+- (ForgeVision)Partially itched WebView2 and is being slowly replaced by a custom design system
+- (ForgeVision)*New: Subtitles support - recognizes embeded subtitle tracks for now
+- (ForgeVision)*New: Scrolling text support (not yet implemented in Playout)
+- (ForgeAir/ForgeVision)*New: Customizable database environment
+- (ForgeVision)Added experimental support for DirectX Video (not yet implemented in Playout)
+- (ForgeVision)Added new and fresh icons/splash screen
+- (ForgeVision)Supply audio in NDI® stream (laggy)
+- (ForgeVision)Removed some track categories
+- (ForgeVision)Removed crossfading
+- (ForgeVision)Removed VST support as BASS is removed
+- (ForgeAir/ForgeVision)*New: Audio Output Configuration window - finally it can be done by UI :P
+- (ForgeAir)*New: Track Editor for imported tracks (limited support)
+- (ForgeVision)*New: XMLTv experimental support for EPG data (currently shows event "FORGEVISION")
+- (ForgeVision)Added new category in settings "Video Configuration"
+- (ForgeAir/ForgeVision)Added containsVideoTrack flag in database in order to seperate audio and video tracks from each program
+- (ForgeAir/ForgeVision)Fixed random database timeouts causing the program to crash
+- (ForgeAir/ForgeVision)Fixed a bug where if the program would terminate in the middle of importing and loses track of id, the audio engine would try and find an id that is non-existent and crash
+- (ForgeAir/ForgeVision)Fixed a bug where the cover art in the now playing section would display the previous' track cover art
+- (ForgeAir/ForgeVision)Fixed a bug where sometimes, if the crossfade duration is really long, the now playing text in butt wouldn't be updated
+- (ForgeAir/ForgeVision)Blocked any type of track other than Song/Music to be passed into now playing text
+- (ForgeAir/ForgeVision)Fixed studio window strange margin
+- (ForgeAir/ForgeVision)*New: migration support for Jazler 2.0x InfoTag found in comment tag (thats 20+ years old, but why not?)
+- (ForgeAir/ForgeVision)*New redesigned track library
+- (ForgeAir/ForgeVision)*New: Ability to delete tracks in track library manager
+- (ForgeVision)*New: Logging system
+
+
+ForgeAir v1.0a.2000 Changelog
+- (ForgeAir)*New: Customizable database environment
+- (ForgeAir)*New: Ability to rebroadcast from internet streams
+- (ForgeAir)*New: Start point in tracks
+- (ForgeAir)*New: Expandable at screen's resolution clock and now playing views
+- (ForgeAir)*New: ForgeAir runs in background thanks to adding a tray icon! It solves some issues that the program had already as well (closing the program wouldn't stop playback) and it has the ability to show/hide the studio window and access vst editor/settings from there!
+- (ForgeAir)*New: Installation Wizard
+- (ForgeAir)*New: Track Editor for imported tracks (limited support, read only and limited writing)
+- (ForgeAir)*New: Auto-update database on startup
+- (ForgeAir)*New: Categories for tracks
+- (ForgeAir)*New: Experimental sweeper support at track intro! (might cause a lot of delay and instability while autopilot is searching and preparing an appropriate sweeper)
+- (ForgeAir)*New: Track position slider (glitchy for now)
+- (ForgeAir)*New: "ON AIR" smart box. Lights up if the pilot is set to manual and blinks when nothing's playing
+- (ForgeAir)*New: Ability to delete tracks in track library manager
+- (ForgeAir)*New redesigned track library
+- (ForgeAir)*New: migration support for Jazler 2.0x InfoTag found in comment tag (thats 20+ years old, but why not?)
+- (ForgeAir)*New: ability to load VST plugins and enable/disable VST through UI
+- (ForgeAir)*New: Audio Output Configuration window - finally it can be done by UI :P
+- (ForgeAir)small makeover done to the now playing view
+- (ForgeAir)Ripped off any code regarding video
+- (ForgeAir/ForgeVision)Added containsVideoTrack flag in database in order to seperate audio and video tracks from each program
+- (ForgeAir)Finished VST Setup Window
+- (ForgeAir)Fixed a bug where crossfading wouldn't occur when the play/skip button has been pressed
+- (ForgeAir)Improved the really slowwww and inaccurate timing when the calculated crossfade time is greater than 6 seconds
+- (ForgeAir)Switched to allocated device buffer for accurate and fast crossfading
+- (ForgeAir)New n' Improved listviews in queue manager & track library (added artists and proper duration format)
+- (ForgeAir/ForgeVision)Fixed random database timeouts causing the program to crash
+- (ForgeAir)Ability to pass the current playing track to a text file
+- (ForgeAir)Fixed studio window strange margin
+- (ForgeAir)Ignore streaming now playing text if the current track is NOT a song
+- (ForgeAir)Fixed the now playing view not taking all the space given causing a huge gap to be appeared at FHD/4K displays (was since 1003 :O)
+- (ForgeAir)Added separation to multiple artists present in 'artist' tag (rewrote new method of retreiving artist)
+- (ForgeAir)Fixed a bug where if a number of tracks greater than 1000 was bulk added, the program would crash
+- (ForgeAir)Improved timings and resolved hanging issues in the track manager
+- (ForgeAir)Added a tab-based element in the studio window that will give access to track library/FX/Overview(coming soon)
+- (ForgeAir)FX Support is restored! (had been removed in v1.0a.1005 due to code refactor) - improved mixing of FX
+- (ForgeAir)Fixed broken Pause button
+- (ForgeAir)Added check to skip listing disabled/non-initialized MME/DirectSound devices
+- (ForgeAir)Fixed studio buttons getting misaligned at resize
+- (ForgeAir)Fixed a bug where if a directory with tracks with overrided artist name was added and then another directory would be added with no overrided artist, the newly imported tracks would contain the overrided artist that was in the before import
+- (ForgeAir/ForgeVision)Fixed a bug where if the program would terminate in the middle of importing and loses track of id, the audio engine would try and find an id that is non-existent and crash
+- (ForgeAir/ForgeVision)Fixed a bug where the cover art in the now playing section would display the previous' track cover art
+- (ForgeAir/ForgeVision)Fixed a bug where sometimes, if the crossfade duration is really long, the now playing text in butt wouldn't be updated
+- (ForgeAir/ForgeVision)Blocked any type of track other than Song/Music to be passed into now playing text
+- (ForgeAir)Fixed a bug in the track library manager window not adapting the custom window system and leading to random glitches
+- (ForgeAir)Fixed now playing view, butt encoder, text output displaying the first artist
+- (ForgeAir)Supplied BASS libraries in the output directory automatically
+- (ForgeAir)Fixed add category window crashing the program
+- (ForgeAir)Switched the crossfade speed calculation based on the tracks endpoint and not at its whole duration
+- (ForgeAir)Added gapless playback by crossfading the device's buffer if the calculated crossfade time is 0 (happened mostly with comemmercials, adding a huge gap between them)
+- (ForgeAir)Fixed random database timeouts causing the program to crash
+- (ForgeAir)Fixed a bug where if a lot of tracks short in duration would play quickly, BUTT would lose synchronization with the now playing text and cause ForgeAir to report false data
+- (ForgeAir)Fixed a bug where if a track without any crossfade (0-1secs) has finished playing, the audio player's playback monitor would crash silently and cause ForgeAir stop playing tracks
+- (ForgeAir)Fixed a huge delay to update the current track when pressing "Play/Skip"
+- (ForgeAir)Added Categories and Track Type in now playing view
+- (ForgeAir)Improved CPU usage - on an i3-10100 the usage went from ~10-20% to ~0.1-1%
+
+ForgeAir v1.0a.2001 Changelog
+- (ForgeAir)*New: Search Option in track library
+- (ForgeAir)*New: Track monitor - hear tracks in the studio before on air
+dev note: fix pilot and queuemanagement
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+- ForgeAir v.1.0b is a version series that include a whole overhaul and rewrite in the project (as v.1.0a was for me to learn how to work with, hence the bad performance and stability) and added support for things that are remotely close to the needs of a commercial station
+
+! Due to code changes and new features and for best support, ForgeAir now REQUIRES Windows 10 1809 or later (dropped Windows 7 sadly)
+ForgeAir v1.0b.1001 Changelog
+- Rewritten ForgeAir's source code (rewrote ~200 sources files from scratch, adapted MVVM pattern) for better performance and stability both in UI and backend - while you might experience small issues, you may see a small increase in performance and usability (depends on your use case)
+- *New: Flat/Metro UI - changed all UI to it while some parts keep/mimic their original prototype as their prior
+- *New: NAudio Audio Engine (primary, covers core functionallity)
+- *New: Updated SDK which implements an ILogger, a new IConfiguraionManager and a new plugin logic and simplifies the initialization process
+- *New: Tab-based system in the main window
+- *New: VU Meters (should work on NAudio properly)
+- *New: Clock-based automation - offers limited track selection - will get more used in ForgeAir by time
+- *New: Add tracks via M3U/M3U8 file - doesn't have an updater/playlist watcher for now
+- *New: Track import process window
+- *New: Localized a portion of the program in Greek
+- *New: ForgeAir Logging system (for now it logs basic events such track changes, plugin logs)
+- *New: Ability to search tracks by their ID in database (found it useful when received feedback from radio producers)
+- *New: Plugin Manager window
+- *New: User-based system (partial)
+- *New: Redesigned "Add Categories" window (removed bolierplate code)
+- *New: Station Metadata Edit (existed in database since 1.0a.1003 but never used)
+- *New: Database Backup/Restore ability (limited)
+- *New: Drag n' Drop from library to queue
+- *New: Crash Reporter
+- *New: Colors for each track type
+- *New: Improved splashscreen
+- *New: Activity Center (that existed and implemented wayy back when the program was called Forge and now brought back) - access everything with one click easily! 
+- Added "Import Track" dialog to replace the three indivindual options (import track/directory/playlist) and added a copy of it to the new activity center for quicker importing process
+- Added an option to hide ForgeAir's main window from the tray
+- Replaced the folder browser with an older from Win32 as the previous one would cause confusion when trying adding a folder of tracks
+- Removed initialization script from source and replaceed it with a DI service-based one (speeds up startup a lot)
+- Improved queue management stability and stopped random UI locks
+- Fixed some windows not having the "ForgeAir" watermark and some having the watermark double burned
+- Styled any legacy messagebox with handycontrols UI
+- Improved compatibility and added ability to auto-pull categories from track that contains a Jazler InfoTag
+- Due to licensing issues with BASS, BASS becomes a second option in audio engine selection and if you use BASS in commercial environments, you MUST purchase a license to use it with ForgeAir
+- Switched installation wizard to Inno Setup instead of using a custom one
+- Removed ffmpeg & mediainfo libraries as they were intended for forgevision (reduces output file size a lot)
+- Added basic checks while track importing to database
+- Added last modified date column in Track Library
+- Replaced track type radio buttons in add track windows with comboboxes
+- Added an option to modify a track's status without going into the editor
+- Colorized the text in the tracks that are enqueued based on the categories
+- Added an option to modify track's artists in editor
+- Added an option to add imported tracks to categories
+- Replaced application's icon with a multisize one that improves compatibility
+- Removed FixClickingWorkaround flag in configuration as its obselete now and was useful back when ForgeAir didn't manage well BASS audio buffers (until v1.0a.1007)
+- Fixed tray icon not disposing correctly after program shutdown
+- Removed any unused dependecies from ForgeAir
+- Added a check to avoid running multiple instances of ForgeAir
