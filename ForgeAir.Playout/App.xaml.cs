@@ -11,6 +11,12 @@ namespace ForgeAir.Playout
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            if (Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName).Length > 1)
+            {
+                HandyControl.Controls.MessageBox.Show("ForgeAir is already running", "ForgeAir - Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            
+            }
             base.OnStartup(e);
             _bootstrapper = new Bootstrapper();
         }
