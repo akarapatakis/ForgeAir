@@ -8,9 +8,9 @@ using ForgeAir.Core.Services.DeviceManager.Interfaces;
 
 namespace ForgeAir.Core.Services.DeviceManager
 {
-    public class BassManagerFactory : IBassManagerFactory
+    public static class BassManagerFactory
     {
-        public BassManager Create(BassDevice outputDevice)
+        public static BassManager Create(BassDevice outputDevice)
         {
             return new BassManager(outputDevice);
         }

@@ -54,7 +54,7 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             _device = device;
             _queueService = queueService;
             _schedulerService = schedulerService;
-           // Bass.CurrentDevice = device.TargetDevice.Index; <- fix later
+           // Bass.CurrentDevice = device.TargetDevice.Index; <- fix later 
             _crossfadeDuration = device.TargetDevice.BufferLength;
 
             _eventAggregator = eventAggregator;

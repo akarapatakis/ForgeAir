@@ -16,15 +16,13 @@ namespace ForgeAir.Core.Services.AudioPlayout
         IPlayer _player;
 
 
-        public AudioPlayerService(IPlayer player)
+        public AudioPlayerService()
         {
-            _player = player;
         }
-
 
         public void Initialize()
         {
-            
+
         }
 
         public void Stop()
