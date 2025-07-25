@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ForgeAir.Core.Models
 {
-    public class BassDevice
+    public class BassDevice 
     {
         public required OutputDevice TargetDevice { get; set; }
 

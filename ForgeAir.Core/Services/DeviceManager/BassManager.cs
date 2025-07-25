@@ -106,10 +106,14 @@
                 Bass.DeviceNonStop = true;
 
 
-                if (Bass.Init(device.TargetDevice.Index, device.TargetDevice.BufferLength, Flags: (DeviceInitFlags)device.TargetDevice.MMEaudioChannels | GeneralHelpers.ProperbitDepthConvertor(device.TargetDevice.BitDepth)) == false)
+            if (Bass.Init(device.TargetDevice.Index, device.TargetDevice.BufferLength, Flags: (DeviceInitFlags)device.TargetDevice.MMEaudioChannels | GeneralHelpers.ProperbitDepthConvertor(device.TargetDevice.BitDepth)) == false)
+            {
+                if (!Bass.LastError.HasFlag(Errors.Already))
                 {
                     throw new Exception(Bass.LastError.ToString());
+
                 }
+            }
                 device.Handle = BassMix.CreateMixerStream(device.TargetDevice.SampleRate, GeneralHelpers.MMEToMixerChans(device.TargetDevice.MMEaudioChannels), BassFlags.MixerNonStop | BassFlags.AutoFree | BassFlags.Float);
                 return 0;
 
