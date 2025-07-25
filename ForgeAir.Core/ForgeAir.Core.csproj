@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
 		  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
       </PropertyGroup>
 
       <ItemGroup>
@@ -27,18 +28,13 @@
         <PackageReference Include="ManagedBass.Winamp" Version="3.1.1" />
         <PackageReference Include="ManagedBass.Wma" Version="3.1.1" />
         <PackageReference Include="ManagedBass.Wv" Version="3.1.1" />
-        <PackageReference Include="MediaInfo.Core.Native" Version="21.9.1" />
-        <PackageReference Include="MediaInfo.DotNetWrapper" Version="1.0.7" />
-        <PackageReference Include="MediaInfo.Wrapper.Core" Version="21.9.3" />
         <PackageReference Include="Microsoft.ML" Version="4.0.2" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="NAudio.Core" Version="2.2.1" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="OpenSky.Core" Version="1.0.1" />
-        <PackageReference Include="Sonora" Version="1.0.0" />
         <PackageReference Include="System.Management" Version="9.0.6" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
-        <PackageReference Include="Tcp.NET.Core" Version="7.0.26" />
       </ItemGroup>
 
       <ItemGroup>
