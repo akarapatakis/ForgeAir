@@ -1,4 +1,5 @@
 ﻿using ForgeAir.Core.DTO;
+using ForgeAir.Core.Events;
 using ForgeAir.Core.Models;
 using ForgeAir.Core.Services.Database;
 using ForgeAir.Core.Services.Importers.Interfaces;
@@ -141,6 +142,7 @@ namespace ForgeAir.Core.Services.Importers
             .Query()
             .Include(at => at.Artist)
             .LoadAsync();
+            TrackDbChanged.RaiseTrackImported(TrackDTO.FromEntity(trackEntity));
 
             return SuccessResult();
         }
