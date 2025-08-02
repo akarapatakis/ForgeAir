@@ -27,5 +27,8 @@ namespace ForgeAir.Database.Models
         [MaxLength(64)]
         public string? Slogan { get; set; } = "Radio Automation Software";
 
+        [MaxLength(64)]
+        public string? NameTag { get; set; }
+
     }
 }
