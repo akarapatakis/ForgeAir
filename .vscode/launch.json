@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "runtimeArgs": [
+    "--arch", "x64"
+    ],
+    "configurations": [
+        
+        {
+            "name": "C#: ForgeAir.Playout",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}\\ForgeAir.Playout\\ForgeAir.Playout.csproj",
+            "launchConfigurationId": "TargetFramework=;ForgeAir.Playout"
+        }
+    ]
+}
