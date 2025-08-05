@@ -6,6 +6,7 @@ using ForgeAir.Core.Tracks.Enums;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
 using ForgeAir.Database.Models.Enums;
+using MahApps.Metro.Controls;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
@@ -16,12 +17,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace ForgeAir.Playout.Views
+namespace ForgeAir.Playout.Views.Settings.TrackManagement.Importing
 {
     /// <summary>
     /// Interaction logic for ImportDirectoryView.xaml
     /// </summary>
-    public partial class ImportDirectoryView : HandyControl.Controls.GlowWindow
+    public partial class ImportDirectoryView : MetroWindow
     {
         public ImportDirectoryView()
         {

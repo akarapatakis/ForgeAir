@@ -11,13 +11,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 
-namespace ForgeAir.Playout.Views
+namespace ForgeAir.Playout.Views.Settings.TrackManagement.Importing
 {
     /// <summary>
     /// Interaction logic for ImportingProcessView.xaml
     /// </summary>
-    public partial class ImportingProcessView : Window
+    public partial class ImportingProcessView : MetroWindow
     {
         public ImportingProcessView()
         {

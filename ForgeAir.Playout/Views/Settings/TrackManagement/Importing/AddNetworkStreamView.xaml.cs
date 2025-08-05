@@ -23,13 +23,14 @@ using System.Net.Sockets;
 using ForgeAir.Core.Services.Database.Interfaces;
 using ForgeAir.Core.Services.Importers;
 using ForgeAir.Core.Services.Importers.Interfaces;
+using MahApps.Metro.Controls;
 
-namespace ForgeAir.Playout.Views
+namespace ForgeAir.Playout.Views.Settings.TrackManagement.Importing
 {
     /// <summary>
     /// Interaction logic for AddNetworkStreamView.xaml
     /// </summary>
-    public partial class AddNetworkStreamView : HandyControl.Controls.Window
+    public partial class AddNetworkStreamView : MetroWindow
     {
         public AddNetworkStreamView()
         {

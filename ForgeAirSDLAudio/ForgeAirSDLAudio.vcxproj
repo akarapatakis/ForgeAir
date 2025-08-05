@@ -74,6 +74,11 @@
     <IncludePath>D:\Users\choco\SDL3-3.2.16\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Users\choco\SDL3-3.2.16\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>D:\Users\choco\SDL3-3.2.16\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Users\choco\SDL3-3.2.16\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>

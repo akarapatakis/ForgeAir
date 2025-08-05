@@ -1,0 +1,34 @@
+﻿<mah:MetroWindow x:Class="ForgeAir.Playout.Views.Settings.TrackManagement.Importing.ImportTrackWizardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:local="clr-namespace:ForgeAir.Playout.Views.Settings.TrackManagement.Importing"
+        mc:Ignorable="d"
+        Title="Import Track" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="83*"/>
+            <RowDefinition Height="63*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="93*"/>
+            <ColumnDefinition Width="224*"/>
+            <ColumnDefinition Width="83*"/>
+        </Grid.ColumnDefinitions>
+        <ListBox BorderThickness="0" Grid.Column="1" Style="{DynamicResource WrapPanelHorizontalListBox}" ItemsSource="{Binding DataList}" Background="{x:Null}" Grid.Row="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="data:TileModel">
+                    <mah:Tile Title="{Binding Title}" Foreground="White" Command="{Binding Command}"  Background="{Binding Color}">
+                        <iconPacks:PackIconRemixIcon Kind="{Binding Icon}" Width="40" Height="40" />
+                    </mah:Tile>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBlock Grid.Column="1" Margin="0,84,0,10" TextWrapping="Wrap" Text="Import From..." FontSize="36" TextAlignment="Center"/>
+
+    </Grid>
+</mah:MetroWindow>

@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>AnyCPU;x64</Platforms>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
@@ -65,8 +66,6 @@
   <ItemGroup>
     <Page Remove="Assets\Icons\playout\playout.xaml" />
     <Page Remove="Assets\Logos.xaml" />
-    <Page Remove="Strings\SetupWizard\el-gr.xaml" />
-    <Page Remove="Strings\SetupWizard\en-us.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -122,8 +121,6 @@
     <Resource Include="Assets\Icons\playout\vst64.png" />
     <Resource Include="Assets\Images\splash_background.png" />
     <Resource Include="Assets\Images\vision_splash_background.png" />
-    <Resource Include="Strings\SetupWizard\el-gr.xaml" />
-    <Resource Include="Strings\SetupWizard\en-us.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -141,7 +138,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ForgeAir.UI.Win32\ForgeAir.UI.Win32.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Langs\Resources.el-GR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <CustomToolNamespace></CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Langs\Resources.en-US.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <CustomToolNamespace></CustomToolNamespace>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,7 @@ using ForgeAir.Database;
 using ForgeAir.Database.Models;
 using ForgeAir.Database.Models.Enums;
 using HandyControl.Controls;
+using MahApps.Metro.Controls;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Win32;
@@ -27,12 +28,12 @@ using System.Windows.Shapes;
 using MessageBox = HandyControl.Controls.MessageBox;
 using Track = ForgeAir.Database.Models.Track;
 
-namespace ForgeAir.Playout.Views
+namespace ForgeAir.Playout.Views.Settings.TrackManagement.Importing
 {
     /// <summary>
     /// Interaction logic for ImportTrackFileView.xaml
     /// </summary>
-    public partial class ImportTrackFileView : HandyControl.Controls.GlowWindow
+    public partial class ImportTrackFileView : MetroWindow
     {
         public ImportTrackFileView()
         {

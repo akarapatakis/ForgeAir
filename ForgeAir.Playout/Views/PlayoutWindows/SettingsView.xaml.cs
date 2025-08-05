@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Caliburn.Micro;
 
-namespace ForgeAir.Playout.Views
+namespace ForgeAir.Playout.Views.PlayoutWindows
 {
     /// <summary>
     /// Interaction logic for SettingsView.xaml
     /// </summary>
-    public partial class SettingsView : Page
+    public partial class SettingsView : UserControl
     {
         public SettingsView()
         {

@@ -15,7 +15,6 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Vulkan.Win32;
 
 namespace ForgeAir.Playout.Views.VST
 {

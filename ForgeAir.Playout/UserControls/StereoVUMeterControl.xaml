@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ForgeAir.Playout.UserControls"
              xmlns:Controls="clr-namespace:ForgeAir.UI.Core.Controls;assembly=ForgeAir.UI.Core" xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="ForgeAir.Playout.UserControls.StereoVUMeterControl"
-             mc:Ignorable="d" Height="262" Width="115">
+             mc:Ignorable="d" Height="185" Width="115">
     <Grid>
-        <Controls:VUMeter x:Name="leftVU" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" />
-        <Controls:VUMeter x:Name="rightVU" HorizontalAlignment="Right" Margin="0,4,10,0" VerticalAlignment="Top" />
-        <TextBlock Margin="24,209,80,24" TextWrapping="Wrap" Text="L" FontSize="24"/>
-        <TextBlock Margin="78,209,23,24" TextWrapping="Wrap" Text="R" FontSize="24"/>
+        <Controls:VUMeter x:Name="leftVU" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" Height="150" />
+        <Controls:VUMeter x:Name="rightVU" HorizontalAlignment="Right" Margin="0,4,10,0" VerticalAlignment="Top" Height="150" />
+        <TextBlock Margin="24,159,79,6" TextWrapping="Wrap" Text="L" FontSize="18"/>
+        <TextBlock Margin="78,159,23,6" TextWrapping="Wrap" Text="R" FontSize="18"/>
     </Grid>
 </UserControl>

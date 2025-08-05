@@ -117,13 +117,133 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="settingsWindowTitle" xml:space="preserve">
-    <value>Ρυθμίσεις ForgeAir</value>
+  <data name="Settings" xml:space="preserve">
+    <value>Ρυθμίσεις</value>
   </data>
-  <data name="addTrackString" xml:space="preserve">
+  <data name="ImportTrack" xml:space="preserve">
     <value>Προσθήκη Κομματιού...</value>
   </data>
   <data name="ActivityCenter" xml:space="preserve">
-    <value></value>
+    <value>Κέντρο Έναρξης</value>
+  </data>
+  <data name="Playout" xml:space="preserve">
+    <value>Ροή Αναπαραγωγής</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Αποσύνδεση</value>
+  </data>
+  <data name="Quit" xml:space="preserve">
+    <value>Έξοδος</value>
+  </data>
+  <data name="ImportTrackFile" xml:space="preserve">
+    <value>Προσθήκη Αρχείου Κομματιού</value>
+  </data>
+  <data name="ImportTrackDirectory" xml:space="preserve">
+    <value>Προσθήκη Φακέλου/Καταλόγου</value>
+  </data>
+  <data name="ImportTrackList" xml:space="preserve">
+    <value>Προσθήκη Κομματιών από Λίστα</value>
+  </data>
+  <data name="ImportNetworkStream" xml:space="preserve">
+    <value>Προσθήκη Διαδικτυακού Στριμ (ροής)</value>
+  </data>
+  <data name="ImportCategory" xml:space="preserve">
+    <value>Προσθήκη Κατηγορίας Κομματιού</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Άκυρο</value>
+  </data>
+  <data name="ForgeAir_BetaAlert" xml:space="preserve">
+    <value>Αυτή είναι μια δοκιμαστική έκδοση. Μην τη διανείμετε!</value>
+  </data>
+  <data name="FilePath" xml:space="preserve">
+    <value>Διαδρομή Αρχείου</value>
+  </data>
+  <data name="DirectoryPath" xml:space="preserve">
+    <value>Διαδρομή Φακέλου/Καταλόγου</value>
+  </data>
+  <data name="CrossfadeDuration" xml:space="preserve">
+    <value>Διάρκεια Μίξης (Crossfade)</value>
+  </data>
+  <data name="TrackType" xml:space="preserve">
+    <value>Κατηγορία Κομματιού</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Προσθήκη</value>
+  </data>
+  <data name="Categories" xml:space="preserve">
+    <value>Κατηγορίες</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Κατηγορία</value>
+  </data>
+  <data name="ImportFx" xml:space="preserve">
+    <value>Προσθήκη Εφέ (FX)</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Όνομα</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Επιλογή</value>
+  </data>
+  <data name="Color" xml:space="preserve">
+    <value>Χρώμα</value>
+  </data>
+  <data name="ImportingTracks" xml:space="preserve">
+    <value>Εισαγωγή Κομματιών</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>Κατασταση</value>
+  </data>
+  <data name="FilePath_s" xml:space="preserve">
+    <value>Διαδρομή</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Σφάλματα</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="URL" xml:space="preserve">
+    <value>Σύνδεσμος URL</value>
+  </data>
+  <data name="Plugin" xml:space="preserve">
+    <value>Πρόσθετο</value>
+  </data>
+  <data name="Plugin Management" xml:space="preserve">
+    <value>Διαχείριση Προσθέτων</value>
+  </data>
+  <data name="RDS" xml:space="preserve">
+    <value>RDS</value>
+  </data>
+  <data name="DynamicJingles" xml:space="preserve">
+    <value>Δυναμικά Σποτ</value>
+  </data>
+  <data name="MetadataBroadcast" xml:space="preserve">
+    <value>Μετάδοση Μεταδεδομένων</value>
+  </data>
+  <data name="TrackSelector" xml:space="preserve">
+    <value>Επιλογέας Κομματιών</value>
+  </data>
+  <data name="EditStationInfo" xml:space="preserve">
+    <value>Επεξεργασία Πληροφοριών Σταθμού</value>
+  </data>
+  <data name="Scheduler" xml:space="preserve">
+    <value>Προγραμματιστής</value>
+  </data>
+  <data name="Tray_ShowForgeAir" xml:space="preserve">
+    <value>Εμφάνιση του ForgeAir</value>
+  </data>
+  <data name="VSTPlugin" xml:space="preserve">
+    <value>Πρόσθετο VST</value>
+  </data>
+  <data name="AudioEngine" xml:space="preserve">
+    <value>Μηχανή Ήχου</value>
+  </data>
+  <data name="TrackQueue" xml:space="preserve">
+    <value>Ουρά Κομματιών</value>
+  </data>
+  <data name="NowPlaying" xml:space="preserve">
+    <value>Τώρα Παίζει</value>
   </data>
 </root>

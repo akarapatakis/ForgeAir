@@ -1,48 +1,82 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ForgeAir.Core.Helpers;
+using ForgeAir.Core.Models;
+using ForgeAir.Core.Services.Database;
+using ForgeAir.Core.Services.Importers;
+using ForgeAir.Core.Tracks.Enums;
+using ForgeAir.Database;
+using ForgeAir.Database.Models;
+using ForgeAir.Database.Models.Enums;
+using ForgeAir.Playout.UserControls.ViewModels;
+using ForgeAir.UI.Win32.Controls;
+using ForgeAir.UI.Win32.Controls.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Caliburn.Micro;
-using ForgeAir.Core.Services.Database;
-using ForgeAir.Core.Services.Importers;
-using ForgeAir.Database.Models;
-using ForgeAir.Database;
-using ForgeAir.Core.Helpers;
-using ForgeAir.Core.Tracks.Enums;
-using Microsoft.Win32;
-using System.IO;
 using System.Windows;
-using ForgeAir.Database.Models.Enums;
-using ForgeAir.UI.Win32.Controls;
-using ForgeAir.UI.Win32.Controls.Interfaces;
-using ForgeAir.Core.Models;
 namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
 {
     public class ImportDirectoryViewModel : Screen
     {
         private readonly RepositoryService<Artist> artistsService;
-        private readonly TrackImporter trackImporter = new();
         private readonly IWindowManager _windowManager;
+        private readonly IServiceProvider _provider;
+        private TrackType _selectedTrackType;
+        public CategoryManipulatorViewModel CategoryManipulatorViewModel { get; }
+
+        public TrackType SelectedTrackType
+        {
+            get => _selectedTrackType;
+            set
+            {
+                _selectedTrackType = value;
+                NotifyOfPropertyChange(() => SelectedTrackType);
+            }
+        }
+        private List<TrackType> trackTypeList;
+        public List<TrackType> TrackTypeList
+        {
+            get => trackTypeList;
+            set
+            {
+                trackTypeList = value;
+                NotifyOfPropertyChange(() => TrackTypeList);
+            }
+        }
+
         private ICollection<TrackImportModel> _trackImports = new List<TrackImportModel>();
         public ImportDirectoryViewModel(IServiceProvider provider, IWindowManager windowManager)
         {
             _provider = provider;
             _windowManager = windowManager;
-            artistsService = new(factory);
+            artistsService = new(_provider.GetRequiredService<IDbContextFactory<ForgeAirDbContext>>());
+            CategoryManipulatorViewModel = _provider.GetRequiredService<CategoryManipulatorViewModel>();
+            TrackTypeList = Enum.GetValues(typeof(TrackType)).Cast<TrackType>().ToList();
+
+            // removing forgevision entries because it uses shared tracktype (fuck me)
+            TrackTypeList.Remove(TrackType.None);
+            TrackTypeList.Remove(TrackType.Bumper);
+            TrackTypeList.Remove(TrackType.Instant);
+            TrackTypeList.Remove(TrackType.Ident);
+            TrackTypeList.Remove(TrackType.MusicVideo);
+            TrackTypeList.Remove(TrackType.Newsreport);
+            TrackTypeList.Remove(TrackType.Movie);
+            TrackTypeList.Remove(TrackType.Show);
+            TrackTypeList.Remove(TrackType.Rebroadcast);
         }
+        public List<Artist> ArtistSearchResults { get; set; }
+
+        public string SearchText { get; set; }
         public string DirectoryBox { get; set; }
         public string ArtistAutoCompleteBox { get; set; }
         public bool OverrideArtistCheck { get; set; }
-        public double CrossFadeUpDown { get; set; }
-
-        // Radio Buttons (Bound by Caliburn naming convention)
-        public bool SongRadioButton { get; set; }
-        public bool CommercialRadioButton { get; set; }
-        public bool JingleRadioButton { get; set; }
-        public bool SweeperRadioButton { get; set; }
-        public bool VoicetrackRadioButton { get; set; }
-        public bool OtherTrackRadioButton { get; set; }
+        public double CrossFadeDuration { get; set; }
 
         public void DirSelect()
         {
@@ -56,7 +90,13 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
 
         public async void Add()
         {
-            if (!IsTrackTypeSelected())
+            if (string.IsNullOrWhiteSpace(DirectoryBox))
+            {
+                MessageBox.Show("No file selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (_selectedTrackType == null)
             {
                 MessageBox.Show("Please select track type.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -68,40 +108,28 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
             {
                 if (!GeneralHelpers.isThisAnAudioFile(file)) continue;
 
-                _trackImports.Add(new TrackImportModel(file, GetTrackType(), TimeSpan.FromSeconds(CrossFadeUpDown), artistString: overrideArtist));
+               _trackImports.Add(new TrackImportModel(file, null, SelectedTrackType, TimeSpan.FromSeconds(CrossFadeDuration), CategoryManipulatorViewModel.SelectedCategories));
             }
 
-            var processVM = new ImportingProcessViewModel(_trackImports);
+            var processVM = new ImportingProcessViewModel(_provider, _trackImports);
             await _windowManager.ShowDialogAsync(processVM);
+            _trackImports.Clear();
         }
-
+    
         public async void ArtistAutoCompleteBoxChanged()
         {
             if (!string.IsNullOrEmpty(ArtistAutoCompleteBox))
             {
                 var result = await artistsService.SearchAsync(ArtistAutoCompleteBox, ModelTypesEnum.Artist);
-                // Bind to auto-complete box if needed
+                if (result != null) { 
+                    ArtistSearchResults = result;
+                }
             }
         }
 
         public void Cancel()
         {
             TryCloseAsync(true);
-        }
-
-        private bool IsTrackTypeSelected() =>
-            SongRadioButton || CommercialRadioButton || JingleRadioButton ||
-            SweeperRadioButton || VoicetrackRadioButton || OtherTrackRadioButton;
-
-        private TrackType GetTrackType()
-        {
-            if (SongRadioButton) return TrackType.Song;
-            if (CommercialRadioButton) return TrackType.Commercial;
-            if (JingleRadioButton) return TrackType.Jingle;
-            if (SweeperRadioButton) return TrackType.Sweeper;
-            if (VoicetrackRadioButton) return TrackType.Voicetrack;
-            if (OtherTrackRadioButton) return TrackType.Other;
-            return TrackType.Other;
         }
     }
 }

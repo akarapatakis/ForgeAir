@@ -13,8 +13,9 @@
                 <ResourceDictionary>
                     <local:Bootstrapper x:Key="Bootstrapper" />
                 </ResourceDictionary>
-
-                <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Strings/SetupWizard/en-us.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Orange.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Assets/Icons/Logos.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Assets/Images/Images.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/ForgeAir.UI.Core;component/Assets/Icons/playout/playout.xaml"/>

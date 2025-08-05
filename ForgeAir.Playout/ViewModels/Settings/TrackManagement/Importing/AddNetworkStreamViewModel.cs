@@ -1,19 +1,23 @@
 ﻿using Caliburn.Micro;
+using ForgeAir.Core.Models;
 using ForgeAir.Core.Services.Importers;
 using ForgeAir.Core.Services.Importers.Interfaces;
 using HandyControl.Controls;
 using System;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace ForgeAir.Playout.ViewModels
+namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
 {
     public class AddNetworkStreamViewModel : Screen
     {
-        private IWindowManager _windowManager;
+        private readonly IWindowManager _windowManager;
+        private readonly IServiceProvider _provider;
+
         private string _url;
         public string Url
         {
@@ -27,7 +31,8 @@ namespace ForgeAir.Playout.ViewModels
             get => _name;
             set => Set(ref _name, value);
         }
-        public AddNetworkStreamViewModel(IWindowManager windowManager) { 
+        public AddNetworkStreamViewModel(IServiceProvider provider, IWindowManager windowManager) { 
+            _provider = provider;
             _windowManager = windowManager;
         }
         public async void Add()
@@ -87,8 +92,8 @@ namespace ForgeAir.Playout.ViewModels
 
         private async Task AddToDatabase(string url, string name)
         {
-            ITrackImporter trackImporter = new TrackImporter(); // Preferably inject this if needed
-           // fix await Task.Run(() => trackImporter.createNetStreamTrack(url, name));
+          //  var processVM = new ImportingProcessViewModel(_provider, new ObservableCollection<TrackImportModel>() { new TrackImportModel(url, name, Database.Models.Enums.TrackType.Rebroadcast, TimeSpan.Zero) });
+           // await _windowManager.ShowDialogAsync(processVM);
         }
     }
 }

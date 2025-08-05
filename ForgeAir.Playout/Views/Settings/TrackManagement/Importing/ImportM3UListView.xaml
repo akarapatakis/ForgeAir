@@ -1,35 +1,46 @@
-﻿<hc:GlowWindow x:Class="ForgeAir.Playout.Views.Settings.TrackManagement.Importing.ImportM3UListView"
+﻿<mah:MetroWindow x:Class="ForgeAir.Playout.Views.Settings.TrackManagement.Importing.ImportM3UListView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+               xmlns:cal="http://www.caliburnproject.org"
+
         xmlns:local="clr-namespace:ForgeAir.Playout.Views.Settings.TrackManagement.Importing"
         mc:Ignorable="d"
-        Title="Import Tracks from List" Height="450" Width="800">
+        Title="Import Tracks from List" Height="500" Width="800">
     <Grid>
-        <GroupBox x:Name="groupBox" Header="Add Tracks from List...">
-            <Grid>
-                <hc:Watermark Mark="ForgeAir" FontSize="32" FontWeight="UltraLight" Opacity="0.5"/>
 
-                <hc:TextBox x:Name="FileBox" Margin="10,58,105,0" TextWrapping="Wrap" IsReadOnly="True" Height="24" VerticalAlignment="Top"/>
-                <hc:NumericUpDown x:Name="CrossFadeUpDown" HorizontalAlignment="Left" Margin="10,181,0,0" Height="28" VerticalAlignment="Top"/>
-                <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,160,0,0" TextWrapping="Wrap" Text="Crossfade Seconds" VerticalAlignment="Top"/>
-                <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="10,37,0,0" TextWrapping="Wrap" Text="List Filepath..." VerticalAlignment="Top"/>
-                <hc:ButtonGroup Margin="0,0,19,10" Style="{StaticResource ButtonGroupSolid}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="230">
-                    <Button x:Name="Add" Content="Add" IsDefault="True" Style="{StaticResource ButtonDefault}" HorizontalAlignment="Right" Width="100"/>
-                    <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right" Width="100"/>
-                </hc:ButtonGroup>
-                <Button x:Name="FileSelect" Content="Select..." HorizontalAlignment="Right" Margin="0,58,15,0" VerticalAlignment="Top" Width="85"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="77*"/>
+                <ColumnDefinition Width="323*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="259*"/>
+                <RowDefinition Height="27*"/>
+                <RowDefinition Height="159*"/>
+                <RowDefinition Height="39*"/>
+            </Grid.RowDefinitions>
+            <hc:Watermark Mark="ForgeAir" FontSize="32" FontWeight="UltraLight" Opacity="0.5" Grid.RowSpan="4" Grid.ColumnSpan="2"/>
+            <TextBox x:Name="FileBox" Margin="10,58,105,0" TextWrapping="Wrap" IsReadOnly="True" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+            <mah:NumericUpDown x:Name="CrossFadeUpDown" Value="{Binding  Path=CrossFadeDuration, Mode=TwoWay}" Margin="10,181,78,0" Height="28" VerticalAlignment="Top"/>
 
-                <RadioButton x:Name="SongRadioButton" Content="Song" HorizontalAlignment="Left" Margin="10,0,0,127" VerticalAlignment="Bottom"/>
-                <RadioButton x:Name="JingleRadioButton" Content="Jingle" HorizontalAlignment="Left" Margin="10,0,0,106" VerticalAlignment="Bottom" Height="16"/>
-                <RadioButton x:Name="SweeperRadioButton" Content="Sweeper" HorizontalAlignment="Left" Margin="10,0,0,85" VerticalAlignment="Bottom"/>
-                <RadioButton x:Name="OthertrackRadioButton" Content="Other" HorizontalAlignment="Left" Margin="10,0,0,64" VerticalAlignment="Bottom"/>
-                <RadioButton x:Name="VoicetrackRadioButton" Content="Voice Track" HorizontalAlignment="Left" Margin="114,0,0,127" VerticalAlignment="Bottom"/>
-                <RadioButton x:Name="CommercialRadioButton" Content="Commercial" HorizontalAlignment="Left" Margin="114,0,0,106" VerticalAlignment="Bottom"/>
-            </Grid>
+            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,160,0,0" TextWrapping="Wrap" Text="Crossfade Duration" VerticalAlignment="Top" Height="16" Width="102"/>
+            <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="10,37,0,0" TextWrapping="Wrap" Text="Filepath..." VerticalAlignment="Top" Height="16" Width="50"/>
+            <Button x:Name="Add" Content="Add" IsDefault="True" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,120,10"  Width="100" Height="27" Grid.Row="3" Grid.Column="1"/>
+            <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right"  Margin="0,0,10,10" VerticalAlignment="Bottom" Width="100" Height="27" Grid.Row="3" Grid.Column="1"/>
+            <GroupBox Margin="303,114,10,10" Header="Categories" Grid.RowSpan="3" Grid.Column="1">
 
-        </GroupBox>
+                <ContentControl VerticalAlignment="Stretch" cal:View.Model="{Binding CategoryManipulatorViewModel}"/>
+
+            </GroupBox>
+            <Button x:Name="FileSelect" Content="Select..." HorizontalAlignment="Right" Margin="0,58,15,0" VerticalAlignment="Top" Width="85" Height="27" Grid.Column="1"/>
+            <ComboBox x:Name="TrackTypeList" SelectedItem="{Binding Path=SelectedTrackType, Mode=TwoWay}" Margin="10,251,10,0" Grid.RowSpan="2" VerticalAlignment="Top" Height="26" ItemsSource="{Binding Path=TrackTypeList}"/>
+            <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="10,226,0,1" TextWrapping="Wrap" Text="Track Type" Width="102"/>
+
+
+        </Grid>
     </Grid>
-</hc:GlowWindow>
+</mah:MetroWindow>

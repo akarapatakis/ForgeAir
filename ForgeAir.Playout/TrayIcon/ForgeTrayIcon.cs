@@ -13,7 +13,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 namespace ForgeAir.Playout.TrayIcon
 {
     public class ForgeTrayIcon : IDisposable
@@ -36,7 +35,7 @@ namespace ForgeAir.Playout.TrayIcon
             contextMenu1.Items.Add(new ToolStripMenuItem("Quit", null, new EventHandler(Quit_Click), "Quit"));
 #if DEBUG
             contextMenu1.Items.Add(new ToolStripSeparator());
-            contextMenu1.Items.Add(new ToolStripMenuItem("Crash On Purpose", null, new EventHandler(Crash_Click), "Crash On Purpose"));
+            contextMenu1.Items.Add(new ToolStripMenuItem("Get debug data of scheduler roots", null, new EventHandler(Crash_Click), ""));
 #endif
             trayIcon.ContextMenuStrip = contextMenu1;
 
@@ -59,9 +58,11 @@ namespace ForgeAir.Playout.TrayIcon
             };
         }
 
-        private void Crash_Click(object? sender, EventArgs e)
+        private void Crash_Click(object? sender, EventArgs e) // todo:i will need to find a way to use these data with day system and import them into a ui
         {
-
+            var scheduler = _provider.GetRequiredService<ForgeAir.Core.Services.Scheduler.Interfaces.ISchedulerService>();
+            var x = scheduler.GetClockItemFor(new DateTime(2025, 01, 01) + TimeSpan.Zero);
+            MessageBox.Show($">> {x.StartTime} - {x.EndTime}\n>> {x.Type} ** {x.Parameter}", "SCHEDULER", MessageBoxButtons.OK);
         }
 
         void ShowStudio(object? sender, EventArgs e)
@@ -71,13 +72,20 @@ namespace ForgeAir.Playout.TrayIcon
                 .FirstOrDefault(w => w.DataContext is ShellViewModel);
 
             if (window == null)
-                return;
-
-            if (!window.IsVisible)
             {
-                window.Show();
-                window.Activate();
+                window = System.Windows.Application.Current.Windows
+                .OfType<System.Windows.Window>()
+                .FirstOrDefault(w => w.DataContext is StationSelectorViewModel);
+                if (window == null)
+                {
+                    _windowManager.ShowWindowAsync(_provider.GetRequiredService<StationSelectorViewModel>());
+                }
+                else
+                {
+                    window.Show();
+                    window.Activate();
 
+                }
             }
 
         }

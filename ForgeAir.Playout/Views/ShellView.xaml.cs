@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ForgeAir.Playout.ViewModels;
+using MahApps.Metro.Controls;
+using Microsoft.Toolkit.Uwp.Notifications;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,11 +20,24 @@ namespace ForgeAir.Playout.Views
     /// <summary>
     /// Interaction logic for ShellView.xaml
     /// </summary>
-    public partial class ShellView : Window
+    public partial class ShellView : MetroWindow
     {
         public ShellView()
         {
             InitializeComponent();
+        }
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            /*
+            if (DataContext is ShellViewModel vm)
+            {
+                // now we need the window to close in order to reopen the station selector
+                new ToastContentBuilder()
+                .AddText("ForgeAir is minimized to the system tray.")
+                .AddText("To restore, click the icon in the system tray.")
+                .Show();
+            }*/
         }
     }
 }

@@ -11,13 +11,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 
-namespace ForgeAir.Playout.Views
+namespace ForgeAir.Playout.Views.Settings.TrackManagement.Importing
 {
     /// <summary>
     /// Interaction logic for AddCategory.xaml
     /// </summary>
-    public partial class AddCategoryView : HandyControl.Controls.Window
+    public partial class AddCategoryView : MetroWindow
     {
         public AddCategoryView()
         {

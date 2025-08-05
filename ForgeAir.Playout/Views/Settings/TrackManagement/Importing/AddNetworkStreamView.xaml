@@ -1,27 +1,22 @@
-﻿<hc:Window x:Class="ForgeAir.Playout.Views.AddNetworkStreamView"
+﻿<mah:MetroWindow x:Class="ForgeAir.Playout.Views.Settings.TrackManagement.Importing.AddNetworkStreamView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ForgeAir.Playout.Views"
+        xmlns:local="clr-namespace:ForgeAir.Playout.Views.Settings.TrackManagement.Importing"
+                   xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
         Title="Add Network Stream" Height="366" Width="266">
     <Grid>
         <hc:Watermark Mark="ForgeAir" FontSize="32" FontWeight="UltraLight" Opacity="0.5"/>
-        <GroupBox x:Name="groupBox" Header="Add Network Stream...">
-            <Grid>
-                <hc:Watermark Mark="ForgeAir" FontSize="32" FontWeight="UltraLight" Opacity="0.5"/>
-                <hc:TextBox x:Name="Name" Margin="10,0,10,0" TextWrapping="Wrap" Text="" Height="28" VerticalAlignment="Center"/>
-                <hc:TextBox x:Name="Url" Margin="10,60,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-                <hc:ButtonGroup Margin="0,0,19,10" Style="{StaticResource ButtonGroupSolid}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="230">
-                    <Button x:Name="Add" Content="Add" IsDefault="True" Style="{StaticResource ButtonDefault}" HorizontalAlignment="Right" Width="100"/>
-                    <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right" Width="100"/>
-                </hc:ButtonGroup>
-                <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,118,0,0" TextWrapping="Wrap" Text="Stream Name (to be shown in Track Library)" VerticalAlignment="Top"/>
-                <TextBlock x:Name="textBl1ock" HorizontalAlignment="Left" Margin="10,39,0,0" TextWrapping="Wrap" Text="Stream URL" VerticalAlignment="Top"/>
+        <TextBox x:Name="Name" Margin="10,0,10,0" TextWrapping="Wrap" Text="" Height="28" VerticalAlignment="Center"/>
+        <TextBox x:Name="Url" Margin="10,60,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+        <Button x:Name="Add" Content="Add" IsDefault="True" VerticalAlignment="Bottom"  HorizontalAlignment="Right" Width="100" Margin="0,0,105,10"/>
+        <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="100" Margin="0,0,0,10"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,118,0,0" TextWrapping="Wrap" Text="Stream Name (to be shown in Track Library)" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBl1ock" HorizontalAlignment="Left" Margin="10,39,0,0" TextWrapping="Wrap" Text="Stream URL" VerticalAlignment="Top"/>
 
-            </Grid>
-        </GroupBox>
     </Grid>
-</hc:Window>
+</mah:MetroWindow>

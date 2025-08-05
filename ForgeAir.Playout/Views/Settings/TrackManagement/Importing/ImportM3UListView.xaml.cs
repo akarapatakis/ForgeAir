@@ -12,13 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using HandyControl.Controls;
+using MahApps.Metro.Controls;
 
 namespace ForgeAir.Playout.Views.Settings.TrackManagement.Importing
 {
     /// <summary>
     /// Interaction logic for ImportM3UListView.xaml
     /// </summary>
-    public partial class ImportM3UListView : GlowWindow
+    public partial class ImportM3UListView : MetroWindow
     {
         public ImportM3UListView()
         {

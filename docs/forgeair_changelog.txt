@@ -265,7 +265,9 @@ ForgeAir v1.0b.1001 Changelog
 - *New: Crash Reporter
 - *New: Colors for each track type
 - *New: Improved splashscreen
+- *New: Support for traffic announcements - they can be either pre-recorded or manually typed and then passed on through TTS - Supports TA flag in RDS!
 - *New: Activity Center (that existed and implemented wayy back when the program was called Forge and now brought back) - access everything with one click easily! 
+- *New: Multi-station support (experimental so expect issues) customizable with INI files
 - Added "Import Track" dialog to replace the three indivindual options (import track/directory/playlist) and added a copy of it to the new activity center for quicker importing process
 - Added an option to hide ForgeAir's main window from the tray
 - Replaced the folder browser with an older from Win32 as the previous one would cause confusion when trying adding a folder of tracks

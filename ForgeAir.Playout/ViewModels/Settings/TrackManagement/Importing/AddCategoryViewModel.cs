@@ -1,18 +1,21 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ForgeAir.Core.DTO;
+using ForgeAir.Core.Tracks;
+using ForgeAir.Database;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Caliburn.Micro;
-using ForgeAir.Core.DTO;
-using ForgeAir.Core.Tracks;
 
 namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
 {
     public class AddCategoryViewModel : Screen
     {
-        private readonly Importer importer = new();
+        private readonly Importer importer;
 
         private CategoryDTO categoryDTO;
         private readonly IWindowManager _windowManager;
@@ -22,8 +25,10 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
         public string CategoryColor { get; set; }
 
 
-        public AddCategoryViewModel(IWindowManager windowManager)
+        public AddCategoryViewModel(IServiceProvider provider, IWindowManager windowManager)
         {
+            importer = new Importer(provider.GetRequiredService<IDbContextFactory<ForgeAirDbContext>>());
+
             _windowManager = windowManager;
 
         }
@@ -37,6 +42,7 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
                 Name = CategoryName
             };
             importer.AddCategory(categoryDTO);
+            TryCloseAsync(true);
         }
         public void Cancel()
         {
