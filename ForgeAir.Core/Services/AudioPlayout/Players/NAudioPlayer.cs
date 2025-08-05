@@ -109,6 +109,10 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
                 _crossfadeDuration = _device.TargetDevice.BufferLength;
                 _currentTrack.StartPoint = TimeSpan.Zero;
             }
+            if (_currentTrack.IsDynamicJingleAsset)
+            {
+                _crossfadeDuration = 0;
+            }
             _audioFileReader = new AudioFileReader(_currentTrack?.FilePath);
             _audioFileReader.CurrentTime = _currentTrack.StartPoint.Value;
 
@@ -211,6 +215,10 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             {
                 _crossfadeDuration = _device.TargetDevice.BufferLength;
                 _currentTrack.StartPoint = TimeSpan.Zero;
+            }
+            if (_currentTrack.IsDynamicJingleAsset)
+            {
+                _crossfadeDuration = 0;
             }
             _audioFileReader = new AudioFileReader(_currentTrack?.FilePath);
             _audioFileReader.CurrentTime = _currentTrack.StartPoint.Value;

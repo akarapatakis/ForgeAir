@@ -106,6 +106,10 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
                     _crossfadeDuration = 333;
                     _currentTrack.StartPoint = TimeSpan.Zero;
                 }
+                if (_currentTrack.IsDynamicJingleAsset)
+                {
+                    _crossfadeDuration = 0;
+                }
                 Bass.ChannelSetAttribute(_trackHandle, ChannelAttribute.Volume, 0);
                 Bass.ChannelSetPosition(_trackHandle, Bass.ChannelSeconds2Bytes(_trackHandle, _currentTrack.StartPoint?.TotalSeconds ?? TimeSpan.Zero.TotalSeconds), PositionFlags.Bytes); // set start position
                 BassMix.MixerAddChannel(_device.Handle, _trackHandle, BassFlags.Default | BassFlags.Float);
@@ -266,7 +270,10 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
                 _crossfadeDuration = (int)(_currentTrack.EndPoint?.TotalMilliseconds - _currentTrack.MixPoint?.TotalMilliseconds ?? 333);
                 if (_crossfadeDuration <= 0)
                     _crossfadeDuration = 333;
-
+                if (_currentTrack.IsDynamicJingleAsset)
+                {
+                    _crossfadeDuration = 0;
+                }
                 Bass.ChannelSetAttribute(_trackHandle, ChannelAttribute.Volume, 0);
                 BassMix.MixerAddChannel(_device.Handle, _trackHandle, BassFlags.Default | BassFlags.Float);
                 Bass.ChannelPlay(_device.Handle);

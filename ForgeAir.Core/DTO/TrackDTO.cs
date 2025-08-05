@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ForgeAir.Core.Models;
 using ForgeAir.Database.Models;
 using ForgeAir.Database.Models.Enums;
 
@@ -31,6 +32,8 @@ namespace ForgeAir.Core.DTO
         public DateTime DateAdded { get; set; }
         public DateTime? DateModified { get; set; }
         public DateTime? DateDeleted { get; set; }
+        public bool IsDynamicJingleAsset { get; set; } = false; // it needs to be treated differently in the audio engine
+
         public ICollection<ArtistTrackDTO> TrackArtists { get; set; }
 
         public ICollection<CategoryDTO> Categories { get; set; }
@@ -116,6 +119,16 @@ namespace ForgeAir.Core.DTO
                 FilePath = dto.FilePath,
                 Bpm = dto.Bpm,
                 ISRC = dto.ISRC,
+            };
+        }
+
+        public static TrackDTO FromDynamicJingle(DynamicJingle jingle)
+        {
+            return new TrackDTO
+            {
+                Title = jingle.Name,
+                FilePath = jingle.Path,
+                IsDynamicJingleAsset = true
             };
         }
     }
