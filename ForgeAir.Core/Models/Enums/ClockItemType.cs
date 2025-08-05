@@ -15,6 +15,7 @@ namespace ForgeAir.Core.Models.Enums
         News,
         Playlist,
         Stop,
-        LiveShow
+        LiveShow,
+        Announcement
     }
 }
