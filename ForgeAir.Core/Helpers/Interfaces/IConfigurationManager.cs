@@ -12,7 +12,7 @@ namespace ForgeAir.Core.Helpers.Interfaces
         bool GetBool(string section, string key, bool defaultValue = false);
         int GetInt(string section, string key, int defaultValue = 0);
         void Set(string section, string key, string value);
-
+        List<Dictionary<string, string>> GetAll(string section);
         void Save();
     }
 }

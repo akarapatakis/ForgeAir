@@ -40,6 +40,9 @@ namespace ForgeAir.Core.Helpers
             }
         }
 
+        public int Count(string section) => data.ContainsKey(section) ? data[section].Count : 0;
+
+        public List<Dictionary<string, string>> GetAll(string section) => data.ContainsKey(section) ? new List<Dictionary<string, string>>() { data[section] } : new List<Dictionary<string, string>>();
         public string Get(string section, string key, string defaultValue = "")
         {
             return data.ContainsKey(section) && data[section].ContainsKey(key)
