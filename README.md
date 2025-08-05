@@ -1,31 +1,15 @@
 
-# ForgeAir
+# ForgeAir - Work In Progress (DO NOT USE)
 
 <p align="center">
   <img src="docs/assets/readme-banner.png" width="100%" alt="ForgeAir Banner">
 </p>
-<h2>🚧 Due to my Panhellenic exams, I am currently unable to develop ForgeAir
-actively. </h2>
+<h2>🚧 Due to my Panhellenic exams, I am currently unable to develop and
+ maintain ForgeAir. </h2>
 
-**ForgeAir** is a modern, modular and lightweight radio automation system built
+**ForgeAir** is a w.i.p modern, modular and lightweight radio automation system built
 with C# and WPF. Designed for my use case mainly but that does not limit you in
 choosing ForgeAir.
-
----
-
-## ✨ Features
-
-- 🎵 High-performance audio engines (BASS & NAudio) with VST Plugin support
- (limited to BASS only) with support for WaveOut, DirectSound and WASAPI (ASIO
- support only on NAudio)
-- 🎙️ Sweeper overlays, FX, rebroadcasting, crossfading, and streaming support
-- 📞 Audience messages by SMS via Android using [ForgeCrowd](https://github.com/akarapatakis/ForgeCrowd)
-- 🛠 Ability to create plugins using an [SDK](https://github.com/akarapatakis/ForgePluginSDK)
-- 💾 RDS/RBDS, DAB+ PAD and Internet Text
-- 🧠 Clean MVVM architecture using Caliburn.Micro
-- ⚡ Friendly configuration through INI
-- 👀 Small but handy features like Traffic Announcemnts, Dynamic Jingles,
-Temperature etc.
 
 ---
 
@@ -41,16 +25,29 @@ Temperature etc.
 
 ---
 
+### Credits
+
+Thanks to these people/groups for helping through ForgeAir's development:
+
+- [@andreiv1](github.com/andreiv1)
+ for helping in early development with his valuable knowledge and helping me
+  write better code :))
+
+...and to all of you who use ForgeAir (?)
+
+---
+
 ## 🚀 Getting Started
 
 ### Requirements
 
-- x64 machine
-- .NET 6 SDK
+- x64 CPU and host
+- Windows 10 1809 (17763) or better
+- .NET 8 SDK
 - Visual Studio 2022
 - Telegram Bot
 - WeatherAPI Account
-- MySQL/MariaDB server (for track database)
+- MySQL/MariaDB server
 
 ### Building
 
@@ -71,14 +68,40 @@ CRASH_REPORTER_TELEGRAM_BOT_TOKEN=XXXXXXXXXXXXX
 CRASH_REPORTER_TELEGRAM_CHATID=XXXXXXXXXX
 
 Open ForgeAir.sln in Visual Studio and build or use MSBuild 
+
+Copy configuration.ini from ForgeAir.Playout to the output directory 
+and create a station by modifying the file with:
+
+[Stations]
+0=default_station
+
+create the directory tree Stations\default_station
+and create a default_station.ini and add the following template
+
+Remember to modify/fill the values for your needs!
+
+[General]
+Tag=Default Station
+AutoStart=0
+PlayAutoAtStart=1
+
+[Database]
+Host=
+Port=
+DatabaseName=
+Password=
+User=
+[MainOutput]
+AudioEngine=NAudio
+MainOutDevice==1
+MainOutDeviceMethod=MME
+MainOutSampleRate=44100
+MainOutBitDepth=16
+MainOutChannels=2
+MainOutBuffer=333
+MainOutUseDSound=1
+FixClickingWorkAround=1
+[VST]
+Enabled=0
+EffectPath=
 ```
-
----
-
-### Credits
-
-Thanks to these people/groups for helping through ForgeAir's development:
-
-- @andreiv1  for helping in early development and helping me write better code :P
-
-...and to all of you who use ForgeAir (?)
