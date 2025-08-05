@@ -2,19 +2,25 @@
 using ForgeAir.Core.Tracks.Enums;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
+using m3uParser;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using m3uParser;
 namespace ForgeAir.Core.Tracks
 {
     public class Importer
     {
+        private readonly IDbContextFactory<ForgeAirDbContext> _contextFactory;
+        public Importer(IDbContextFactory<ForgeAirDbContext> contextFactory) { 
+            _contextFactory = contextFactory;
+        }
         public void AddCategory(CategoryDTO category) {
             if (category == null) { return; }
-            using (var context = new ForgeAirDbContext())
+            using (var context = _contextFactory.CreateDbContext())
             {
 
                 context.Category.Add(CategoryDTO.ToEntity(category));
@@ -27,7 +33,7 @@ namespace ForgeAir.Core.Tracks
         public void AddFx(FxDTO fx) {
             if (fx == null) { return; }
 
-            using (var context = new ForgeAirDbContext())
+            using (var context = _contextFactory.CreateDbContext())
             {
                 context.Fx.Add(FxDTO.ToEntity(fx));
                 context.SaveChanges();
@@ -47,7 +53,7 @@ namespace ForgeAir.Core.Tracks
         }
         public void AddFX(FxDTO fx) {
 
-            using (var context = new ForgeAirDbContext())
+            using (var context = _contextFactory.CreateDbContext())
             {
                 context.Fx.Add(FxDTO.ToEntity(fx));
                 context.SaveChanges();

@@ -21,13 +21,13 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
 {
     public class ImportDirectoryViewModel : Screen
     {
-        private readonly ForgeAirDbContextFactory factory = new();
         private readonly RepositoryService<Artist> artistsService;
         private readonly TrackImporter trackImporter = new();
         private readonly IWindowManager _windowManager;
         private ICollection<TrackImportModel> _trackImports = new List<TrackImportModel>();
-        public ImportDirectoryViewModel(IWindowManager windowManager)
+        public ImportDirectoryViewModel(IServiceProvider provider, IWindowManager windowManager)
         {
+            _provider = provider;
             _windowManager = windowManager;
             artistsService = new(factory);
         }

@@ -13,10 +13,11 @@ namespace ForgeAir.Core.UserAuthentication
     public class UserAuthenticator
     {
         private readonly ForgeAirDbContext _dbContext;
-        public UserAuthenticator()
+        public UserAuthenticator(IDbContextFactory<ForgeAirDbContext> dbContextFactory)
         {
-            _dbContext = new ForgeAirDbContext();
+            _dbContext = dbContextFactory.CreateDbContext();
         }
+        
         private static bool VerifyPassword(string inputPassword, string storedHashBase64)
         {
             byte[] hashBytes = Convert.FromBase64String(storedHashBase64);

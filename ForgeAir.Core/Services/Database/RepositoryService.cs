@@ -14,9 +14,10 @@ namespace ForgeAir.Core.Services.Database
     public class RepositoryService<T> where T : class
     {
         private readonly IDbContextFactory<ForgeAirDbContext> _contextFactory;
-        public RepositoryService(IDbContextFactory<ForgeAirDbContext> contextFactory)
+
+        public RepositoryService(IDbContextFactory<ForgeAirDbContext> factory)
         {
-            _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
+            _contextFactory = factory;
         }
 
         public async Task<int> GetCountOf(ModelTypesEnum model)

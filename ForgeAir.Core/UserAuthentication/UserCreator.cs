@@ -18,7 +18,7 @@ namespace ForgeAir.Core.UserAuthentication
         private readonly string _fullname;
         private string? _password;
         private User _user;
-        public UserCreator(string username, string fullname, string password, User executor)
+        public UserCreator(IDbContextFactory<ForgeAirDbContext> dbContextFactory, string username, string fullname, string password, User executor)
         {
             if (executor.Role != Database.Models.Enums.UserRole.Administrator)
             {
@@ -32,7 +32,7 @@ namespace ForgeAir.Core.UserAuthentication
             _username = username;
             _fullname = fullname;
             _password = password;
-            _dbContext = new ForgeAirDbContext();
+            _dbContext = dbContextFactory.CreateDbContext();
         }
 
         public string HashedPassword

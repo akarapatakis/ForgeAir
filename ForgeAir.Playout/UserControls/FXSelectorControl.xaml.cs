@@ -18,6 +18,8 @@ using ForgeAir.Core.Services;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
 using MahApps.Metro.Controls;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ForgeAir.Playout.UserControls
 {
@@ -27,14 +29,12 @@ namespace ForgeAir.Playout.UserControls
     public partial class FXSelectorControl : UserControl
     {
 
-        private readonly ForgeAirDbContextFactory factory;
         public List<FxDTO> FXTiles { get; set; } = new List<FxDTO>();
         public Core.Services.Database.RepositoryService<FX> repository;
-        public FXSelectorControl()
+        public FXSelectorControl(IServiceProvider provider)
         {
 
-            factory = new ForgeAirDbContextFactory();
-            repository = new Core.Services.Database.RepositoryService<FX>(factory);
+            repository = new Core.Services.Database.RepositoryService<FX>(provider.GetRequiredService<IDbContextFactory<ForgeAirDbContext>>());
 
             InitializeComponent();
             this.DataContext = this;

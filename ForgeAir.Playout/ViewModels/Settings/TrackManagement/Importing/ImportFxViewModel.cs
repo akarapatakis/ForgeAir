@@ -9,7 +9,8 @@ using ForgeAir.Core.DTO;
 using ForgeAir.Core.Services.Tags;
 using ForgeAir.Core.Tracks;
 using ForgeAir.Database;
-using Microsoft.Identity.Client;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Win32;
 
 namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
@@ -22,11 +23,11 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
         private FxDTO fx;
         private string fileDirBox;
         private OpenFileDialog openFileDialog;
-        private ForgeAirDbContext _context;
         private readonly IWindowManager _windowManager;
-        private readonly Importer importer = new();
-        public ImportFxViewModel(IWindowManager windowManager)
+        private readonly Importer importer;
+        public ImportFxViewModel(IServiceProvider provider, IWindowManager windowManager)
         {
+            importer = new Importer(provider.GetRequiredService<IDbContextFactory<ForgeAirDbContext>>());
             openFileDialog = new OpenFileDialog();
             openFileDialog.CheckFileExists = true;
             openFileDialog.Multiselect = false;
@@ -47,6 +48,7 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
         }
         public void Add()
         {
+
             if (fxFilename != null && File.Exists(fxFilename))
             {
                 var tagReader = new TagService(new TrackDTO() { FilePath = fxFilename });

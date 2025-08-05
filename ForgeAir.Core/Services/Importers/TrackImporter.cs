@@ -21,17 +21,19 @@ namespace ForgeAir.Core.Services.Importers
 {
     public class TrackImporter : ITrackImporter
     {
-        private readonly ForgeAirDbContext _dbContext;
         private readonly RepositoryService<Track> _repositoryService;
-
-        public TrackImporter()
+        private readonly IDbContextFactory<ForgeAirDbContext> contextFactory;
+        private ForgeAirDbContext _dbContext;
+        public TrackImporter(IDbContextFactory<ForgeAirDbContext> _contextFactory)
         {
-            _dbContext = new ForgeAirDbContext();
-            _repositoryService = new RepositoryService<Track>(new ForgeAirDbContextFactory());
+            contextFactory = _contextFactory;
+            _repositoryService = new RepositoryService<Track>(contextFactory);
+            _dbContext = contextFactory.CreateDbContext();
         }
 
         public async Task<Dictionary<ImportTrackStatusEnum, ImportTrackErrorsEnum>> CreateNetStreamTrack(TrackImportModel stream)
         {
+
             _dbContext.ChangeTracker.Clear();
 
             var track = new TrackDTO
