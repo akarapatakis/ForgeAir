@@ -189,7 +189,7 @@ namespace ForgeAir.Playout.Bootstrappers
             var weather = Services.GetRequiredService<IWeatherService>();
             if (_globalProvider != null)
             {
-                weather.CurrentWeather = await Task.Run(() => weather.GetWeather(_globalProvider.GetRequiredService<IConfigurationManager>().Get("Weather", "City")));
+                weather.CurrentWeather = await Task.Run(() => weather.GetWeather(_globalProvider.GetRequiredService<IConfigurationManager>().Get("Weather", "City") + " " + _globalProvider.GetRequiredService<IConfigurationManager>().Get("Weather", "Country")));
             }
             return;
         }

@@ -106,7 +106,6 @@ namespace ForgeAir.Playout
             _serviceProvider.GetRequiredService(instance.GetType());
         }
 
-       
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
             splashScreen.Show();
