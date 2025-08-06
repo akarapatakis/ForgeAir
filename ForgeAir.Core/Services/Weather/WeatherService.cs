@@ -13,6 +13,10 @@ namespace ForgeAir.Core.Services.Weather
 {
    public class WeatherService : IWeatherService
    {
+
+        public double[] CurrentWeather { get; set; }
+
+
         public WeatherService() {
             DotNetEnv.Env.TraversePath().Load();
         } 

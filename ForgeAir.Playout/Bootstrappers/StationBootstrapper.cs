@@ -47,9 +47,13 @@ namespace ForgeAir.Playout.Bootstrappers
     {
         public string Tag { get; private set; }
         public IServiceProvider Services { get; private set; }
+        private readonly IServiceProvider _globalProvider;
 
-        public StationBootstrapper(string iniPath)
+
+        public StationBootstrapper(string iniPath, IServiceProvider globalProvider)
         {
+            _globalProvider = globalProvider;
+
             var config = new ConfigurationManager(iniPath);
             Tag = config.Get("General", "Tag");
             var dbName = config.Get("Database", "DatabaseName");
@@ -176,13 +180,18 @@ namespace ForgeAir.Playout.Bootstrappers
             return;
 
         }
-        public Task Initialize()
+        public async Task Initialize()
         {
             var dbFactory = Services.GetRequiredService<IDbContextFactory<ForgeAirDbContext>>();
             dbFactory.CreateDbContext();
             InitializeDatabase();
             Services.GetRequiredService<IPlayerFactory>().CreatePlayer();
-            return Task.CompletedTask;
+            var weather = Services.GetRequiredService<IWeatherService>();
+            if (_globalProvider != null)
+            {
+                weather.CurrentWeather = await Task.Run(() => weather.GetWeather(_globalProvider.GetRequiredService<IConfigurationManager>().Get("Weather", "City")));
+            }
+            return;
         }
 
         public async Task ShowShellViewAsync()

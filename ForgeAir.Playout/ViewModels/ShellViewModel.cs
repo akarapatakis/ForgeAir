@@ -118,10 +118,10 @@ namespace ForgeAir.Playout.ViewModels
         private async void updateTemp_Tick(object sender, EventArgs e)
         {
             var tempService = _provider.GetRequiredService<IWeatherService>();
-            var temp = await Task.Run(() => tempService.GetWeather("Chania Gr")); //todo: change it
 
-            if (temp != null) { 
-                CurrentTemp = $"{temp.First().ToString()} °C / {temp.Last().ToString()} °F";
+
+            if (tempService.CurrentWeather != null) { 
+                CurrentTemp = $"{tempService.CurrentWeather.First().ToString()} °C / {tempService.CurrentWeather.Last().ToString()} °F";
             }
         }
         public void OpenTab(TabItemViewModelBase tab)

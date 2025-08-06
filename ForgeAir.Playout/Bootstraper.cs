@@ -144,6 +144,11 @@ namespace ForgeAir.Playout
             await Task.Run(async () =>
             {
                 var stationTags = _serviceProvider.GetRequiredService<IConfigurationManager>().GetAll("Stations").FirstOrDefault()?.Values.ToList();
+                if (stationTags == null)
+                {
+                    HandyControl.Controls.MessageBox.Show("No Stations found.\nPlease add a Station.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(0);
+                }
                 foreach (var tag in stationTags)
                 {
                     string stationConfigPath = $"Stations/{tag}/{tag}.ini";
@@ -154,14 +159,11 @@ namespace ForgeAir.Playout
                         continue;
                     }
 
-                    var bootstrapper = new StationBootstrapper(stationConfigPath);
+                    var bootstrapper = new StationBootstrapper(stationConfigPath, _serviceProvider);
                     await bootstrapper.Initialize();
                     StationsInstance.Instance.Stations.Add(bootstrapper);
                 }
-                if (StationsInstance.Instance.Stations.Count == 0) {
-                    HandyControl.Controls.MessageBox.Show("No Stations found. Please add a Station");
-                    Environment.Exit(0);
-                }
+
             });
             _serviceProvider.GetRequiredService<ForgeTrayIcon>();
             await DisplayRootViewForAsync<StationSelectorViewModel>();

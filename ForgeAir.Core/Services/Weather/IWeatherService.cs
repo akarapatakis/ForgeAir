@@ -11,6 +11,7 @@ namespace ForgeAir.Core.Services.Weather
 {
     public interface IWeatherService
     {
+        double[] CurrentWeather { get; set; }
         Task<double[]> GetWeather(string location);
     }
 }
