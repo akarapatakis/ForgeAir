@@ -92,8 +92,8 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
 
         private async Task AddToDatabase(string url, string name)
         {
-          //  var processVM = new ImportingProcessViewModel(_provider, new ObservableCollection<TrackImportModel>() { new TrackImportModel(url, name, Database.Models.Enums.TrackType.Rebroadcast, TimeSpan.Zero) });
-           // await _windowManager.ShowDialogAsync(processVM);
+            var processVM = new ImportingProcessViewModel(_provider, new ObservableCollection<TrackImportModel>() { new TrackImportModel(url, name, Database.Models.Enums.TrackType.Rebroadcast, TimeSpan.Zero, null) });
+            await _windowManager.ShowDialogAsync(processVM);
         }
     }
 }
