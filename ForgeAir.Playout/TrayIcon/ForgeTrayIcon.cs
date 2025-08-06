@@ -84,8 +84,19 @@ namespace ForgeAir.Playout.TrayIcon
                 {
                     window.Show();
                     window.Activate();
+                    window.Focus();
+                    window.WindowState = System.Windows.WindowState.Normal;
+
 
                 }
+            }
+            else
+            {
+                window.Show();
+                window.Activate();
+                window.Focus();
+                window.WindowState = System.Windows.WindowState.Normal;
+
             }
 
         }
