@@ -118,6 +118,10 @@ namespace ForgeAir.Core.Services.Importers
 
                 if (existingCategory == null)
                 {
+                    if (categoryDto == null || categoryDto.Name == null || categoryDto.Id == null)
+                    {
+                        continue;
+                    }
                     existingCategory = new Category
                     {
                         Name = categoryDto.Name,

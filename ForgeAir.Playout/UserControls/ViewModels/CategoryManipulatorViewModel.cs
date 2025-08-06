@@ -65,7 +65,7 @@ namespace ForgeAir.Playout.UserControls.ViewModels
 
         public void Add()
         {
-            if (SelectedCategory != null && !SelectedCategories.Contains(SelectedCategory))
+            if (SelectedCategory != null && SelectedCategory.Id != null && SelectedCategory.Name != null && !SelectedCategories.Contains(SelectedCategory))
                 SelectedCategories.Add(SelectedCategory);
         }
         public void Remove()
