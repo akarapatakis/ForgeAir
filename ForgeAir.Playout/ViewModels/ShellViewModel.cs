@@ -118,8 +118,6 @@ namespace ForgeAir.Playout.ViewModels
         private async void updateTemp_Tick(object sender, EventArgs e)
         {
             var tempService = _provider.GetRequiredService<IWeatherService>();
-
-
             if (tempService.CurrentWeather != null) { 
                 CurrentTemp = $"{tempService.CurrentWeather.First().ToString()} °C / {tempService.CurrentWeather.Last().ToString()} °F";
             }

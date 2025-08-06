@@ -68,53 +68,56 @@ namespace ForgeAir.Core.Services.Tags
 
 
 
-        public ObservableCollection<ArtistDTO> getArtists()
+        public ObservableCollection<ArtistDTO> Artists
         {
-            var artists = new ObservableCollection<ArtistDTO>();
-
-            try
+            get
             {
+                var artists = new ObservableCollection<ArtistDTO>();
 
-
-                // First: Add performers from TagLib
-                if (_tag.Tag.Performers != null && _tag.Tag.Performers.Length > 0)
+                try
                 {
-                    foreach (var performer in _tag.Tag.Performers)
-                    {
-                        if (!string.IsNullOrWhiteSpace(performer))
-                            artists.Add(new ArtistDTO { Name = performer.Trim() });
-                    }
-                }
 
-                // Optional: Add from getArtist if needed (not clear what it does)
-                var fallbackName = getArtist()?.Name;
-                if (!string.IsNullOrWhiteSpace(fallbackName))
-                {
-                    foreach (var name in fallbackName.Split(";"))
+
+                    // First: Add performers from TagLib
+                    if (_tag.Tag.Performers != null && _tag.Tag.Performers.Length > 0)
                     {
-                        var trimmed = name.Trim();
-                        if (!string.IsNullOrEmpty(trimmed) && !artists.Any(a => a.Name == trimmed))
+                        foreach (var performer in _tag.Tag.Performers)
                         {
-                            artists.Add(new ArtistDTO { Name = trimmed });
+                            if (!string.IsNullOrWhiteSpace(performer))
+                                artists.Add(new ArtistDTO { Name = performer.Trim() });
                         }
                     }
-                }
 
-                // If still empty, add "Unknown Artist"
-                if (!artists.Any())
+                    // Optional: Add from getArtist if needed (not clear what it does)
+                    var fallbackName = getArtist()?.Name;
+                    if (!string.IsNullOrWhiteSpace(fallbackName))
+                    {
+                        foreach (var name in fallbackName.Split(";"))
+                        {
+                            var trimmed = name.Trim();
+                            if (!string.IsNullOrEmpty(trimmed) && !artists.Any(a => a.Name == trimmed))
+                            {
+                                artists.Add(new ArtistDTO { Name = trimmed });
+                            }
+                        }
+                    }
+
+                    // If still empty, add "Unknown Artist"
+                    if (!artists.Any())
+                    {
+                        artists.Add(new ArtistDTO { Name = "Unknown Artist" });
+                    }
+                }
+                catch (UnsupportedFormatException)
                 {
                     artists.Add(new ArtistDTO { Name = "Unknown Artist" });
                 }
-            }
-            catch (UnsupportedFormatException)
-            {
-                artists.Add(new ArtistDTO { Name = "Unknown Artist" });
-            }
 
-            return artists;
+                return artists;
+            }
         }
 
-        public ArtistDTO getArtist() // fuck
+        private ArtistDTO getArtist()
         {
             ArtistDTO artist = new ArtistDTO();
             string[] artists;
@@ -144,23 +147,12 @@ namespace ForgeAir.Core.Services.Tags
         {
             get
             {
-                if (_tag.Tag.Year <= 1)
-                    return null;
-
-                if (DateTime.TryParseExact(
-                    _tag.Tag.Year.ToString(),
-                    "yyyy",
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.None,
-                    out DateTime parsedDate))
-                {
-                    return parsedDate;
-                }
-
-                return null;
+                uint year = _tag.Tag.Year;
+                return (year > 1 && year <= DateTime.MaxValue.Year)
+                    ? new DateTime((int)year, 1, 1)
+                    : null;
             }
         }
-
 
 
 

@@ -42,8 +42,8 @@ namespace ForgeAir.Core.Services.Importers
                 Title = stream.StreamDisplayTitle ?? stream.FilePath,
                 Album = "",
                 ISRC = "",
-                DateAdded = DateTime.UtcNow,
-                DateModified = DateTime.UtcNow,
+                DateAdded = DateTime.Now,
+                DateModified = DateTime.Now,
                 Bpm = 0,
                 Duration = TimeSpan.Zero,
                 MixPoint = TimeSpan.Zero,
@@ -162,8 +162,8 @@ namespace ForgeAir.Core.Services.Importers
                 Title = tagReader.Title,
                 Album = tagReader.Album,
                 ISRC = tagReader.ISRC,
-                DateAdded = DateTime.UtcNow,
-                DateModified = DateTime.UtcNow,
+                DateAdded = DateTime.Now,
+                DateModified = DateTime.Now,
                 Bpm = tagReader.BPM,
                 StartPoint = TimeSpan.Zero,
                 Duration = tagReader.AudioDuration,
@@ -178,7 +178,7 @@ namespace ForgeAir.Core.Services.Importers
 
             var resolvedArtists = new List<Artist>();
 
-            foreach (var artistDto in tagReader.getArtists() ?? new())
+            foreach (var artistDto in tagReader.Artists ?? new())
             {
                 var existing = await _dbContext.Artists.FirstOrDefaultAsync(a => a.Name.ToUpper() == artistDto.Name.ToUpper());
                 if (existing == null)
