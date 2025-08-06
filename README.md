@@ -29,7 +29,7 @@ choosing ForgeAir.
 
 Thanks to these people/groups for helping through ForgeAir's development:
 
-- [@andreiv1](github.com/andreiv1)
+- [@andreiv1](https://github.com/andreiv1)
  for helping in early development with his valuable knowledge and helping me
   write better code :))
 
