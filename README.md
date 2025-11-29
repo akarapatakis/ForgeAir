@@ -1,10 +1,10 @@
 
-# ForgeAir - Work In Progress (DO NOT USE)
+# ForgeAir
 
 <p align="center">
   <img src="docs/assets/readme-banner.png" width="100%" alt="ForgeAir Banner">
 </p>
-<h2>🚧 Due to my Panhellenic exams, I am currently unable to develop and
+<h2>🚧 Due to my Panhellenic exams, I am currently unable to actively develop and
  maintain ForgeAir. </h2>
 
 **ForgeAir** is a w.i.p modern, modular and lightweight radio automation system built
