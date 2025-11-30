@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # secrets
 *.env
+/ForgeAir.Playout/nlog.config
