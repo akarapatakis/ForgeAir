@@ -1,0 +1,123 @@
+﻿<mah:MetroWindow
+    x:Class="ForgeAir.Playout.Views.Settings.Generals.StationMetadataEditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://caliburnmicro.com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:ForgeAir.Playout.Views.Settings.Generals"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Edit Station Metadata"
+    Width="800"
+    Height="550"
+    mc:Ignorable="d">
+    <DockPanel Margin="10">
+        <TextBlock
+            Margin="0,0,0,10"
+            HorizontalAlignment="Center"
+            DockPanel.Dock="Top"
+            FontSize="28"
+            FontWeight="Light"
+            Text="Edit Station Metadata" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80*" />
+                <RowDefinition Height="168*" />
+                <RowDefinition Height="19*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Image
+                Grid.Row="0"
+                Grid.Column="0"
+                Source="{Binding Logo}"
+                Stretch="UniformToFill">
+                <Image.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem cal:Message.Attach="ChangeLogo" Header="Change Logo" />
+
+
+                        <Separator />
+
+                        <MenuItem cal:Message.Attach="RemoveLogo" Header="Remove Logo" />
+                    </ContextMenu>
+                </Image.ContextMenu>
+            </Image>
+            <StackPanel Grid.RowSpan="3" Grid.Column="1">
+                <TextBlock
+                    Margin="10,0,0,10"
+                    Text="Name"
+                    TextAlignment="Left" />
+                <TextBox Margin="10,0,10,10" Text="{Binding NewName}" />
+                <TextBlock
+                    Margin="10,0,0,10"
+                    Text="Slogan"
+                    TextAlignment="Left" />
+                <TextBox Margin="10,0,10,10" Text="{Binding NewSlogan}" />
+                <TextBlock
+                    Margin="10,0,0,10"
+                    Text="Telephone"
+                    TextAlignment="Left" />
+                <TextBox Margin="10,0,10,10" Text="{Binding NewTelephone}" />
+                <TextBlock
+                    Margin="10,0,0,10"
+                    Text="E-Mail"
+                    TextAlignment="Left" />
+                <TextBox Margin="10,0,10,10" Text="{Binding NewEmail}" />
+                <TextBlock
+                    Margin="10,0,0,10"
+                    Text="Genre"
+                    TextAlignment="Left" />
+                <TextBox Margin="10,0,10,10" Text="{Binding NewGenre}" />
+                <TextBlock
+                    Margin="10,0,0,10"
+                    Text="Website"
+                    TextAlignment="Left" />
+                <TextBox Margin="10,0,10,10" Text="{Binding NewWebsite}" />
+                <TextBlock
+                    Margin="10,0,0,10"
+                    Text="RDS PI (Program Identifier)"
+                    TextAlignment="Left" />
+                <TextBox
+                    Width="40"
+                    Margin="10,0,10,10"
+                    HorizontalAlignment="Left"
+                    Text="{Binding NewPI}" />
+
+            </StackPanel>
+            <Button
+                x:Name="FMPIGen_call"
+                Grid.Row="2"
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Content="RDS PI Generator"
+                DockPanel.Dock="Bottom" />
+
+            <StackPanel
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Margin="404,0,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                DockPanel.Dock="Bottom"
+                Orientation="Horizontal">
+                <Button
+                    x:Name="Apply"
+                    Width="100"
+                    Margin="5,0"
+                    Content="Save" />
+                <Button
+                    x:Name="Cancel"
+                    Width="100"
+                    Margin="5,0"
+                    Content="Cancel" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+
+</mah:MetroWindow>

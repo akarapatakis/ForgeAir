@@ -5,11 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ForgeAir.Playout.UserControls"
              xmlns:Controls="clr-namespace:ForgeAir.UI.Core.Controls;assembly=ForgeAir.UI.Core" xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="ForgeAir.Playout.UserControls.StereoVUMeterControl"
-             mc:Ignorable="d" Height="185" Width="115">
+             mc:Ignorable="d" Height="125" Width="250">
     <Grid>
-        <Controls:VUMeter x:Name="leftVU" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top" Height="150" />
-        <Controls:VUMeter x:Name="rightVU" HorizontalAlignment="Right" Margin="0,4,10,0" VerticalAlignment="Top" Height="150" />
-        <TextBlock Margin="24,159,79,6" TextWrapping="Wrap" Text="L" FontSize="18"/>
-        <TextBlock Margin="78,159,23,6" TextWrapping="Wrap" Text="R" FontSize="18"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15*"/>
+            <ColumnDefinition Width="112*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <Controls:VUMeter x:Name="leftVU" Margin="10,0,0,0" Grid.Row="0" VerticalAlignment="Stretch" Height="38" Grid.Column="1" />
+        <Controls:VUMeter x:Name="rightVU" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Stretch" Height="38" Grid.Column="1" />
+
+        <TextBlock Margin="10,18,11,12" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="L" FontSize="18" Grid.Row="0" Grid.Column="0"/>
+        <TextBlock Margin="10,22,2,19" TextWrapping="Wrap" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Text="R" FontSize="18" Grid.Row="1" Grid.Column="0"/>
     </Grid>
 </UserControl>

@@ -57,15 +57,7 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
             CategoryManipulatorViewModel = _provider.GetRequiredService<CategoryManipulatorViewModel>();
             TrackTypeList = Enum.GetValues(typeof(TrackType)).Cast<TrackType>().ToList();
 
-            // removing forgevision entries because it uses shared tracktype (fuck me)
             TrackTypeList.Remove(TrackType.None);
-            TrackTypeList.Remove(TrackType.Bumper);
-            TrackTypeList.Remove(TrackType.Instant);
-            TrackTypeList.Remove(TrackType.Ident);
-            TrackTypeList.Remove(TrackType.MusicVideo);
-            TrackTypeList.Remove(TrackType.Newsreport);
-            TrackTypeList.Remove(TrackType.Movie);
-            TrackTypeList.Remove(TrackType.Show);
             TrackTypeList.Remove(TrackType.Rebroadcast);
 
         }

@@ -22,6 +22,11 @@ namespace ForgeAir.Core.Models
         public string Name { get; set; }
 
         /// <summary>
+        /// For NAudio's DirectSound Wrapper
+        /// </summary>
+        public Guid Guid { get; set; }
+
+        /// <summary>
         /// The use of device (is it for FX, a mic, a line out?)
         /// </summary>
         public DeviceTypeEnum Type { get; set; }

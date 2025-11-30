@@ -1,166 +1,196 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
+using DynamicData;
+using DynamicData.Binding;
 using ForgeAir.Core.DTO;
 using ForgeAir.Core.Events;
-using ForgeAir.Core.Models;
-using ForgeAir.Core.Services.Database;
-using ForgeAir.Core.Services.Managers;
-using ForgeAir.Database.Models;
+using ForgeAir.Core.Services.Database.Interfaces;
 using ForgeAir.Database.Models.Enums;
-using ForgeAir.Playout.ViewModels.PlayoutWindows;
+using ForgeAir.Playout.UserControls.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.ObjectModel;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace ForgeAir.Playout.UserControls.ViewModels
 {
-    public class TrackSelectorViewModel : Screen, IDisposable, INotifyPropertyChanged
+    public class TrackSelectorViewModel : Screen, IDisposable
     {
-        private readonly AppState _appState;
-        private readonly IServiceProvider _provider;
-        public TrackDTO SelectedTrack;
-        private readonly RepositoryService<Track> _trackRepository;
-        private ObservableCollection<string> _comboItems = new();
-        private ObservableCollection<TrackDTO> _allTracks;
-        public ObservableCollection<TrackDTO> AllTracks
-        {
-            get => _allTracks;
-            set
-            {
-                _allTracks = value;
-                NotifyOfPropertyChange(() => AllTracks);
-            }
-        }
-        private ObservableCollection<TrackDTO> _filteredTracks = new();
-        private string _searchText = string.Empty;
-        private readonly TrackQueueViewModel QueueView;
-        private TrackType _selectedTrackType;
-        public TrackType SelectedTrackType
-        {
-            get => _selectedTrackType;
-            set
-            {
-                _selectedTrackType = value;
-                ApplyFilter();
-            }
-        }
-        public TrackSelectorViewModel(IServiceProvider provider)
-        {
-            _provider = provider;
-            _trackRepository = _provider.GetRequiredService<RepositoryService<Track>>();
-            AllTracks = _provider.GetRequiredService<ObservableCollection<TrackDTO>>();
-            TrackDbChanged.TrackImported += OnTrackImported;
-            QueueView = _provider.GetRequiredService<TrackQueueViewModel>();
-            LoadData();
-        }
-        private void OnTrackImported(TrackDTO track)
-        {
-            Application.Current.Dispatcher.Invoke(() => {
-                LoadData(); // refresh from db
-            });
-        }
-        public ObservableCollection<TrackDTO> FilteredTracks
+        private readonly SourceList<TrackDTO> _items = new();
+        private readonly ITracksService _tracksService;
+        private readonly TrackQueueViewModel _queueView;
+
+        private ReadOnlyObservableCollection<TrackDTO> _filteredTracks;
+        public ReadOnlyObservableCollection<TrackDTO> FilteredTracks
         {
             get => _filteredTracks;
-            set
+            private set
             {
                 _filteredTracks = value;
                 NotifyOfPropertyChange(() => FilteredTracks);
             }
         }
 
-        public ObservableCollection<string> ComboItems
-        {
-            get => _comboItems;
-            set
-            {
-                _comboItems = value;
-                NotifyOfPropertyChange(() => ComboItems);
-            }
-        }
+        private string _searchText = string.Empty;
+        private readonly Subject<string> _searchTextChanged = new();
+        private readonly Subject<TrackType> _trackTypeChanged = new();
 
         public string SearchText
         {
             get => _searchText;
             set
             {
-                if (Set(ref _searchText, value))
-                {
-                    ApplyFilter();
-                }
+                _searchText = value;
+                NotifyOfPropertyChange(() => SearchText);
+                _searchTextChanged.OnNext(value);
             }
         }
-        private async void LoadData()
+
+        public ObservableCollection<TrackType> TrackTypes { get; } = new();
+        private TrackType _selectedTrackType = TrackType.None;
+        public TrackType SelectedTrackType
         {
-
-
-
-            var tracks = await Task.Run(() => _trackRepository.GetAll(Core.Tracks.Enums.ModelTypesEnum.Track));
-
-
-            foreach (var track in tracks)
+            get => _selectedTrackType;
+            set
             {
-                var dto = TrackDTO.FromEntity(track);
-                AllTracks.Add(dto);
+                _selectedTrackType = value;
+                NotifyOfPropertyChange(() => SelectedTrackType);
+                _trackTypeChanged.OnNext(value);
             }
-
-
-            FilteredTracks = new ObservableCollection<TrackDTO>(AllTracks);
-
-
-            ComboItems = new ObservableCollection<string>();
-
-            foreach (var _enum in Enum.GetNames(typeof(Database.Models.Enums.TrackType))){
-                ComboItems.Add(_enum.ToString());
-            }
-            SelectedTrackType = TrackType.None; // init value so the combobox won't be empty
-
         }
+
+        public ObservableCollection<TrackType> ComboItems { get; } = new();
+
+        // Lazy-loading fields
+        private bool _isLoading = false;
+        private readonly object _loadLock = new();
+        private int _pageSize = 100;
+        private int _currentSkip = 0;
+
+        public TrackSelectorViewModel(ITracksService tracksService, IServiceProvider provider)
+        {
+            _tracksService = provider.GetRequiredService<ITracksService>();
+            _queueView = provider.GetRequiredService<TrackQueueViewModel>();
+
+            Enum.GetValues(typeof(TrackType)).Cast<TrackType>().ToObservable().Subscribe(t => TrackTypes.Add(t));
+
+            _items
+                .Connect()
+                .AutoRefreshOnObservable(_ =>
+                    this.WhenAnyPropertyChanged(nameof(SearchText), nameof(SelectedTrackType)))
+                .Filter(FilterTrack)
+                .Bind(out var filtered)
+                .Subscribe();
+
+            FilteredTracks = filtered;
+
+            _searchTextChanged
+                .Throttle(TimeSpan.FromMilliseconds(250))
+                .DistinctUntilChanged()
+                .ObserveOn(SynchronizationContext.Current) // run subsequent actions on UI thread
+                .Subscribe(async text =>
+                {
+                    await ResetAndLoadFirstPageAsync();
+                });
+
+            _trackTypeChanged
+                .DistinctUntilChanged()
+                .ObserveOn(SynchronizationContext.Current)
+                .Subscribe(async _ =>
+                {
+                    await ResetAndLoadFirstPageAsync();
+                });
+
+            TrackDbChanged.TrackImported += OnTrackImported;
+
+            // Initial load
+            _ = ResetAndLoadFirstPageAsync();
+        }
+
+        private async Task ResetAndLoadFirstPageAsync()
+        {
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                _currentSkip = 0;
+                _items.Edit(list => list.Clear());
+            });
+
+            await LoadNextPage();
+        }
+
+        private bool FilterTrack(TrackDTO t)
+        {
+            bool typeMatch = _selectedTrackType == TrackType.None || t.TrackType == _selectedTrackType;
+            if (string.IsNullOrWhiteSpace(SearchText))
+                return typeMatch;
+
+            string lowerSearch = _searchText.ToLowerInvariant();
+            bool textMatch =
+                (!string.IsNullOrEmpty(t.Title) && t.Title.ToLowerInvariant().Contains(lowerSearch)) ||
+                (!string.IsNullOrEmpty(t.DisplayArtists) && t.DisplayArtists.ToLowerInvariant().Contains(lowerSearch)) ||
+                (!string.IsNullOrEmpty(t.Album) && t.Album.ToLowerInvariant().Contains(lowerSearch)) ||
+                (t.ISRC != null && t.ISRC.ToLowerInvariant() == (lowerSearch)) ||
+                (t.Bpm != null && t.Bpm.ToString() == (lowerSearch)) ||
+                (t.Id.ToString() == (lowerSearch));
+
+            return typeMatch && textMatch;
+        }
+
+        public async Task LoadNextPage()
+        {
+            // quick guard to prevent overlapping loads
+            if (_isLoading) return;
+
+            lock (_loadLock)
+            {
+                if (_isLoading) return;
+                _isLoading = true;
+            }
+
+            try
+            {
+                var newTracks = await _tracksService.GetTracks(_currentSkip, _pageSize);
+
+                await Application.Current.Dispatcher.InvokeAsync(() => _items.AddRange(newTracks));
+
+                _currentSkip += _pageSize;
+            }
+            finally
+            {
+                _isLoading = false;
+            }
+        }
+
+        private void OnTrackImported(TrackDTO track)
+        {
+            Application.Current.Dispatcher.Invoke(() => _items.Add(track));
+        }
+
         public void DoubleClickAdd(TrackDTO track)
         {
-            if (QueueView != null)
-            {
-                QueueView.MoveToQueue(new Core.CustomCollections.LinkedListQueueItem { Track = track});
-            }
+            _queueView?.MoveToQueue(new ForgeAir.Core.CustomCollections.LinkedListQueueItem { Track = track });
         }
 
-        private void ApplyFilter()
-        {
-            if (string.IsNullOrWhiteSpace(SearchText) && SelectedTrackType == TrackType.None)
-            {
-                FilteredTracks = new ObservableCollection<TrackDTO>(AllTracks);
-            }
-            else
-            {
-                var lowerSearch = SearchText.ToLowerInvariant();
-                var filtered = AllTracks
-                    .Where(t =>
-                        (SelectedTrackType == TrackType.None || t.TrackType == SelectedTrackType) && 
-                        (
-                            (t.ISRC != null && t.ISRC.ToLowerInvariant().Contains(lowerSearch)) ||
-                            (t.Bpm != null && t.Bpm.ToString().Contains(lowerSearch)) ||
-                            (t.Id != null && t.Id.ToString().Contains(lowerSearch)) ||
-                            (t.TrackType != null && t.TrackType.ToString().ToLowerInvariant().Contains(lowerSearch)) ||
-                            (t.Title != null && t.Title.ToLowerInvariant().Contains(lowerSearch)) ||
-                            (t.DisplayArtists != null && t.DisplayArtists.ToLowerInvariant().Contains(lowerSearch)) ||
-                            (t.Album != null && t.Album.ToLowerInvariant().Contains(lowerSearch))
-                        )
-                    );
-
-                FilteredTracks = new ObservableCollection<TrackDTO>(filtered);
-            }
-        }
         public void Dispose()
         {
             TrackDbChanged.TrackImported -= OnTrackImported;
 
+            _items.Edit(list => list.Clear());
+
+            _items.Dispose();
+
+            NotifyOfPropertyChange(() => FilteredTracks);
+        }
+
+        protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            await base.OnDeactivateAsync(close, cancellationToken);
+
+            if (close)
+                Dispose();
         }
     }
-
-
 }

@@ -16,8 +16,9 @@ namespace ForgeAir.Core.Services.AudioPlayout
         IPlayer _player;
 
 
-        public AudioPlayerService()
+        public AudioPlayerService(IPlayer player)
         {
+            _player = player;
         }
 
         public void Initialize()
@@ -30,9 +31,9 @@ namespace ForgeAir.Core.Services.AudioPlayout
             _player.Stop();
         }
 
-        public void Play()
+        public void Play(bool skipToNextTrack = false)
         {
-            Task.Run(() => _player.Play());
+            Task.Run(() => _player.Play(skipToNextTrack));
         }
 
         public void Pause()
@@ -48,6 +49,16 @@ namespace ForgeAir.Core.Services.AudioPlayout
         public float[] GetLevels()
         {
             return _player.GetLevels();
+        }
+
+        public Task<TimeSpan> RemainingTime() => _player.GetRemainingTime();
+
+        public Task<TimeSpan> ElapsedTime() => _player.GetElapsedTime();
+
+        public float[] GetWaveformPCM(int targetPoints = 800)
+        {
+            return _player.GetWaveformPCM(targetPoints);
+
         }
     }
 }

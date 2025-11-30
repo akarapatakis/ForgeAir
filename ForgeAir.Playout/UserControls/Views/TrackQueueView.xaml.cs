@@ -1,4 +1,8 @@
-﻿using System;
+﻿using ForgeAir.Core.CustomCollections;
+using ForgeAir.Core.DTO;
+using ForgeAir.Playout.UserControls.ViewModels;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -13,9 +17,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ForgeAir.Core.CustomCollections;
-using ForgeAir.Core.DTO;
-using ForgeAir.Playout.UserControls.ViewModels;
 
 namespace ForgeAir.Playout.UserControls.Views
 {
@@ -76,6 +77,7 @@ namespace ForgeAir.Playout.UserControls.Views
                 {
                     _draggedItem = listView.ItemContainerGenerator.ItemFromContainer(listViewItem);
                     DragDrop.DoDragDrop(listViewItem, _draggedItem, DragDropEffects.Move);
+
                 }
             }
         }
@@ -84,7 +86,9 @@ namespace ForgeAir.Playout.UserControls.Views
         {
             if (!e.Data.GetDataPresent(typeof(TrackDTO)))
             {
-
+                var dropTrack = (LinkedListQueueItem)e.Data.GetData(typeof(LinkedListQueueItem));
+                if (dropTrack == null)
+                    return;
                 var droppedData = _draggedItem;
                 var _listView = sender as ListView;
                 var target = Helpers.ControlsHelper.GetNearestContainer(e.OriginalSource as UIElement);
@@ -107,6 +111,12 @@ namespace ForgeAir.Playout.UserControls.Views
                 }
 
                 _draggedItem = null;
+                var modifiedItem = new LinkedListQueueItem { Track = dropTrack.Track, Place = newIndex };
+
+                if (DataContext is TrackQueueViewModel _vm)
+                {
+                    _vm.MoveToQueue(modifiedItem);
+                }
                 return;
             }
 
@@ -128,5 +138,7 @@ namespace ForgeAir.Playout.UserControls.Views
                 vm.MoveToQueue(queueItem);
             }
         }
+
+
     }
 }

@@ -1,34 +1,38 @@
-﻿using System;
+﻿using ForgeAir.Core.DTO;
+using ForgeAir.Core.Models;
+using ForgeAir.Core.Models.Enums;
+using ForgeAir.Core.Services.Database;
+using ForgeAir.Core.Services.Database.Interfaces;
+using ForgeAir.Core.Services.TrackSelector.Enums;
+using ForgeAir.Core.Services.TrackSelector.Interfaces;
+using ForgeAir.Core.Tracks.Enums;
+using ForgeAir.Database.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ForgeAir.Core.DTO;
-using ForgeAir.Core.Models.Enums;
-using ForgeAir.Core.Models;
-using ForgeAir.Core.Services.TrackSelector.Interfaces;
-using ForgeAir.Core.Services.Database;
-using ForgeAir.Core.Tracks.Enums;
 
 namespace ForgeAir.Core.Services.TrackSelector
 {
     public class ClockTrackSelector : ITrackSelector
     {
-        private readonly RepositoryService<TrackDTO> _trackRepository;
+        private readonly ITracksService _trackRepository;
+        public TrackSelectionMode SelectionMode => TrackSelectionMode.Clock;
 
-        public ClockTrackSelector(RepositoryService<TrackDTO> trackRepository)
+        public ClockTrackSelector(ITracksService trackRepository)
         {
             _trackRepository = trackRepository;
         }
 
-        public async Task<TrackDTO?> GetBestTrackAsync(ClockItem item, DateTime time)
+        public async Task<TrackDTO?> GetBestTrackAsync(ClockItem item, DateTime time, TrackType trackType = TrackType.None)
         {
 
             switch (item.Type)
             {
                 case ClockItemType.TrackFromCategory:
                     var category = item.Parameter;
-                    var tracks = await _trackRepository.GetTracksByCategoryAsync(new CategoryDTO() { Name = category });
+                    var tracks = await _trackRepository.GetByCategory(new CategoryDTO() { Name = category });
 
                     if (tracks == null || !tracks.Any())
                         return null;
@@ -53,7 +57,7 @@ namespace ForgeAir.Core.Services.TrackSelector
                 case ClockItemType.TrackFromArtist:
 
                     var artist = item.Parameter;
-                    var tracksfromDb = await _trackRepository.GetTracksByArtistAsync(new ArtistDTO() { Name = artist });
+                    var tracksfromDb = await _trackRepository.GetByArtist(new ArtistDTO() { Name = artist });
 
                     if (tracksfromDb == null || !tracksfromDb.Any())
                         return null;

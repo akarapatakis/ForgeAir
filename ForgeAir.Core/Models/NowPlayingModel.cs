@@ -15,6 +15,9 @@ namespace ForgeAir.Core.Models
         public string CurrentTrackColor { get; set; } = string.Empty;
         public string PreviousTrackColor { get; set; } = string.Empty;
 
+        public string StringPrefix { get; set; } = "Now Playing: ";
+        public string StringSuffix { get; set; } = ""; //todo: change back
+
         public MemoryStream CurrentTrackBitmap { get; set; }
         public MemoryStream PreviousTrackBitmap { get; set; }
     }

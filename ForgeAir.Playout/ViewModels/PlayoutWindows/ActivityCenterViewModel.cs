@@ -1,10 +1,17 @@
 ﻿using Caliburn.Micro;
+using ForgeAir.Core.DTO;
+using ForgeAir.Core.Events;
+using ForgeAir.Core.Services.AudioPlayout.Interfaces;
+using ForgeAir.Core.Services.AudioPlayout.Players.Interfaces;
 using ForgeAir.Core.Services.Database;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
 using ForgeAir.Playout.Helpers;
 using ForgeAir.Playout.Models;
 using ForgeAir.Playout.Properties;
+using ForgeAir.Playout.UserControls;
+using ForgeAir.Playout.UserControls.ViewModels;
+using ForgeAir.Playout.UserControls.Views;
 using ForgeAir.Playout.ViewModels.Helpers;
 using MahApps.Metro.IconPacks;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +25,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace ForgeAir.Playout.ViewModels.PlayoutWindows
 {
@@ -30,6 +38,10 @@ namespace ForgeAir.Playout.ViewModels.PlayoutWindows
         public override bool Closeable => false;
         private ShellViewModel _shell;
         private string _stationName;
+        public StereoVUMeterControl VUMeters;
+        private IAudioService AudioService;
+
+        private DispatcherTimer vuTimer;
         public string StationName
         {
             get { return _stationName; }
@@ -39,8 +51,30 @@ namespace ForgeAir.Playout.ViewModels.PlayoutWindows
                 NotifyOfPropertyChange(() => StationName);
             }
         }
+        private double _leftLevel;
+        public double LeftLevel
+        {
+            get => _leftLevel;
+            set => Set(ref _leftLevel, value);
+        }
 
+        private double _rightLevel;
+        public double RightLevel
+        {
+            get => _rightLevel;
+            set => Set(ref _rightLevel, value);
+        }
 
+        private string _currentPlayingText;
+        public string CurrentPlayingText
+        {
+            get => _currentPlayingText;
+            set
+            {
+                _currentPlayingText = value;
+                NotifyOfPropertyChange(() =>  CurrentPlayingText);
+            }
+        }
         private void getStationName()
         {
             var dbFactory = _provider.GetRequiredService<IDbContextFactory<ForgeAirDbContext>>();
@@ -53,13 +87,46 @@ namespace ForgeAir.Playout.ViewModels.PlayoutWindows
                             + (!string.IsNullOrWhiteSpace(station.Website) ? $" ({station.Website})" : "");
         }
 
-        public ActivityCenterViewModel(IServiceProvider provider)
+        private void OnTrackChanged(TrackDTO newTrack)
+        {
+            if (newTrack == null)
+            {
+                CurrentPlayingText = "Nothing On Air!";
+                return;
+            }
+            CurrentPlayingText = "On Air: " + (!string.IsNullOrWhiteSpace(newTrack.DisplayArtists) ? $"{newTrack.DisplayArtists} - " : "") + newTrack.Title + $" (ID: {newTrack.Id})";
+        }
+        public ActivityCenterViewModel(IWindowManager windowManager,TestViewModel testViewModel, IServiceProvider provider, TrackChangedEvent TrackChangedEvent, StationInformationChangedEvent stationInformationChangedEvent)
         {
             _provider = provider;
             DataList = GetCardDataList();
             getStationName();
+            stationInformationChangedEvent.StationUpdated += StationInformationChanged;
+            TrackChangedEvent.TrackChanged += OnTrackChanged;
+            if (TrackChangedEvent.CurrentTrack != null)
+            {
+                OnTrackChanged(TrackChangedEvent.CurrentTrack);
+            }
+            AudioService = _provider.GetRequiredService<IAudioService>();
+            windowManager.ShowWindowAsync(new TestViewModel(AudioService));
+            vuTimer = new DispatcherTimer();
+            vuTimer.Interval = TimeSpan.FromMilliseconds(50);
+            vuTimer.Tick += vuMeter_Update;
+            vuTimer.IsEnabled = true;
+            vuTimer.Start();
         }
+        private void StationInformationChanged(Station newStation)
+        {
+            getStationName();
+        }
+        private void vuMeter_Update(object sender, EventArgs e)
+        {
+            var data = AudioService.GetLevels();
 
+            LeftLevel = data.FirstOrDefault() * 100;
+            RightLevel = data.LastOrDefault() * 100;
+
+        }
         public void SetShellViewModel(ShellViewModel shell)
         {
             _shell = shell;
@@ -68,7 +135,7 @@ namespace ForgeAir.Playout.ViewModels.PlayoutWindows
         {
             var playout = _provider.GetRequiredService<PlayoutViewModel>();
             var settings = _provider.GetRequiredService<SettingsViewModel>();
-            
+            var trackLibrary = _provider.GetRequiredService<TrackLibraryViewModel>();
             return new ObservableCollection<TileModel>
             {
                 new TileModel
@@ -115,12 +182,26 @@ namespace ForgeAir.Playout.ViewModels.PlayoutWindows
                     Title = "Track Library",
                     Icon = PackIconRemixIconKind.Archive2Fill,
                     Color = new SolidColorBrush(Colors.DarkOliveGreen),
+                    Command = new RelayCommand(() =>
+                    {
+                           if (_shell == null)
+                            return;
+
+                        _shell.OpenTab(trackLibrary);
+
+                    }),
                 },
                 new TileModel
                 {
-                    Title = "Logout",
-                    Icon = PackIconRemixIconKind.LogoutBoxFill,
-                    Color = new SolidColorBrush(Colors.Red),
+                    Title = "Logs",
+                    Icon = PackIconRemixIconKind.InfoI,
+                    Color = new SolidColorBrush(Colors.RosyBrown),
+                },
+                new TileModel
+                {
+                    Title = "Web Browser",
+                    Icon = PackIconRemixIconKind.GlobalFill,
+                    Color = new SolidColorBrush(Colors.DarkCyan),
                 },
             };
         }

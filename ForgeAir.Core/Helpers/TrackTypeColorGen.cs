@@ -1,4 +1,5 @@
 ﻿using ForgeAir.Database.Models.Enums;
+using MahApps.Metro.IconPacks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,27 @@ using System.Threading.Tasks;
 
 namespace ForgeAir.Core.Helpers
 {
+
+    public static class TrackTypeIconGen
+    {
+        public static PackIconRemixIconKind Generate(TrackType type)
+        {
+            switch (type){
+                case TrackType.Song:
+                    return PackIconRemixIconKind.DiscFill;
+                case TrackType.Jingle:
+                    return PackIconRemixIconKind.AlarmWarningFill;
+                case TrackType.Commercial:
+                    return PackIconRemixIconKind.HandCoinFill;
+                case TrackType.Rebroadcast:
+                    return PackIconRemixIconKind.RadarFill;
+                case TrackType.Sweeper:
+                    return PackIconRemixIconKind.MicAiFill;
+                default:
+                    return PackIconRemixIconKind.QuestionMark;
+            }
+        }
+    }
     public static class TrackTypeColorGen
     {
         public static string Generate(TrackType Type)
@@ -29,24 +51,10 @@ namespace ForgeAir.Core.Helpers
                     return "#CDDC39";
                 case TrackType.Other:
                     return "#616161";
-                case TrackType.Instant:
-                    return "#CDDC39";
                 case TrackType.Sweeper:
                     return "#00ACC1";
                 case TrackType.Rebroadcast:
                     return "#8D6E63";
-                case TrackType.Movie:
-                    return "#3F51B5";
-                case TrackType.Show:
-                    return "#5C6BC0";
-                case TrackType.Newsreport:
-                    return "#D32F2F";
-                case TrackType.Ident:
-                    return "#4CAF50";
-                case TrackType.Bumper:
-                    return "#FF5722";
-                case TrackType.MusicVideo:
-                    return "#EC407A";
                 default:
                     return "";
             }

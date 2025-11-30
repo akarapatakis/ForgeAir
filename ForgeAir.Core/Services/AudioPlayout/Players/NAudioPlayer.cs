@@ -1,20 +1,24 @@
-﻿using System;
+﻿using ForgeAir.Core.CustomCollections;
+using ForgeAir.Core.DTO;
+using ForgeAir.Core.Events;
+using ForgeAir.Core.Helpers.Interfaces;
+using ForgeAir.Core.Models;
+using ForgeAir.Core.Services.AudioPlayout.Interfaces;
+using ForgeAir.Core.Services.AudioPlayout.Players.Enums;
+using ForgeAir.Core.Services.AudioPlayout.Players.Interfaces;
+using ForgeAir.Core.Services.Scheduler.Interfaces;
+using ForgeAir.Core.Services.TrackSelector.Enums;
+using ForgeAir.Database.Models;
+using ForgeAir.Database.Models.Enums;
+using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ForgeAir.Core.Models;
-using NAudio.Wave.SampleProviders;
-using NAudio.Wave;
-using ForgeAir.Core.Services.AudioPlayout.Players.Interfaces;
-using ForgeAir.Database.Models;
-using ForgeAir.Core.CustomCollections;
-using ForgeAir.Core.DTO;
-using ForgeAir.Core.Helpers.Interfaces;
-using ForgeAir.Core.Events;
-using ForgeAir.Core.Services.AudioPlayout.Interfaces;
 using PlaybackState = NAudio.Wave.PlaybackState;
-using ForgeAir.Core.Services.Scheduler.Interfaces;
 
 namespace ForgeAir.Core.Services.AudioPlayout.Players
 {
@@ -36,8 +40,9 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
         private int _crossfadeDuration = 0;
         private float leftVolumeLevel = 0.0f;
         private float rightVolumeLevel = 0.0f;
-
-        public NAudioPlayer(NAudioDevice device, IEventAggregator eventAggregator, IQueueService queueService, ISchedulerService schedulerService)
+        private readonly Events.TrackChangedEvent _trackChangedEvent;
+        private static float[] peakSmoothed;
+        public NAudioPlayer(NAudioDevice device, IEventAggregator eventAggregator, IQueueService queueService, ISchedulerService schedulerService, TrackChangedEvent trackChangedEvent)
         {
             _device = device;
             object? api = device.GetAPI();
@@ -58,33 +63,101 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             _queueService = queueService;
             _eventAggregator = eventAggregator;
             _schedulerService = schedulerService;
-            meteringSampleProvider = new MeteringSampleProvider(mixer);
+            _trackChangedEvent = trackChangedEvent;
+
+            meteringSampleProvider = new MeteringSampleProvider(mixer) { SamplesPerNotification = 50 };
             meteringSampleProvider.StreamVolume += (s, a) =>
             {
-                leftVolumeLevel = a.MaxSampleValues[0];
-                rightVolumeLevel = a.MaxSampleValues[1];
+                if (peakSmoothed == null || peakSmoothed.Length != a.MaxSampleValues.Length)
+                    peakSmoothed = new float[a.MaxSampleValues.Length];
+
+                // Simple smoothing: peak = 70% old + 30% new
+                for (int i = 0; i < a.MaxSampleValues.Length; i++)
+                {
+                    peakSmoothed[i] = 0.7f * peakSmoothed[i] + 0.3f * a.MaxSampleValues[i];
+
+                    // Convert to dBFS
+                    double db = 20 * Math.Log10(peakSmoothed[i] + 1e-10);
+//                    Debug.WriteLine($"Channel {i} dBFS: {db:F2}");
+                    if (i == 0)
+                        leftVolumeLevel = peakSmoothed[i];
+                    else if (i == 1)
+                        rightVolumeLevel = peakSmoothed[i];
+                }
+
 
             };
-            outputDevice.Init(mixer);
+            outputDevice.Init(meteringSampleProvider);
             outputDevice.Play();
         }
 
         public void Pause()
         {
-            throw new NotImplementedException();
+            if (isPaused)
+            {
+                outputDevice.Pause();
+                isPaused = false;
+            }
+            else
+            {
+                outputDevice.Pause();
+                isPaused = true;
+            }
         }
-
-
-        public void OnTrackChanged(TrackDTO newTrack)
+        public Task<double> GetPlaybackHandleDb()
         {
-            _eventAggregator.Publish(new TrackChangedEvent(newTrack));
-        }
+            // Use the higher channel level (like BASS_ChannelGetLevel)
+            float peak = Math.Max(leftVolumeLevel, rightVolumeLevel);
 
-        public async Task Play()
+            // Convert to dBFS
+            double db = 20 * Math.Log10(peak + 1e-10);
+            return Task.FromResult(db);
+        }
+        public async Task PopulateQueue(int times)
+        {
+            if (_queueService.Selector.CurrentSelector.SelectionMode == TrackSelectionMode.Manual)
+            {
+                return;
+            }
+            int absTimes = Math.Abs(times);
+            for (int i = 0; i <= absTimes;)
+            {
+                await _queueService.FillQueueAsync(_schedulerService.GetClockItemFor(DateTime.Now), DateTime.Now); // need to do fire and forget to avoid blocking manual track selection 
+                i++;
+            }
+        }
+        private double MixDb()
         {
             if (_queueService.IsEmpty())
             {
-                await _queueService.FillQueueAsync(_schedulerService.GetClockItemFor(DateTime.Now), DateTime.Now);
+                return -18.0f;
+
+            }
+            switch (_queueService.Peek().TrackType)
+            {
+                case TrackType.Song:
+                    if (_currentTrack.TrackType == TrackType.Jingle) return -14.0f;
+                    return -6.0f;
+                case TrackType.Jingle:
+                    if (_currentTrack.TrackType == TrackType.Song) return -10.0f;
+                    if (_currentTrack.TrackType == TrackType.Commercial) return -40.0f;
+                    return -12.0f;
+                case TrackType.Commercial:
+                    return -40.0f;
+                default:
+                    return -40.0f;
+            }
+        }
+
+        public void OnTrackChanged(TrackDTO newTrack)
+        {
+            _trackChangedEvent.RaiseTrackChanged(newTrack);
+        }
+        public async Task Play(bool skipToNextTrack = false)
+        {
+            if (_queueService.Count() < 10)
+            {
+                await PopulateQueue(Math.Abs(_queueService.Count() - 10));
             }
 
             isPaused = false;
@@ -102,6 +175,8 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             {
                 _crossfadeDuration = _device.TargetDevice.BufferLength;
             }
+            if (_currentTrack.MixPoint == _currentTrack.EndPoint) { 
+            }
             else { _crossfadeDuration = (int)(_currentTrack.EndPoint.Value.TotalMilliseconds - _currentTrack.MixPoint?.TotalMilliseconds ?? 0); }
 
             if (_crossfadeDuration == 0 || _crossfadeDuration == null)
@@ -113,61 +188,100 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             {
                 _crossfadeDuration = 0;
             }
+            if (skipToNextTrack)
+            {
+                _crossfadeDuration = 100;
+            }
             _audioFileReader = new AudioFileReader(_currentTrack?.FilePath);
             _audioFileReader.CurrentTime = _currentTrack.StartPoint.Value;
 
             var fader = new FadeInOutSampleProvider(_audioFileReader, true);
-            fader.BeginFadeIn(_crossfadeDuration / 2);
-
+            fader.BeginFadeIn(333);
             mixer.AddMixerInput(new WdlResamplingSampleProvider(fader, mixer.WaveFormat.SampleRate));
 
-            foreach (var activeTrack in activeTracks.ToList())
+            Task.Run(async () =>
             {
-                activeTrack.Fader.BeginFadeOut(_crossfadeDuration / 2);
-                await Task.Delay(_crossfadeDuration / 2);
-                mixer.RemoveMixerInput(activeTrack.Fader);
-                activeTrack.Reader.Dispose();
-                activeTracks.Remove(activeTrack);
-            }
-            activeTracks.Add(new TrackItem
-            {
-                Reader = _audioFileReader,
-                Fader = fader
+                foreach (var activeTrack in activeTracks.ToList())
+                {
+                    activeTrack.Fader.BeginFadeOut(_crossfadeDuration);
+                    await Task.Delay(_crossfadeDuration);
+                    mixer.RemoveMixerInput(activeTrack.Fader);
+                    activeTrack.Reader.Dispose();
+                    activeTracks.Remove(activeTrack);
+                }
+                activeTracks.Add(new TrackItem
+                {
+                    Reader = _audioFileReader,
+                    Fader = fader
+                });
             });
+           
+
 
             isPlaying = true;
+            OnTrackChanged(_currentTrack);
+            await Task.Delay(60);
+
             _ = MonitorPlayback();
+
         }
 
         public Task<int> GetRemainingMilliseconds()
         {
-            if (_audioFileReader == null) return Task.FromResult(0);
-            return Task.FromResult(_audioFileReader.CurrentTime.Milliseconds);
+            if (_audioFileReader == null || _currentTrack == null)
+                return Task.FromResult(0);
+
+            int remaining = (int)(_currentTrack.Duration.TotalMilliseconds - _audioFileReader.CurrentTime.TotalMilliseconds);
+            if (remaining < 0) remaining = 0;
+            return Task.FromResult(remaining);
         }
 
         private async Task MonitorPlayback()
         {
-            while (outputDevice.PlaybackState == PlaybackState.Playing)
+            _crossfadeCts?.Cancel();
+            _crossfadeCts = new CancellationTokenSource();
+            var token = _crossfadeCts.Token;
+
+            try
             {
-                var remainingTime = GetRemainingMilliseconds().Result;
-                if (remainingTime < _crossfadeDuration)
+                while (!token.IsCancellationRequested && outputDevice.PlaybackState == PlaybackState.Playing)
                 {
-                    await PlayNextTrack();
-                    break;
+                    var remainingTime = await GetRemainingMilliseconds();
+                    var db = await GetPlaybackHandleDb();
+
+                    if (remainingTime <= _crossfadeDuration
+                        || ((remainingTime <= 8000) &&
+                            (_currentTrack.MixPoint == null || _currentTrack.MixPoint == _currentTrack.EndPoint) &&
+                            db <= MixDb()))
+                    {
+                        if (_currentTrack.MixPoint == _currentTrack.EndPoint)
+                        {
+                            _crossfadeDuration = remainingTime;
+                        }
+
+                        break;
+                    }
+
+                    await Task.Delay(50, token);
                 }
-                await Task.Delay(333);
+
+                if (!token.IsCancellationRequested)
+                {
+                    await Play();
+                }
             }
-            await Task.Delay(500);
-            if (_crossfadeCts != null && !_crossfadeCts.Token.IsCancellationRequested)
+            catch (TaskCanceledException)
             {
-                _crossfadeCts.Cancel();
-
-                await PlayNextTrack();
-
-                return;
+                // Expected on cancellation, safely ignore
+            }
+            catch (Exception ex)
+            {
+                // Log unexpected exceptions
+                Console.WriteLine($"[MonitorPlayback] Error: {ex.Message}");
             }
         }
 
+        public PlayerEnum GetPlayerEngine() => PlayerEnum.NAudio;
         public async Task PlayFX(FX fx)
         {
             foreach (var activeTrack in activeTracks.ToList())
@@ -185,65 +299,6 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             {
                 activeTrack.Reader.Volume = 1.0f;
             }
-        }
-
-        public async Task PlayNextTrack()
-        {
-            if (_queueService.IsEmpty())
-            {
-                await _queueService.FillQueueAsync(_schedulerService.GetClockItemFor(DateTime.Now), DateTime.Now);
-            }
-
-            isPaused = false;
-            if (_crossfadeCts != null)
-            {
-                _crossfadeCts.Cancel();
-            }
-
-            _currentTrack = _queueService.Dequeue();
-            if (_currentTrack == null) return;
-
-
-
-            if (_currentTrack.EndPoint == null && _currentTrack.MixPoint == null && _currentTrack.StartPoint == null)
-            {
-                _crossfadeDuration = _device.TargetDevice.BufferLength;
-            }
-            else { _crossfadeDuration = (int)(_currentTrack.EndPoint.Value.TotalMilliseconds - _currentTrack.MixPoint?.TotalMilliseconds ?? 0); }
-
-            if (_crossfadeDuration == 0 || _crossfadeDuration == null)
-            {
-                _crossfadeDuration = _device.TargetDevice.BufferLength;
-                _currentTrack.StartPoint = TimeSpan.Zero;
-            }
-            if (_currentTrack.IsDynamicJingleAsset)
-            {
-                _crossfadeDuration = 0;
-            }
-            _audioFileReader = new AudioFileReader(_currentTrack?.FilePath);
-            _audioFileReader.CurrentTime = _currentTrack.StartPoint.Value;
-
-            var fader = new FadeInOutSampleProvider(_audioFileReader, true);
-            fader.BeginFadeIn(_crossfadeDuration / 2);
-
-            mixer.AddMixerInput(new WdlResamplingSampleProvider(fader, mixer.WaveFormat.SampleRate));
-
-            foreach (var activeTrack in activeTracks.ToList())
-            {
-                activeTrack.Fader.BeginFadeOut(_crossfadeDuration / 2);
-                await Task.Delay(_crossfadeDuration / 2);
-                mixer.RemoveMixerInput(activeTrack.Fader);
-                activeTrack.Reader.Dispose();
-                activeTracks.Remove(activeTrack);
-            }
-            activeTracks.Add(new TrackItem
-            {
-                Reader = _audioFileReader,
-                Fader = fader
-            });
-
-            isPlaying = true;
-            _ = MonitorPlayback();
         }
 
         void IPlayer.Resume()
@@ -271,6 +326,25 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             return new float[] { leftVolumeLevel, rightVolumeLevel };
         }
 
+        public Task<TimeSpan> GetElapsedTime()
+        {
+            return Task.FromResult(_audioFileReader.CurrentTime);
+        }
+
+        public Task<TimeSpan> GetRemainingTime()
+        {
+            return Task.FromResult(_currentTrack.Duration - _audioFileReader.CurrentTime);
+        }
+
+        public Task PlayNextTrack()
+        {
+            throw new NotImplementedException();
+        }
+
+        public float[] GetWaveformPCM(int targetPoints = 800)
+        {
+            throw new NotImplementedException();
+        }
     }
     internal class TrackItem
     {

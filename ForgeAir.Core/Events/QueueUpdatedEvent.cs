@@ -10,11 +10,8 @@ namespace ForgeAir.Core.Events
 {
     public class QueueUpdatedEvent
     {
-        public LinkedListQueue<DTO.TrackDTO> CurrentQueue { get; }
-
-        public QueueUpdatedEvent(LinkedListQueue<TrackDTO> newQueue)
-        {
-            CurrentQueue = newQueue;
-        }
+        public event Action? QueueChanged;
+        public void RaiseQueueChanged() => QueueChanged?.Invoke();
     }
+
 }

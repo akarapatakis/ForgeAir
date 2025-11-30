@@ -5,6 +5,7 @@ using ForgeAir.Database;
 using ForgeAir.Database.Models;
 using ForgeAir.Playout.Helpers;
 using ForgeAir.Playout.UserControls.ViewModels;
+using ForgeAir.Playout.ViewModels.PlayoutWindows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,27 @@ namespace ForgeAir.Playout.UserControls.Views
         {
         }
 
-    
+        private async void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            var listView = sender as ListView;
+
+            if (listView is not ListView) {
+                return;
+            }
+            ScrollViewer scrollViewer = (ScrollViewer)VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(listView,0), 0);
+            if (scrollViewer is not ScrollViewer) return;
+
+            // check if user scrolled near bottom
+            if (scrollViewer.VerticalOffset + scrollViewer.ViewportHeight >= scrollViewer.ExtentHeight - 50)
+            {
+                if (DataContext is TrackSelectorViewModel vm)
+                {
+                    await vm.LoadNextPage();
+                }
+            }
+        }
+
+
         private void ListView_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             _startPoint = e.GetPosition(null);

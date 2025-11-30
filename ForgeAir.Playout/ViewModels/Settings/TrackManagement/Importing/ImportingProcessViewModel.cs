@@ -34,13 +34,10 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await InitializeAsync();
+            Task.Run(() => Add());
         }
 
-        public async Task InitializeAsync()
-        {
-            await Add();
-        }
+
         public void Done()
         {
             TryCloseAsync(true);

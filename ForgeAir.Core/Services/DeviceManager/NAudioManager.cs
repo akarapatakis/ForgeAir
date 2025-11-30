@@ -58,7 +58,26 @@ namespace ForgeAir.Core.Services.DeviceManager
             }
         }
 
-        public static string[] ListDevicesByAPI(DeviceOutputMethodEnum api)
+        /// <summary>
+        /// Does the same as ListDevicesByAPI but External to allow "emegerncy" calls from places that do not have access to a DeviceManager
+        /// </summary>
+        /// <param name="api">Audio Driver (MME, WASAPI, DSound, ASIO)</param>
+        public static List<OutputDevice> ListDevicesByAPI_Ex(DeviceOutputMethodEnum api)
+        {
+            switch (api)
+            {
+                case DeviceOutputMethodEnum.MME:
+                    return getMMEOutDevices();
+                case DeviceOutputMethodEnum.DirectSound:
+                    return getMMEOutDevices();
+                case DeviceOutputMethodEnum.WASAPI:
+                    return getWASAPIOutDevices();
+                case DeviceOutputMethodEnum.ASIO:
+                    return getASIODevices();
+            }
+            return new List<OutputDevice>();
+        }
+        public List<OutputDevice> ListDevicesByAPI(DeviceOutputMethodEnum api)
         {
             switch (api)
             {
@@ -71,26 +90,31 @@ namespace ForgeAir.Core.Services.DeviceManager
                 case DeviceOutputMethodEnum.ASIO:
                     return getASIODevices();
             }
-            return Array.Empty<string>();
+            return new List<OutputDevice>();
         }
 
-        private static string[] getASIODevices()
+        private static List<OutputDevice> getASIODevices()
         {
-            string[] devices = new string[] { };
+            List<OutputDevice> devices = new List<OutputDevice>();
+
             foreach (var asio in AsioOut.GetDriverNames())
             {
-                devices.Append(asio);
+              devices.Add(new OutputDevice { API = DeviceOutputMethodEnum.ASIO, Index = devices.Count, Name = asio });
             }
             return devices;
         }
 
-        private static string[] getWASAPIOutDevices()
+        private static List<OutputDevice> getWASAPIOutDevices()
         {
-            string[] devices = new string[] { };
+            List<OutputDevice> devices = new List<OutputDevice>();
             var enumerator = new MMDeviceEnumerator();
-            foreach (var wasapi in enumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active))
+            foreach (var wasapi in enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active))
             {
-                Console.WriteLine($"{wasapi.DataFlow} {wasapi.FriendlyName} {wasapi.DeviceFriendlyName} {wasapi.State}");
+                if (!(wasapi.State == DeviceState.Active))
+                {
+                    continue;
+                }
+                devices.Add(new OutputDevice { API = DeviceOutputMethodEnum.WASAPI, Index = devices.Count, Name = wasapi.FriendlyName });
             }
             return devices;
         }
@@ -106,24 +130,24 @@ namespace ForgeAir.Core.Services.DeviceManager
             return index >= 0 && index < devices.Count ? devices[index].Guid : null;
         }
 
-        private static string[] getMMEOutDevices()
+        private static List<OutputDevice> getMMEOutDevices()
         {
-            string[] devices = new string[] { };
 
+            List<OutputDevice> devices = new List<OutputDevice>();
             for (int n = -1; n < WaveOut.DeviceCount; n++)
             {
                 var caps = WaveOut.GetCapabilities(n);
-                devices.Append(caps.NameGuid.ToString());
-                Console.WriteLine($"{n}: {caps.ProductName}");
+                devices.Add(new OutputDevice { API = DeviceOutputMethodEnum.MME, Index = n, Name = caps.ProductName });
             }
             return devices;
         }
-        private static string[] getDSoundOutDevices()
+        private static List<OutputDevice> getDSoundOutDevices()
         {
-            string[] devices = new string[] { };
+            List<OutputDevice> devices = new List<OutputDevice>(); 
+
             foreach (var dev in DirectSoundOut.Devices)
             {
-                Console.WriteLine($"{dev.ModuleName} | ({dev.Guid})");
+                devices.Add(new OutputDevice { API = DeviceOutputMethodEnum.DirectSound, Index = devices.Count, Name = dev.ModuleName, Guid = dev.Guid });
             }
             return devices;
         }

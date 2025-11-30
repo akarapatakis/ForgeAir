@@ -2,6 +2,8 @@
 using ForgeAir.Core.Helpers;
 using ForgeAir.Core.Models;
 using ForgeAir.Core.Services.Database;
+using ForgeAir.Core.Services.Database.Interfaces;
+using ForgeAir.Core.Services.Database.RepositoryServices;
 using ForgeAir.Core.Services.Importers;
 using ForgeAir.Core.Tracks.Enums;
 using ForgeAir.Database;
@@ -24,7 +26,7 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
 {
     public class ImportDirectoryViewModel : Screen
     {
-        private readonly RepositoryService<Artist> artistsService;
+        private readonly ISearchService _artistsService;
         private readonly IWindowManager _windowManager;
         private readonly IServiceProvider _provider;
         private TrackType _selectedTrackType;
@@ -51,23 +53,15 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
         }
 
         private ICollection<TrackImportModel> _trackImports = new List<TrackImportModel>();
-        public ImportDirectoryViewModel(IServiceProvider provider, IWindowManager windowManager)
+        public ImportDirectoryViewModel(ISearchService artistsService , IServiceProvider provider, IWindowManager windowManager)
         {
             _provider = provider;
             _windowManager = windowManager;
-            artistsService = new(_provider.GetRequiredService<IDbContextFactory<ForgeAirDbContext>>());
+            _artistsService = artistsService;
             CategoryManipulatorViewModel = _provider.GetRequiredService<CategoryManipulatorViewModel>();
             TrackTypeList = Enum.GetValues(typeof(TrackType)).Cast<TrackType>().ToList();
 
-            // removing forgevision entries because it uses shared tracktype (fuck me)
             TrackTypeList.Remove(TrackType.None);
-            TrackTypeList.Remove(TrackType.Bumper);
-            TrackTypeList.Remove(TrackType.Instant);
-            TrackTypeList.Remove(TrackType.Ident);
-            TrackTypeList.Remove(TrackType.MusicVideo);
-            TrackTypeList.Remove(TrackType.Newsreport);
-            TrackTypeList.Remove(TrackType.Movie);
-            TrackTypeList.Remove(TrackType.Show);
             TrackTypeList.Remove(TrackType.Rebroadcast);
         }
         public List<Artist> ArtistSearchResults { get; set; }
@@ -120,7 +114,7 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
         {
             if (!string.IsNullOrEmpty(ArtistAutoCompleteBox))
             {
-                var result = await artistsService.SearchAsync(ArtistAutoCompleteBox, ModelTypesEnum.Artist);
+                var result = await _artistsService.SearchArtists(ArtistAutoCompleteBox);
                 if (result != null) { 
                     ArtistSearchResults = result;
                 }

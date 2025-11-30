@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace ForgeAir.Playout.ViewModels
 {
-    public class StationSelectorViewModel : INotifyPropertyChanged
+    public class StationSelectorViewModel : Screen, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IServiceProvider _provider;
@@ -37,6 +37,8 @@ namespace ForgeAir.Playout.ViewModels
         private async void ExecuteSelectStation(StationBootstrapper station)
         {
             await station.ShowShellViewAsync();
+            await this.TryCloseAsync();
+
         }
         public StationSelectorViewModel(IServiceProvider provider, IWindowManager windowManager) {
             _provider = provider;

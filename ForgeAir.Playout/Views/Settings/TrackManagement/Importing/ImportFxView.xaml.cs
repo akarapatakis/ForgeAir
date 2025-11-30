@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using ForgeAir.Core.AudioEngine;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
+using MahApps.Metro.Controls;
 using Microsoft.Win32;
 
 namespace ForgeAir.Playout.Views
@@ -22,7 +23,7 @@ namespace ForgeAir.Playout.Views
     /// <summary>
     /// Interaction logic for ImportFxView.xaml
     /// </summary>
-    public partial class ImportFxView : HandyControl.Controls.Window
+    public partial class ImportFxView : MetroWindow
     {
         public ImportFxView()
         {

@@ -7,23 +7,22 @@
       xmlns:local="clr-namespace:ForgeAir.Playout"
       xmlns:cal="http://www.caliburnproject.org" x:Class="ForgeAir.Playout.SplashScreen"
       mc:Ignorable="d" 
-      Height="200" Width="600"
+      Height="300" Width="600"
       WindowStartupLocation="CenterScreen"
-ResizeMode="NoResize" Topmost="True"
+ResizeMode="NoResize" Topmost="False"
  WindowStyle="None"
       Cursor="Wait"
       Title="ForgeAir Radio Automation Software">
     <Window.Background>
-        <ImageBrush ImageSource="/Views/PlayoutWindows/splashscreen.png"/>
+        <ImageBrush ImageSource="/Assets/Splash/splashscreen_new.png"/>
     </Window.Background>
 
     <Grid>
         <StackPanel>
-            <TextBlock Text="ForgeAir Radio Automation Software" FontSize="34" TextAlignment="Center" FontWeight="SemiBold" Foreground="White"/>
-            <TextBlock Text="This is a pre-release version. DO NOT DISTRIBUTE!" FontSize="14" TextAlignment="Center" FontWeight="SemiBold" Foreground="White"/>
-            <TextBlock Text="v.1.0b.1000" FontSize="11" TextAlignment="Center" FontWeight="SemiBold" Foreground="White"/>
+            <TextBlock Text="by Karapatakis Angelos" FontSize="11" Margin="10,10,10,10" TextAlignment="Right" FontWeight="SemiBold" Foreground="White" FontFamily="Segoe UI Light"/>
 
         </StackPanel>
+
         <mah:MetroProgressBar IsIndeterminate="True"  Height="10" VerticalAlignment="Bottom" />
 
     </Grid>

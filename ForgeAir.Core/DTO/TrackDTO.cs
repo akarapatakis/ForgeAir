@@ -1,21 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ForgeAir.Core.Models;
+using ForgeAir.Core.Services.Tags;
 using ForgeAir.Database.Models;
 using ForgeAir.Database.Models.Enums;
+using MahApps.Metro.IconPacks;
 
 namespace ForgeAir.Core.DTO
 {
-    public class TrackDTO
+    public class TrackDTO : INotifyPropertyChanged
     {
+
         public int Id { get; set; }
-        public string Title { get; set; }
+
+        private string _title;
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                if (_title != value)
+                {
+                    _title = value;
+                    OnPropertyChanged(nameof(Title));
+                }
+            }
+        }
         public string FilePath { get; set; }
-        public string Album { get; set; }
+
+        private string _album;
+        public string Album
+        {
+            get => _album;
+            set
+            {
+                if (_album != value)
+                {
+                    _album = value;
+                    OnPropertyChanged(nameof(Album));
+                }
+            }
+        }
+
         public String? ISRC { get; set; }
         public DateTime? ReleaseDate { get; set; }
         public int? Bpm { get; set; } 
@@ -49,8 +82,10 @@ namespace ForgeAir.Core.DTO
                 return string.Join(", ", TrackArtists.Select(ta => ta.ArtistName));
             }
         }
-        public string DisplayDuration => Duration.ToString(@"mm\:ss");
-
+        public string DisplayDuration => Duration.ToString(@"hh\:mm\:ss");
+        public string DisplayDateAdded => DateAdded.ToString("yyyy-MM-dd");
+        public string DisplayDateModified => DateModified?.ToString("yyyy-MM-dd");
+        public string DisplayAddedBy => "";
         public string? DisplayType => Enum.GetName(this.TrackType) ?? null;
 
         public string DisplayCategories
@@ -58,14 +93,58 @@ namespace ForgeAir.Core.DTO
             get
             {
                 if (Categories == null || !Categories.Any())
-                    return string.Empty;
+                    return "None";
 
                 return string.Join("/", Categories.Select(ta => ta?.Name));
             }
         }
         // differs from queue opacity
-        public string Background => "#40" + Core.Helpers.TrackTypeColorGen.Generate(TrackType).Substring(1); // add 0.7 opacity to have readable foreground because i thought that burning a person's eyes is a good idea :/
-        public string? Foreground => Categories.FirstOrDefault()?.Color ?? "White";
+        public string Background => "#40" + Core.Helpers.TrackTypeColorGen.Generate(TrackType).Substring(1); // add 0.7 opacity to have readable foreground
+        public string? Foreground
+        {
+            get
+            {
+                if (TrackType == Database.Models.Enums.TrackType.Rebroadcast || IsDynamicJingleAsset)
+                {
+                    return "White";
+                }
+                return Categories.FirstOrDefault()?.Color ?? "White";
+            }
+        }
+        public PackIconRemixIconKind Icon => Core.Helpers.TrackTypeIconGen.Generate(TrackType);
+        public MemoryStream AlbumArt { get {
+                if (TrackType != TrackType.Rebroadcast)
+                {
+                    try
+                    {
+                        var _albumart = new TagService(this).GetPicture()?.Data.Data;
+                        MemoryStream _m = new MemoryStream();
+                        if (_albumart != null)
+                            return new MemoryStream(_albumart);
+                        else
+                        {
+                            ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt.Save(_m, ImageFormat.Png);
+                            return _m;
+                        }
+                    }
+                    catch
+                    {
+                        MemoryStream _m = new MemoryStream();
+                        ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt.Save(_m, ImageFormat.Png);
+                        return _m;
+                    }
+                }
+                else
+                {
+                    MemoryStream _m = new MemoryStream();
+                    ForgeAir.Core.Properties.Resources.ImageResources.DefaultRebroadcastImage.Save(_m, ImageFormat.Png);
+                    return _m;
+                }
+            } }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public static TrackDTO FromEntity(Track track)
         {

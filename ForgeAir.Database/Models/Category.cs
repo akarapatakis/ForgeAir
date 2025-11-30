@@ -21,12 +21,12 @@ namespace ForgeAir.Database.Models
 
         public int? ParentId { get; set; }
 
-        public Category? CategoryParent { get; set; }
+        public virtual Category? CategoryParent { get; set; }
 
         [MaxLength(20)]
         public string? Color { get; set; }
 
-        public ICollection<Category>? Subcategories { get; set; }
-        public ICollection<Track>? Tracks { get; set; }
+        public virtual ICollection<Category>? Subcategories { get; set; }
+        public virtual ICollection<Track>? Tracks { get; set; }
     }
 }

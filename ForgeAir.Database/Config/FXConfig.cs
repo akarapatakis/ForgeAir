@@ -17,7 +17,6 @@ namespace ForgeAir.Database.Config
             builder.Property(t => t.DateDeleted).IsRequired(false);
 
             builder.Property(t => t.Color).IsRequired(true);
-
             builder.HasIndex(t => t.FilePath);
 
 

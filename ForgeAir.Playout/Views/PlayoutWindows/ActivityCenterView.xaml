@@ -6,6 +6,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ForgeAir.Playout.Views.PlayoutWindows"
              xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:user="clr-namespace:ForgeAir.Playout.UserControls"
+             xmlns:cal="http://www.caliburnproject.org"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"  Height="720" Width="1280">
@@ -14,6 +16,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+
         </Grid.RowDefinitions>
 
         <TextBlock x:Name="textBlock" TextAlignment="Center" FontSize="36" TextWrapping="Wrap" Text="{Binding StationName}" Margin="10,0,0,0" Foreground="Gainsboro"/>
@@ -28,5 +32,12 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Grid Grid.Row="2" HorizontalAlignment="Stretch">
+            <StackPanel>
+                <user:StereoVUMeterControl HorizontalAlignment="Stretch" x:Name="VUMeters" LeftVUMeter="{Binding LeftLevel}" RightVUMeter="{Binding RightLevel}"/>
+                <TextBlock HorizontalAlignment="Stretch" x:Name="CurrentPlayingText" Text="Nothing On Air" Foreground="Gray" FontSize="32" TextAlignment="Center" />
+
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

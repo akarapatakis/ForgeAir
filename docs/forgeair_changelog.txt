@@ -240,10 +240,10 @@ ForgeAir v1.0a.2001 Changelog
 dev note: fix pilot and queuemanagement
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-- ForgeAir v.1.0b is a version series that include a whole overhaul and rewrite in the project (as v.1.0a was for me to learn how to work with, hence the bad performance and stability) and added support for things that are remotely close to the needs of a commercial station
+- ForgeAir v.1.1a is a version series that include a whole overhaul and rewrite in the project (as v.1.0a was for me to learn how to work with, hence the bad performance and stability) and added support for things that are remotely close to the needs of a commercial station
 
 ! Due to code changes and new features and for best support, ForgeAir now REQUIRES Windows 10 1809 or later (dropped Windows 7 sadly)
-ForgeAir v1.0b.1001 Changelog
+ForgeAir v1.1a.1001 Changelog
 - Rewritten ForgeAir's source code (rewrote ~200 sources files from scratch, adapted MVVM pattern) for better performance and stability both in UI and backend - while you might experience small issues, you may see a small increase in performance and usability (depends on your use case)
 - *New: Flat/Metro UI - changed all UI to it while some parts keep/mimic their original prototype as their prior
 - *New: NAudio Audio Engine (primary, covers core functionallity)
@@ -265,9 +265,7 @@ ForgeAir v1.0b.1001 Changelog
 - *New: Crash Reporter
 - *New: Colors for each track type
 - *New: Improved splashscreen
-- *New: Support for traffic announcements - they can be either pre-recorded or manually typed and then passed on through TTS - Supports TA flag in RDS!
 - *New: Activity Center (that existed and implemented wayy back when the program was called Forge and now brought back) - access everything with one click easily! 
-- *New: Multi-station support (experimental so expect issues) customizable with INI files
 - Added "Import Track" dialog to replace the three indivindual options (import track/directory/playlist) and added a copy of it to the new activity center for quicker importing process
 - Added an option to hide ForgeAir's main window from the tray
 - Replaced the folder browser with an older from Win32 as the previous one would cause confusion when trying adding a folder of tracks
@@ -291,3 +289,50 @@ ForgeAir v1.0b.1001 Changelog
 - Fixed tray icon not disposing correctly after program shutdown
 - Removed any unused dependecies from ForgeAir
 - Added a check to avoid running multiple instances of ForgeAir
+
+
+ForgeAir v.1.1a.1003
+- *New: Multi-Station support! Run as many stations as you want in ForgeAir with every station having its own enviroment and configuration. 
+- *New: Internet Streaming, stream to Icecast and Shoutcast!
+- *New: Redesigned Track Library Tab
+- *New: Track Selector Mode Flyout (Select Auto or Manual)
+- *New: Decibel-based mixing! - now its optional to set crossfade time in import dialog as now ForgeAir calculates and handles it for you in the runtime 
+- *New: Web Inteface (experimental, shows only current track for now) - not recommended to use as it makes the whole program unstable
+- *New: File Logging!
+- *New: Ability to autoplay at launch
+- *New: Weather in Activity Center (Celsius and Fahrenheit)
+- *New: Ability to show/hide station selector at launch
+- *New: RDS PI Generator
+- *New: Rewritten RDS Service - its mostly boilerplate, it only supports outputting PS and RT to text file for now
+- *New: Time announcements (w.i.p)
+- *New: Auto/Manual Selector
+-  New n Fresh splashscreen
+- Added gradient color to transparent to the background of track queue to improve readability
+- Added current playing track information in activity center
+- Added smooth fade in on air view to mix the gradients of the new track with the old one
+- Added tiny animations here and there
+- Added ability to change and remove the logo of the station
+- Replaced the fallback album art image with a redesigned one and added 2 new images for network source and default station logo
+- Improved track selectors to fill the queue continiously and not when the queue is empty
+- Changed the wrong column name in Queue from "Name" to "Title" - was wrong since last year lol
+- Improved the random track selector mechanism to avoid adding duplicate tracks & included rule to add commercials and jingles if any exist
+- Restored the now playing text file output
+- Removed code delaying BASS mixing tracks significantlly
+- Fixed on air view not using fallback image and crash
+- Fixed a bug where the updated metadata of the station wouldn't be shown on Activity Center or Station Selector 
+- Fixed a bug where auto track selector wouldn't start playing and causing the cpu usage to go high if no jingles existed
+- Fixed on air view not emptying when playback stops
+- Fixed random track selector returning no track because the id range was wrong
+- Removed ForgeVision's video types from being included in ForgeAir causing confusion
+- Improved the frontend track import mechanism to lessen the delay it has to display the importing ui
+- Replaced track position bar with cues (instant cue up and play the start/intro/hooks/outro/end point of a track)
+- Fixed an annoying long crossfade when skipping tracks
+- Added lazy loading to track library views to keep low memory usage in older machines or in setups with huge track databases
+- Fixed accidentally crossfading too early in advertisements and sweepers
+- Fixed a visual bug in track library where the track type combobox would have an empty value as default
+- Migrated to Visual Studio 2026 from 2022
+- Replaced queue action buttons with small icon tiles
+- Improved the handling between a network stream and file, as a result the gap it has between switching back and forth of that is smaller
+...and more which have been lost into time because i had stopped writing in the changelog for a long time
+
+i guess after that we are ready for opensource, right?

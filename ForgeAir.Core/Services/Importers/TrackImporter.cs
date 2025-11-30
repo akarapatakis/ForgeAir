@@ -2,6 +2,7 @@
 using ForgeAir.Core.Events;
 using ForgeAir.Core.Models;
 using ForgeAir.Core.Services.Database;
+using ForgeAir.Core.Services.Database.Interfaces;
 using ForgeAir.Core.Services.Importers.Interfaces;
 using ForgeAir.Core.Services.Importers.Migrators;
 using ForgeAir.Core.Services.Tags;
@@ -21,13 +22,13 @@ namespace ForgeAir.Core.Services.Importers
 {
     public class TrackImporter : ITrackImporter
     {
-        private readonly RepositoryService<Track> _repositoryService;
+        private readonly ITracksService _repositoryService;
         private readonly IDbContextFactory<ForgeAirDbContext> contextFactory;
         private ForgeAirDbContext _dbContext;
-        public TrackImporter(IDbContextFactory<ForgeAirDbContext> _contextFactory)
+        public TrackImporter(ITracksService repositoryService, IDbContextFactory<ForgeAirDbContext> _contextFactory)
         {
             contextFactory = _contextFactory;
-            _repositoryService = new RepositoryService<Track>(contextFactory);
+            _repositoryService = repositoryService;
             _dbContext = contextFactory.CreateDbContext();
         }
 
@@ -60,6 +61,8 @@ namespace ForgeAir.Core.Services.Importers
                 await _dbContext.Tracks.AddAsync(TrackDTO.ToEntity(track));
                 await _dbContext.SaveChangesAsync();
                 _dbContext.ChangeTracker.Clear();
+                TrackDbChanged.RaiseTrackImported(track);
+
                 return SuccessResult();
             }
             catch
@@ -74,9 +77,18 @@ namespace ForgeAir.Core.Services.Importers
             if (!File.Exists(trackImport.FilePath))
                 return ErrorResult(ImportTrackErrorsEnum.TrackFileNotFound);
 
-            var tagReader = new TagService(new DTO.TrackDTO { FilePath = trackImport.FilePath });
+            TagService tagReader = null;
+            try
+            {
+                 tagReader = new TagService(new DTO.TrackDTO { FilePath = trackImport.FilePath });
+                if (tagReader == null) return ErrorResult(ImportTrackErrorsEnum.TagError);
+            }
+            catch
+            {
+                return ErrorResult(ImportTrackErrorsEnum.TagError);
+            }
 
-            var (trackDto, resolvedArtists) = await ImportFromTags(trackImport, tagReader);
+            var (trackDto, resolvedArtists) = await ImportFromJazlerInfoTag(trackImport, tagReader);
             if (trackDto == null)
                 return DbErrorResult();
 
@@ -155,10 +167,6 @@ namespace ForgeAir.Core.Services.Importers
 
 
         private async Task<(TrackDTO, List<Artist>)> ImportFromJazlerInfoTag(TrackImportModel import, TagService tagReader)
-        {
-            return  await ImportFromTags(import, tagReader);
-        }
-        private async Task<(TrackDTO, List<Artist>)> ImportFromTags(TrackImportModel import, TagService tagReader)
         {
             var trackDto = new TrackDTO
             {

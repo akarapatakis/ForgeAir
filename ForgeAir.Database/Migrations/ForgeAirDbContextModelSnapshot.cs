@@ -17,7 +17,7 @@ namespace ForgeAir.Database.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
@@ -88,6 +88,27 @@ namespace ForgeAir.Database.Migrations
                     b.ToTable("Artists_Tracks", (string)null);
                 });
 
+            modelBuilder.Entity("ForgeAir.Database.Models.Bank", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Banks", (string)null);
+                });
+
             modelBuilder.Entity("ForgeAir.Database.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -127,6 +148,9 @@ namespace ForgeAir.Database.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BankId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -145,7 +169,7 @@ namespace ForgeAir.Database.Migrations
 
                     b.Property<string>("FilePath")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -156,7 +180,26 @@ namespace ForgeAir.Database.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BankId");
+
+                    b.HasIndex("FilePath");
+
                     b.ToTable("FX", (string)null);
+                });
+
+            modelBuilder.Entity("ForgeAir.Database.Models.FxBank", b =>
+                {
+                    b.Property<int>("BankId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FxId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BankId", "FxId");
+
+                    b.HasIndex("FxId");
+
+                    b.ToTable("FX_Banks", (string)null);
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.PlaylistToWatch", b =>
@@ -200,14 +243,21 @@ namespace ForgeAir.Database.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("varchar(64)");
 
+                    b.Property<string>("LogoFilePath")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("NameTag")
+                        .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("varchar(64)");
+
+                    b.Property<ushort>("RdsPI")
+                        .HasColumnType("smallint unsigned");
 
                     b.Property<string>("Slogan")
                         .HasMaxLength(64)
@@ -466,9 +516,40 @@ namespace ForgeAir.Database.Migrations
                     b.Navigation("CategoryParent");
                 });
 
+            modelBuilder.Entity("ForgeAir.Database.Models.FX", b =>
+                {
+                    b.HasOne("ForgeAir.Database.Models.Bank", null)
+                        .WithMany("Tracks")
+                        .HasForeignKey("BankId");
+                });
+
+            modelBuilder.Entity("ForgeAir.Database.Models.FxBank", b =>
+                {
+                    b.HasOne("ForgeAir.Database.Models.Bank", "Bank")
+                        .WithMany()
+                        .HasForeignKey("BankId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ForgeAir.Database.Models.FX", "FX")
+                        .WithMany()
+                        .HasForeignKey("FxId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bank");
+
+                    b.Navigation("FX");
+                });
+
             modelBuilder.Entity("ForgeAir.Database.Models.Artist", b =>
                 {
                     b.Navigation("ArtistTracks");
+                });
+
+            modelBuilder.Entity("ForgeAir.Database.Models.Bank", b =>
+                {
+                    b.Navigation("Tracks");
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.Category", b =>

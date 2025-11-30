@@ -14,8 +14,9 @@ namespace ForgeAir.Database.Models
     {
         [Required]
         [MaxLength(100)]
-        public required string Name { get; set; } = "ForgeAir Radio";
-
+        public required string Name { get; set; } = "My Radio Station";
+     
+        public string? LogoFilePath { get; set; }
         [MaxLength(64)]
         public string? Website { get; set; }
         [MaxLength(64)]
@@ -25,10 +26,11 @@ namespace ForgeAir.Database.Models
         [MaxLength(64)]
         public string? Genre { get; set; } = "Varied";
         [MaxLength(64)]
-        public string? Slogan { get; set; } = "Radio Automation Software";
+        public string? Slogan { get; set; } = "Powered by ForgeAir";
 
         [MaxLength(64)]
-        public string? NameTag { get; set; }
+        public required string NameTag { get; set; }
 
+        public ushort RdsPI { get; set; } = 0xffff;
     }
 }

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
-namespace ForgeAir.Core.Services.DeviceManager
+namespace ForgeAir.Core.Models
 {
-    class DeviceManagerService
+    public class StationPaths
     {
+        public string ExportsPath { get; set; }
     }
 }

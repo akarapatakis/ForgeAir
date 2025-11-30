@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ForgeAir.Core.DTO;
 using ForgeAir.Core.Services.Database;
+using ForgeAir.Core.Services.Database.Interfaces;
 using ForgeAir.Database.Models;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +17,7 @@ namespace ForgeAir.Playout.UserControls.ViewModels
     {
         public ObservableCollection<CategoryDTO> FetchedDTOCategories { get; } = new();
         private readonly IServiceProvider _provider;
-        private readonly RepositoryService<Category> repositoryService;
+        private readonly IRepository<Category> repositoryService;
         public readonly ICollection<Category> FetchedCategories;
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -74,10 +75,10 @@ namespace ForgeAir.Playout.UserControls.ViewModels
                 SelectedCategories.Remove(SelectedAddedCategory);
         }
 
-        public CategoryManipulatorViewModel(IServiceProvider provider)
+        public CategoryManipulatorViewModel(IServiceProvider provider, IRepository<Category> _repositoryService)
         {
             _provider = provider;
-            repositoryService = _provider.GetRequiredService<RepositoryService<Category>>();
+            repositoryService = _repositoryService;
             FetchedDTOCategories = _provider.GetRequiredService<ObservableCollection<CategoryDTO>>();
             FetchedCategories = _provider.GetRequiredService<ObservableCollection<Category>>();
 
@@ -90,7 +91,8 @@ namespace ForgeAir.Playout.UserControls.ViewModels
         private async Task FetchCategories()
         {
             FetchedCategories.Clear();
-            List<Category> categories = await Task.Run(() => repositoryService.GetAll(Core.Tracks.Enums.ModelTypesEnum.Category));
+            FetchedDTOCategories.Clear();
+            List<Category> categories = await Task.Run(() => repositoryService.GetAllAsync());
 
             foreach (var category in categories)
             {

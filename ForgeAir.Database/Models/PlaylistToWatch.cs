@@ -13,7 +13,7 @@ namespace ForgeAir.Database.Models
     {
         public string? DisplayName { get; set; }
         public string FilePath { get; set; }
-        public ICollection<Category>? DesiredCategories { get; set; }
+        public virtual ICollection<Category>? DesiredCategories { get; set; }
         public bool isWatching { get; set; }
     }
 }

@@ -1,58 +1,144 @@
 ﻿using Caliburn.Micro;
 using ForgeAir.Core.CustomCollections;
 using ForgeAir.Core.DTO;
+using ForgeAir.Core.Events;
 using ForgeAir.Core.Models;
+using ForgeAir.Core.Services.AudioPlayout.Interfaces;
 using ForgeAir.Playout.ViewModels.Helpers;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.Json;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ForgeAir.Playout.UserControls.ViewModels
 {
-    public class TrackQueueViewModel : Screen
+    public class TrackQueueViewModel : Screen, IDisposable
     {
         private readonly IEventAggregator _events;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        public ObservableCollection<LinkedListQueueItem> Queue {get; set;}
-        public ObservableCollection<TrackDTO> _items { get; set; }
+        public ObservableCollection<LinkedListQueueItem> frontendQueue { get; set; } = new ObservableCollection<LinkedListQueueItem>();
+
+
+        private readonly IQueueService queueService;
+        private readonly IAudioService _audioService;
         public IServiceProvider _provider { get; set; }
         public ICommand RemoveFromQueueCommand => new RelayCommand<LinkedListQueueItem>(RemoveFromQueue);
         public ICommand SkipToCommand => new RelayCommand<LinkedListQueueItem>(SkipTo);
+        private QueueUpdatedEvent _queueUpdatedEvent;   
+        protected void OnPropertyChanged(string propName) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
 
-        public TrackQueueViewModel(IServiceProvider provider)
+        public TrackQueueViewModel(IServiceProvider provider, IAudioService audioService, QueueUpdatedEvent queueUpdatedEvent)
         {
             _provider = provider;
-            _items = _provider.GetRequiredService<ObservableCollection<TrackDTO>>();
-            Queue = _provider.GetRequiredService<ObservableCollection<LinkedListQueueItem>> ();
+            _queueUpdatedEvent = queueUpdatedEvent;
+            _audioService = audioService;   
+            frontendQueue = _provider.GetRequiredService<ObservableCollection<LinkedListQueueItem>>();
+            _queueUpdatedEvent.QueueChanged += OnQueueChanged;
+            queueService = _provider.GetRequiredService<IQueueService>();
+            RefreshAndSyncQueues();
         }
 
         public void SkipTo(LinkedListQueueItem track)
         {
-            int index = Queue.IndexOf(track);
+            int index = frontendQueue.IndexOf(track);
+
+            if (index < 0) return;
+
+            for (int i = 0; i <= index; i++)
             {
-                for (int i = 0; i <= index; i++)
+                if (i == index)
                 {
-                    Queue.RemoveAt(0);
+                    _audioService.Play(true);
+                    RefreshAndSyncQueues();
+                    break;
+
                 }
+                queueService.Remove(queueService.Queue.ElementAt(0));
+                RefreshAndSyncQueues();
+
             }
+
+
+        }
+
+        public DateTime CalculateWillPlayTime(LinkedListQueueItem track)
+        {
+            DateTime dt = DateTime.Now;
+
+            foreach (var item in frontendQueue)
+            {
+                if (item == track)
+                    break;
+
+                dt = dt.Add(item.Track.Duration);
+            }
+
+            return dt;
         }
 
         public void RemoveFromQueue(LinkedListQueueItem track)
         {
-            if (Queue.Contains(track))
-                Queue.Remove(track);
+            queueService.Remove(track.Track);
+            RefreshAndSyncQueues();
         }
+
+        private LinkedListQueueItem MapToQueueItem(TrackDTO track, int index)
+        {
+            return new LinkedListQueueItem
+            {
+                Track = track,
+                Place = index,
+            };
+        }
+        private void RefreshAndSyncQueues()
+        {
+            frontendQueue.Clear();
+
+            int index = 0;
+            foreach (var track in queueService.Queue)
+            {
+                var item = MapToQueueItem(track, index);
+                frontendQueue.Add(item);
+                index++;
+                item.WillPlay = CalculateWillPlayTime(item);
+
+            }
+        }
+
+
         public void MoveToQueue(LinkedListQueueItem item)
         {
-            if (_items.Contains(item.Track))
-                _items.Remove(item.Track);
+            if (queueService.Contains(item.Track))
+                queueService.Remove(item.Track);
 
-            if (item.Place < 0 || item.Place > Queue.Count)
-                Queue.Add(item);
+            if (item.Place == null || item.Place < 0 || item.Place >= queueService.Count())
+            {
+                queueService.EnqueueBottom(item.Track);
+            }
             else
-                Queue.Insert(item.Place, item);
+            {
+                queueService.Insert(item.Track, item.Place.Value);
+            }
+
+            RefreshAndSyncQueues();
         }
 
+        private void OnQueueChanged()
+        {
+            Application.Current.Dispatcher.Invoke(() => {
+                RefreshAndSyncQueues();
+            });
+        }
+
+        public void Dispose()
+        {
+            _queueUpdatedEvent.QueueChanged -= OnQueueChanged;
+        }
     }
 }

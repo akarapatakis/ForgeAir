@@ -4,21 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="40" Width="40" Height="200">
+             d:DesignHeight="40" d:DesignWidth="200" Width="200" Height="40">
     <Grid>
         <!-- Background border -->
         <Border Background="#222" CornerRadius="4" BorderBrush="#555" BorderThickness="1" />
 
         <!-- The colored bar -->
-        <Rectangle x:Name="FillBar" VerticalAlignment="Bottom" Width="20" RadiusY="4" RadiusX="4" />
+        <Rectangle x:Name="FillBar"
+                   HorizontalAlignment="Left"
+                   Height="20"
+                   RadiusY="4"
+                   RadiusX="4"
+                   Margin="0"
+                   VerticalAlignment="Center"
+                   Fill="LimeGreen"
+                   Width="0" />
 
-        <!-- Optional ticks or marks -->
-        <Canvas IsHitTestVisible="False" Margin="8,8,8,8">
-            <!-- Draw 4 ticks -->
-            <Line X1="0" Y1="10" X2="10" Y2="10" Stroke="White" StrokeThickness="1" />
-            <Line X1="0" Y1="50" X2="10" Y2="50" Stroke="White" StrokeThickness="1" />
-            <Line X1="0" Y1="90" X2="10" Y2="90" Stroke="White" StrokeThickness="1" />
-            <Line X1="0" Y1="130" X2="10" Y2="130" Stroke="White" StrokeThickness="1" />
-        </Canvas>
+
     </Grid>
 </UserControl>

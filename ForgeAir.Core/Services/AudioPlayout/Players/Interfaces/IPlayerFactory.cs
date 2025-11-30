@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ForgeAir.Core.AudioEngine.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players.Interfaces
 {
     public interface IPlayerFactory
     {
-        IPlayer CreatePlayer();
+        IPlayer CreatePlayer(DeviceTypeEnum outType);
     }
 }

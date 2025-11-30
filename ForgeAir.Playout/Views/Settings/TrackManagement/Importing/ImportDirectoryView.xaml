@@ -31,7 +31,7 @@
             <Button x:Name="Add" Content="Add" IsDefault="True" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,120,10"  Width="100" Height="27" Grid.Row="1"/>
             <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right"  Margin="0,0,10,10" VerticalAlignment="Bottom" Width="100" Height="27" Grid.Row="1"/>
             <Button x:Name="DirSelect" Content="Select..." HorizontalAlignment="Right" Margin="0,58,15,0" VerticalAlignment="Top" Width="85" Height="27"/>
-            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,160,0,0" TextWrapping="Wrap" Text="Crossfade Duration" VerticalAlignment="Top" Height="16" Width="102"/>
+            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,160,0,0" TextWrapping="Wrap" Text="Crossfade Duration (optional)" VerticalAlignment="Top" Height="16" Width="166"/>
             <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="10,37,0,0" TextWrapping="Wrap" Text="Directory" VerticalAlignment="Top" Height="16" Width="48"/>
             <ComboBox x:Name="TrackTypeList" SelectedItem="{Binding Path=SelectedTrackType, Mode=TwoWay}" Margin="10,251,656,0" VerticalAlignment="Top" Height="26" ItemsSource="{Binding Path=TrackTypeList}"/>
             <TextBlock x:Name="textBlock_Copy1" HorizontalAlignment="Left" Margin="10,226,0,1" TextWrapping="Wrap" Text="Track Type" Width="102" Grid.RowSpan="2"/>

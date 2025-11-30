@@ -28,7 +28,7 @@
             <TextBox x:Name="FileBox" Margin="10,58,105,0" TextWrapping="Wrap" IsReadOnly="True" Height="26" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
             <mah:NumericUpDown x:Name="CrossFadeUpDown" Value="{Binding  Path=CrossFadeDuration, Mode=TwoWay}" Margin="10,181,78,0" Height="28" VerticalAlignment="Top"/>
 
-            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,160,0,0" TextWrapping="Wrap" Text="Crossfade Duration" VerticalAlignment="Top" Height="16" Width="102"/>
+            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,160,0,0" TextWrapping="Wrap" Text="Crossfade Duration (optional)" VerticalAlignment="Top" Height="16" Width="209" Grid.ColumnSpan="2"/>
             <TextBlock x:Name="textBlock_Copy" HorizontalAlignment="Left" Margin="10,37,0,0" TextWrapping="Wrap" Text="Filepath..." VerticalAlignment="Top" Height="16" Width="50"/>
             <Button x:Name="Add" Content="Add" IsDefault="True" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,120,10"  Width="100" Height="27" Grid.Row="3" Grid.Column="1"/>
             <Button x:Name="Cancel" Content="Cancel" HorizontalAlignment="Right"  Margin="0,0,10,10" VerticalAlignment="Bottom" Width="100" Height="27" Grid.Row="3" Grid.Column="1"/>

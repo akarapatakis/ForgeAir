@@ -14,10 +14,9 @@ using ForgeAir.Core.DTO;
 using static System.Net.Mime.MediaTypeNames;
 namespace ForgeAir.Core.Services.Tags
 {
-    public class TagService : ITagService
+    public class TagService : ITagService, IDisposable
     {
 
-        private DTO.TrackDTO track;
         private string filePath;
 
         TagLib.File _tag;
@@ -26,12 +25,19 @@ namespace ForgeAir.Core.Services.Tags
             try
             {
                 filePath = Encoding.UTF8.GetString(Encoding.Default.GetBytes(_track.FilePath));
+                if (_track == null || filePath == null)
+                {
+                    this.Dispose();
+
+                    throw new ArgumentNullException("No valid track to import.");
+                }
                 _tag = TagLib.File.Create(Encoding.UTF8.GetString(Encoding.Default.GetBytes(_track.FilePath)));
             }
 
-            catch
+            catch (Exception ex)
             {
-                return;
+                this.Dispose();
+                throw ex;
             }
 
         }
@@ -40,20 +46,19 @@ namespace ForgeAir.Core.Services.Tags
         public IPicture? GetPicture() {
             try
             {
-                var tfile = TagLib.File.Create(track.FilePath);
-                if (tfile.Tag.Pictures == null)
+                if (_tag.Tag.Pictures == null)
                 {
                     return null;
                 }
                 else
                 {
-                    if (tfile.Tag.Pictures.Length <= 0)
+                    if (_tag.Tag.Pictures.Length <= 0)
                     {
                         return null;
                     }
                     else
                     {
-                        return tfile.Tag.Pictures[0];
+                        return _tag.Tag.Pictures.FirstOrDefault();
                     }
                 }
             }
@@ -169,13 +174,24 @@ namespace ForgeAir.Core.Services.Tags
             return false;
         }
 
-        public string Comment { get => _tag.Tag.Comment ?? string.Empty; }
+        public void Dispose()
+        {
+            if (_tag != null)
+            {
+                _tag.Dispose();
+
+            }
+
+        }
+
+        public string Comment { get => _tag.Tag.Comment ?? ""; }
 
         public string Album { get => _tag.Tag.Album ?? ""; }
-        public string[]? Gernes { get => _tag.Tag.Genres ?? null; }
-        public string? ISRC { get => _tag.Tag.ISRC ?? string.Empty; }
-        public TimeSpan AudioDuration { get => _tag.Properties.Duration; }
+        public string[]? Gernes { get => _tag.Tag.Genres ?? new string[] {""}; }
+        public string? ISRC { get => _tag.Tag.ISRC ?? ""; }
+        public TimeSpan AudioDuration => _tag?.Properties?.Duration ?? TimeSpan.Zero;
         public int BPM { get => (int?)_tag.Tag.BeatsPerMinute ?? 0; }
+
 
     }
 }

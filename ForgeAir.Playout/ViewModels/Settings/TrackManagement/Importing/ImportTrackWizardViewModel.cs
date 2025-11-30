@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Caliburn.Micro;
+using ForgeAir.Core.Services.Database.Interfaces;
+using ForgeAir.Core.Services.Database.RepositoryServices;
+using ForgeAir.Playout.Models;
+using ForgeAir.Playout.ViewModels.Helpers;
+using MahApps.Metro.Controls;
+using MahApps.Metro.IconPacks;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using Caliburn.Micro;
-using ForgeAir.Playout.Models;
-using ForgeAir.Playout.ViewModels.Helpers;
-using MahApps.Metro.Controls;
-using MahApps.Metro.IconPacks;
 
 namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
 {
@@ -18,10 +20,12 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
         private IList<TileModel> _dataList;
         private readonly IWindowManager _windowManager;
         private readonly IServiceProvider _provider;
-        public ImportTrackWizardViewModel(IServiceProvider provider, IWindowManager windowManager)
+        private readonly ISearchService _searchService;
+        public ImportTrackWizardViewModel(ISearchService searchService, IServiceProvider provider, IWindowManager windowManager)
         {
             _provider = provider;
             _windowManager = windowManager;
+            _searchService = searchService;
             DataList = GetCardDataList();
 
         }
@@ -47,7 +51,7 @@ namespace ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing
                     Color = new SolidColorBrush(Colors.SandyBrown),
                     Command = new RelayCommand(() =>
                     {
-                        _windowManager.ShowDialogAsync(new ImportDirectoryViewModel(_provider, _windowManager));
+                        _windowManager.ShowDialogAsync(new ImportDirectoryViewModel(_searchService, _provider, _windowManager));
 
                     }),
                 },

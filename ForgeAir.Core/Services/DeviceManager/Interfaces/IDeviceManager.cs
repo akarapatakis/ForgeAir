@@ -1,9 +1,10 @@
-﻿using System;
+﻿using ForgeAir.Core.AudioEngine.Enums;
+using ForgeAir.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ForgeAir.Core.AudioEngine.Enums;
 
 namespace ForgeAir.Core.Services.DeviceManager.Interfaces
 {
@@ -11,6 +12,6 @@ namespace ForgeAir.Core.Services.DeviceManager.Interfaces
     {
         int InitDevice();
         int FreeDevice();
-        extern string[] ListDevicesByAPI(DeviceOutputMethodEnum api);
+        List<OutputDevice> ListDevicesByAPI(DeviceOutputMethodEnum api);
     }
 }

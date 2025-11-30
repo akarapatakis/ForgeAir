@@ -1,11 +1,13 @@
 ﻿using ForgeAir.Core.AudioEngine.Enums;
+using ManagedBass;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using ManagedBass;
 
 namespace ForgeAir.Core.Helpers
 {
@@ -95,17 +97,34 @@ namespace ForgeAir.Core.Helpers
         }
         public static bool isThisAnAudioFile(string fileName)
         {
-            using ILoggerFactory factory = LoggerFactory.Create(builder => { });
-            ILogger logger = factory.CreateLogger("Program");
-
-            var media = TagLib.File.Create(fileName);
-
-            if (media.Properties.AudioChannels > 0) // should work but i doubt if it is reliable enough
+            try
             {
-                return true;
-            }
-            return false;
+                var media = TagLib.File.Create(fileName);
 
+                if (media.Properties.AudioChannels > 0) // should work but i doubt if it is reliable enough
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
+        public static string GetEnumDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+
+            DescriptionAttribute[] attributes = fi.GetCustomAttributes(typeof(DescriptionAttribute), false) as DescriptionAttribute[];
+
+            if (attributes != null && attributes.Any())
+            {
+                return attributes.First().Description;
+            }
+
+            return value.ToString();
         }
     }
 }

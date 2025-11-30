@@ -1,36 +1,173 @@
 ﻿<UserControl
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ForgeAir.Playout.UserControls.Views"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" x:Class="ForgeAir.Playout.UserControls.Views.OnAirView"
-             mc:Ignorable="d" 
-             d:DesignHeight="540" d:DesignWidth="620" MinWidth="620">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="14*"/>
-            <ColumnDefinition Width="9*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="56*"/>
-            <RowDefinition Height="25*"/>
-            <RowDefinition Height="81*"/>
-            <RowDefinition Height="378*"/>
-        </Grid.RowDefinitions>
-        <Image x:Name="image" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"/>
-        <TextBlock x:Name="textBlock" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" FontSize="22" Height="30" Width="159"/>
-        <TextBlock x:Name="textBlock1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" Height="15" Width="62"/>
-        <TextBlock x:Name="textBlock1_Copy" Grid.Column="2" HorizontalAlignment="Left" Margin="52,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" Height="15" Width="62"/>
-        <TextBlock x:Name="textBlock_Copy" Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" FontSize="22" Height="30" Width="159"/>
-        <TextBlock x:Name="textBlock_Copy1" Grid.Column="2" HorizontalAlignment="Center" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" FontSize="22" Height="30" Width="158" Grid.Row="2"/>
-        <TextBlock x:Name="textBlock_Copy2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center" FontSize="22" Height="30" Width="159" Grid.Row="2"/>
+    x:Class="ForgeAir.Playout.UserControls.Views.OnAirView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:ForgeAir.Playout.UserControls.Views"
+    xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:ForgeAir.Playout.UserControls.ViewModels"
+    Height="150"
+    d:DataContext="{d:DesignInstance Type=viewmodels:OnAirViewModel}"
+    d:DesignWidth="1920"
+    mc:Ignorable="d">
 
-        <mah:Tile x:Name="tile" Content="Tile" HorizontalAlignment="Center" Margin="0,38,0,0" Grid.Row="3" VerticalAlignment="Top"/>
-        <mah:Tile x:Name="tile_Copy" Content="Tile" HorizontalAlignment="Left" Margin="10,38,0,0" Grid.Row="3" VerticalAlignment="Top" Grid.Column="1"/>
-        <mah:Tile x:Name="tile_Copy1" Content="Tile" HorizontalAlignment="Left" Margin="161,38,0,0" Grid.Row="3" VerticalAlignment="Top" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <mah:Tile x:Name="tile_Copy2" Content="Tile" HorizontalAlignment="Left" Margin="30,38,0,0" Grid.Row="3" VerticalAlignment="Top" Grid.Column="2"/>
+    <Grid x:Name="mainGrid">
+        <Grid.Background>
+            <LinearGradientBrush Opacity="0.7" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Offset="0" Color="{Binding Stop0.Color, Mode=OneWay}" />
+                <GradientStop Offset="1" Color="{Binding Stop1.Color, Mode=OneWay}" />
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90*" />
+            <RowDefinition Height="53*" />
+            <RowDefinition Height="58*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150*" />
+            <ColumnDefinition Width="1129*" />
+            <ColumnDefinition Width="158*" />
+            <ColumnDefinition Width="230*" />
+            <ColumnDefinition Width="253*" />
+        </Grid.ColumnDefinitions>
+        <Image
+            Grid.RowSpan="3"
+            Margin="10,10,10,10"
+            Source="{Binding CurrentImage}" />
+        <TextBlock
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            FontFamily="Segoe UI"
+            FontSize="35"
+            FontWeight="Bold"
+            Foreground="White"
+            Text="{Binding CurrentTrack.Title}"
+            TextWrapping="Wrap" />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="10,0,0,0"
+            FontFamily="Segoe UI"
+            FontSize="20"
+            FontWeight="Light"
+            Foreground="White"
+            Text="{Binding CurrentTrack.DisplayArtists}"
+            TextWrapping="Wrap" />
+        <Viewbox
+            Grid.Row="0"
+            Grid.Column="2"
+            Margin="10,0,0,12">
+            <TextBlock
+                Effect="{DynamicResource DropShadowEffect}"
+                FontFamily="Segoe UI Semibold"
+                FontWeight="SemiBold"
+                Foreground="White"
+                Opacity="0.95"
+                Text="{Binding RemainingTime}"
+                TextAlignment="Right">
+                <TextBlock.LayoutTransform>
+                    <ScaleTransform ScaleY="1.05" />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+        </Viewbox>
+        <Viewbox
+            Grid.RowSpan="3"
+            Grid.Column="2"
+            Margin="10,0,0,0">
+            <TextBlock
+                FontFamily="Segoe UI"
+                FontWeight="Light"
+                Foreground="#E0E0E0"
+                Opacity="0.85"
+                Text="{Binding DisplayTrackDuration}"
+                TextAlignment="Right" />
+        </Viewbox>
+        <StackPanel
+            Grid.Row="3"
+            Grid.Column="1"
+            HorizontalAlignment="Left"
+            Orientation="Horizontal">
+            <Button Content="START" />
+            <Button Content="INTRO" />
+            <Button Content="HOOK-IN" />
+            <Button Content="HOOK-OUT" />
+            <Button Content="OUTRO" />
+            <Button Content="END" />
+
+        </StackPanel>
+        <!--  playback controls  -->
+        <Viewbox
+            Grid.RowSpan="3"
+            Grid.Column="3"
+            Grid.ColumnSpan="2"
+            Stretch="Uniform">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160*" />
+                    <ColumnDefinition Width="160*" />
+                    <ColumnDefinition Width="160*" />
+                    <ColumnDefinition Width="160*" />
+                </Grid.ColumnDefinitions>
+                <mah:Tile
+                    x:Name="PlaySkip"
+                    Title="Play/Skip"
+                    Grid.Column="0"
+                    Margin="10,10,10,10"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                    <iconPacks:PackIconRemixIcon
+                        Width="60"
+                        Height="60"
+                        Kind="SkipForwardFill" />
+                </mah:Tile>
+                <mah:Tile
+                    x:Name="Pause"
+                    Title="Pause"
+                    Grid.Column="1"
+                    Margin="10,10,10,10"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                    <iconPacks:PackIconRemixIcon
+                        Width="60"
+                        Height="60"
+                        Kind="PauseFill" />
+                </mah:Tile>
+                <mah:Tile
+                    x:Name="Stop"
+                    Title="Stop"
+                    Grid.Column="2"
+                    Margin="10,10,10,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                    <iconPacks:PackIconRemixIcon
+                        Width="60"
+                        Height="60"
+                        Kind="StopFill" />
+                </mah:Tile>
+
+                <mah:Tile
+                    x:Name="OpenAutoFlyout"
+                    Title="{Binding SelectorTile.Title}"
+                    Grid.Column="3"
+                    Margin="10"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="{Binding SelectorTile.Color}">
+                    <iconPacks:PackIconRemixIcon
+                        Width="60"
+                        Height="60"
+                        DataContext="{Binding SelectorTile}"
+                        Kind="{Binding Icon}" />
+
+                </mah:Tile>
+
+            </Grid>
+        </Viewbox>
+
+
 
     </Grid>
 </UserControl>

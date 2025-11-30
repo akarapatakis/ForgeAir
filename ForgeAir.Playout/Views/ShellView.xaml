@@ -1,53 +1,108 @@
 ﻿<mah:MetroWindow
-          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-          xmlns:hc="https://handyorg.github.io/handycontrol"
-          xmlns:cal="http://caliburnmicro.com"
-          xmlns:usercontrols="clr-namespace:ForgeAir.UI.Core.Controls;assembly=ForgeAir.UI.Core"
-                        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                   xmlns:local="clr-namespace:ForgeAir.Playout"
-          xmlns:UserControls="clr-namespace:ForgeAir.UI.Core.UserControls;assembly=ForgeAir.UI.Core" x:Class="ForgeAir.Playout.Views.ShellView"
-          mc:Ignorable="d"
-          Title="ForgeAir" Width="1366" Height="768" WindowTransitionsEnabled="True" ResizeMode="CanResize" Visibility="{Binding State}" Closing="MetroWindow_Closing" >
+    x:Class="ForgeAir.Playout.Views.ShellView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:UserControls="clr-namespace:ForgeAir.UI.Core.UserControls;assembly=ForgeAir.UI.Core"
+    xmlns:cal="http://caliburnmicro.com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:ForgeAir.Playout"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:usercontrols="clr-namespace:ForgeAir.UI.Core.Controls;assembly=ForgeAir.UI.Core"
+    Title="ForgeAir"
+    Width="1366"
+    Height="768"
+    Closing="MetroWindow_Closing"
+    ResizeMode="CanResize"
+    Visibility="{Binding State}"
+    WindowTransitionsEnabled="True"
+    mc:Ignorable="d">
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
-            <Image Source="pack://application:,,,/Assets/Ico/metro.ico"/>
+            <Image Source="pack://application:,,,/Assets/Ico/metro.ico" />
         </DataTemplate>
     </mah:MetroWindow.IconTemplate>
 
+    <mah:MetroWindow.Flyouts>
+        <mah:FlyoutsControl>
+            <mah:Flyout
+                x:Name="AutoFlyout"
+                Width="300"
+                Header="Track Selector"
+                IsOpen="{Binding IsAutoFlyoutOpen, Mode=TwoWay}"
+                Position="Right"
+                Theme="Accent">
+                <StackPanel Orientation="Vertical">
+                    <mah:Tile
+                        Name="AutoTile"
+                        Title="Auto Mode"
+                        cal:Message.Attach="SetAutoMode"
+                        Background="Purple">
+                        <iconPacks:PackIconRemixIcon
+                            Width="60"
+                            Height="60"
+                            Kind="Robot2Fill" />
+                    </mah:Tile>
+                    <mah:Tile
+                        Name="ManualTile"
+                        Title="Manual Mode"
+                        cal:Message.Attach="SetManualMode"
+                        Background="Green">
+                        <iconPacks:PackIconRemixIcon
+                            Width="60"
+                            Height="60"
+                            Kind="Hand" />
+
+                    </mah:Tile>
+
+                </StackPanel>
+            </mah:Flyout>
+
+        </mah:FlyoutsControl>
+    </mah:MetroWindow.Flyouts>
+
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="251*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="251*" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <!-- Station name -->
-                <RowDefinition Height="Auto"/>
-                <!-- Date -->
-                <RowDefinition Height="Auto"/>
-                <!-- Clock -->
+                <RowDefinition Height="Auto" />
+                <!--  Station name  -->
+                <RowDefinition Height="Auto" />
+                <!--  Date  -->
+                <RowDefinition Height="Auto" />
+                <!--  Clock  -->
             </Grid.RowDefinitions>
 
-            <TextBlock x:Name="CurrentTime" Text="{Binding CurrentTime}" 
-               FontSize="25" 
-               FontWeight="Bold" 
-               TextAlignment="Center" 
-               Grid.Row="1"/>
-            <StackPanel Orientation="Horizontal"        HorizontalAlignment="Center"        Margin="0,0,0,5" Grid.Row="2">
-                <TextBlock Text="{Binding CurrentDate}" TextAlignment="Center"/>
+            <TextBlock
+                x:Name="CurrentTime"
+                Grid.Row="1"
+                FontSize="25"
+                FontWeight="Bold"
+                Text="{Binding CurrentTime}"
+                TextAlignment="Center" />
+            <StackPanel
+                Grid.Row="2"
+                Margin="0,0,0,5"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock Text="{Binding CurrentDate}" TextAlignment="Center" />
                 <TextBlock Text=" - " TextAlignment="Center" />
-                <TextBlock Text="{Binding CurrentTemp}" TextAlignment="Center"/>
+                <TextBlock Text="{Binding CurrentTemp}" TextAlignment="Center" />
             </StackPanel>
 
 
         </Grid>
-        <mah:MetroTabControl ItemsSource="{Binding Items}"
-          SelectedItem="{Binding ActiveItem}" Margin="0,2,0,0" Grid.Row="1">
+        <mah:MetroTabControl
+            Grid.Row="1"
+            Margin="0,2,0,0"
+            ItemsSource="{Binding Items}"
+            SelectedItem="{Binding ActiveItem}">
             <mah:MetroTabControl.ItemContainerStyle>
                 <Style TargetType="{x:Type mah:MetroTabItem}">
                     <Setter Property="CloseButtonEnabled" Value="{Binding Closeable}" />
@@ -64,8 +119,7 @@
             <mah:MetroTabControl.ContentTemplate>
                 <DataTemplate>
 
-                    <mah:TransitioningContentControl Transition="RightReplace"
-                                         cal:View.Model="{Binding}" />
+                    <mah:TransitioningContentControl cal:View.Model="{Binding}" Transition="RightReplace" />
                 </DataTemplate>
             </mah:MetroTabControl.ContentTemplate>
         </mah:MetroTabControl>

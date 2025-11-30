@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace ForgeAir.Database
 {
+#if (DEBUG)
+
     public class AppDbDesignTimeContextFactory : IDesignTimeDbContextFactory<ForgeAirDbContext>
     {
-#if (DEBUG)
-        private readonly static string connectionString = "Server=localhost;Port=3307;Database=forgeair_dev;User=root;Password=ForgeAir;";
-#else
-        private readonly static string connectionString = $"Server=localhost;Port={Shared.DatabaseConnectionProperties.Instance.serverPort};Database={Shared.DatabaseConnectionProperties.Instance.dbName};User=root;Password={Shared.DatabaseConnectionProperties.Instance.password};";
-#endif
-        public ForgeAirDbContext CreateDbContext(string[] args)
+        private readonly static string connectionString = "Server=localhost;Port=3306;Database=forgeair_dev;User=root;Password=12345678;";
+
+    public ForgeAirDbContext CreateDbContext(string[] args)
         {
+
             DbContextOptionsBuilder<ForgeAirDbContext> builder = new();
 
             DbContextOptions<ForgeAirDbContext> options = builder.UseMySql(connectionString, new MySqlServerVersion(new Version(9, 1, 0))).Options;
@@ -25,4 +25,5 @@ namespace ForgeAir.Database
 
         }
     }
+#endif
 }

@@ -1,33 +1,50 @@
-﻿using System.ComponentModel;
+﻿using Caliburn.Micro;
+using ForgeAir.Core.Models;
+using ForgeAir.Core.Services.AudioPlayout;
+using ForgeAir.Core.Services.AudioPlayout.Players;
+using ForgeAir.Core.Services.TrackSelector;
+using ForgeAir.Core.Services.Weather;
+using ForgeAir.Playout.Events;
+using ForgeAir.Playout.Models;
+using ForgeAir.Playout.ViewModels.Helpers;
+using ForgeAir.Playout.ViewModels.PlayoutWindows;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Xaml.Behaviors.Core;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Caliburn.Micro;
-using ForgeAir.Core.Models;
-using ForgeAir.Core.Services.AudioPlayout;
-using ForgeAir.Core.Services.AudioPlayout.Players;
-using ForgeAir.Core.Services.Weather;
-using ForgeAir.Playout.Models;
-using ForgeAir.Playout.ViewModels.Helpers;
-using ForgeAir.Playout.ViewModels.PlayoutWindows;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Xaml.Behaviors.Core;
 
 namespace ForgeAir.Playout.ViewModels
 {
-    public class ShellViewModel : Conductor<TabItemViewModelBase>.Collection.OneActive, INotifyPropertyChanged
+    public class ShellViewModel : Conductor<TabItemViewModelBase>.Collection.OneActive, IHandle<OpenAutoFlyoutMessage>, INotifyPropertyChanged
     {
         public ICommand CloseTabCommand { get; }
         private readonly DispatcherTimer _timer;
         private readonly DispatcherTimer _tempertatureUpdateTimer;
         public TabItemViewModelBase SelectedTab { get; set; }
 
+        private bool _isAutoFlyoutOpen = false;
+
+        public bool IsAutoFlyoutOpen
+        {
+            get => _isAutoFlyoutOpen;
+            set
+            {
+                _isAutoFlyoutOpen = value;
+                OnPropertyChanged(nameof(IsAutoFlyoutOpen));
+            }
+
+        }
+
+        public void ToggleAutoFlyout() => IsAutoFlyoutOpen = !IsAutoFlyoutOpen;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
+        private readonly IEventAggregator _events;
         private string currentTime;
         public string CurrentTime
         {
@@ -84,16 +101,19 @@ namespace ForgeAir.Playout.ViewModels
         }
         protected void OnPropertyChanged(string propName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-
+        private readonly TrackSelectorService _selectorService;
         private readonly IServiceProvider _provider;
-        public ShellViewModel(IServiceProvider provider)
+        public ShellViewModel(IServiceProvider provider, IEventAggregator events, TrackSelectorService selectorService)
         {
             _provider = provider;
+            _events = events;
+            _events.SubscribeOnPublishedThread(this);
+
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += Timer_Tick;
             _timer.Start();
-
+            _selectorService = selectorService;
             _tempertatureUpdateTimer = new DispatcherTimer();
             _tempertatureUpdateTimer.Interval = TimeSpan.FromHours(new Random().Next(2, 4)); // random update hour because we dont want to get a rate limit by the api
             _tempertatureUpdateTimer.Tick += updateTemp_Tick;
@@ -114,6 +134,9 @@ namespace ForgeAir.Playout.ViewModels
             CurrentTime = DateTime.Now.ToString("HH:mm:ss");
             CurrentDate = DateTime.Now.ToString("yyyy/MM/dd");
         }
+
+        public void SetManualMode() => _selectorService.Change(Core.Services.TrackSelector.Enums.TrackSelectionMode.Manual);
+        public void SetAutoMode() => _selectorService.Change(Core.Services.TrackSelector.Enums.TrackSelectionMode.Random); //todo: make it configurable
 
         private async void updateTemp_Tick(object sender, EventArgs e)
         {
@@ -155,6 +178,17 @@ namespace ForgeAir.Playout.ViewModels
                 if (firstItem != null)
                     ActivateItemAsync(firstItem);
             }
+        }
+
+
+        public void Handle(OpenAutoFlyoutMessage message)
+        {
+        }
+
+        public Task HandleAsync(OpenAutoFlyoutMessage message, CancellationToken cancellationToken)
+        {
+            ToggleAutoFlyout();
+            return Task.CompletedTask;
         }
     }
 }

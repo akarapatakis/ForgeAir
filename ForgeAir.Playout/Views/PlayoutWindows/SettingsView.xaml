@@ -1,13 +1,14 @@
-﻿<UserControl x:Class="ForgeAir.Playout.Views.PlayoutWindows.SettingsView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ForgeAir.Playout.Views.PlayoutWindows"
-        mc:Ignorable="d" 
-        xmlns:hc="https://handyorg.github.io/handycontrol">
+﻿<UserControl
+    x:Class="ForgeAir.Playout.Views.PlayoutWindows.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hc="https://handyorg.github.io/handycontrol"
+    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:ForgeAir.Playout.Views.PlayoutWindows"
+    xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
 
 
     <Grid>
@@ -15,102 +16,311 @@
 
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" MinWidth="266"></ColumnDefinition>
-                <ColumnDefinition  Width="auto" MinWidth="266"></ColumnDefinition>
-                <ColumnDefinition Width="auto" MinWidth="266"/>
-                <ColumnDefinition  Width="auto" MinWidth="266"/>
-                <ColumnDefinition  Width="auto"  MinWidth="192"/>
+                <ColumnDefinition Width="auto" MinWidth="266" />
+                <ColumnDefinition Width="auto" MinWidth="266" />
+                <ColumnDefinition Width="auto" MinWidth="266" />
+                <ColumnDefinition Width="auto" MinWidth="266" />
+                <ColumnDefinition Width="auto" MinWidth="192" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"></RowDefinition>
-                <RowDefinition Height="auto"></RowDefinition>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <mah:Tile  x:Name="AddTrack" Title="Import Tracks" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Background="green">
-                <iconPacks:RemixIcon Kind="FileAddFill"  Width="80" Height="80"/>
+            <mah:Tile
+                x:Name="AddTrack"
+                Title="Import Tracks"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="green">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="FileAddFill" />
             </mah:Tile>
-            <mah:Tile x:Name="AddCategory" Title="Add Category" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Column="1" Background="DarkOliveGreen">
-                <iconPacks:RemixIcon Kind="OrganizationChart"  Width="80" Height="80"/>
+            <mah:Tile
+                x:Name="AddCategory"
+                Title="Add Category"
+                Grid.Column="1"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="DarkOliveGreen">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="OrganizationChart" />
             </mah:Tile>
-            <mah:Tile x:Name="AddFx" Title="Add FX" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Column="2" Background="SeaGreen">
-                <iconPacks:RemixIcon Kind="MagicFill"  Width="80" Height="80"/>
+            <mah:Tile
+                x:Name="AddFx"
+                Title="Add FX"
+                Grid.Column="2"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="SeaGreen">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="MagicFill" />
             </mah:Tile>
-            <mah:Tile x:Name="AddNetworkStream" Title="Add Network Stream" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Column="3" Background="ForestGreen">
-                <iconPacks:RemixIcon Kind="BaseStationFill"  Width="80" Height="80"/>
+            <mah:Tile
+                x:Name="AddNetworkStream"
+                Title="Add Network Stream"
+                Grid.Column="3"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="ForestGreen">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="BaseStationFill" />
             </mah:Tile>
-            <mah:Tile Title="Dynamic Jingles" Width="190" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Column="4" Background="DarkSeaGreen">
-                <iconPacks:RemixIcon Kind="StarFill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Dynamic Jingles"
+                Grid.Column="4"
+                Width="190"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="DarkSeaGreen">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="StarFill" />
             </mah:Tile>
-            <mah:Tile Title="Various Options" Width="192" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Column="4" Grid.Row="1" Background="#0093a6">
-                <iconPacks:RemixIcon Kind="Box1Fill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Various Options"
+                Grid.Row="1"
+                Grid.Column="4"
+                Width="192"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#0093a6">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="Box1Fill" />
             </mah:Tile>
-            <mah:Tile Title="Audio Configuration" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="1" Background="#0093a6">
-                <iconPacks:RemixIcon Kind="Speaker2Fill"  Width="80" Height="80"/>
+            <mah:Tile
+                x:Name="AudioConfig"
+                Title="Audio Configuration"
+                Grid.Row="1"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#0093a6">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="Speaker2Fill" />
             </mah:Tile>
-            <mah:Tile Title="Streaming Encoders" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="1" Grid.Column="1" Background="#0093a6">
-                <iconPacks:RemixIcon Kind="ServerFill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Streaming Encoders"
+                Grid.Row="1"
+                Grid.Column="1"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#0093a6">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="ServerFill" />
             </mah:Tile>
-            <mah:Tile Title="Metadata Broadcast" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="1" Grid.Column="2" Background="#0093a6">
-                <iconPacks:RemixIcon Kind="NewspaperFill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Metadata Broadcast"
+                Grid.Row="1"
+                Grid.Column="2"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#0093a6">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="NewspaperFill" />
             </mah:Tile>
-            <mah:Tile Title="Plugin Manager" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="1" Grid.Column="3" Background="#0093a6">
-                <iconPacks:RemixIcon Kind="Puzzle2Fill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Plugin Manager"
+                Grid.Row="1"
+                Grid.Column="3"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="#0093a6">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="Puzzle2Fill" />
             </mah:Tile>
-            <mah:Tile Title="Edit Station Metadata" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="2" Background="Orange" Grid.Column="0">
-                <iconPacks:RemixIcon Kind="PencilFill"  Width="80" Height="80"/>
+            <mah:Tile
+                x:Name="EditStation"
+                Title="Edit Station Metadata"
+                Grid.Row="2"
+                Grid.Column="0"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Orange">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="PencilFill" />
             </mah:Tile>
-            <mah:Tile Title="ForgeCrowd" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="2" Background="DarkOrange" Grid.Column="1">
-                <iconPacks:RemixIcon Kind="TeamFill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="ForgeCrowd"
+                Grid.Row="2"
+                Grid.Column="1"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="DarkOrange">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="TeamFill" />
             </mah:Tile>
-            <mah:Tile Title="Scheduler" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="2" Background="OrangeRed" Grid.Column="2">
-                <iconPacks:RemixIcon Kind="Calendar2Fill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Scheduler"
+                Grid.Row="2"
+                Grid.Column="2"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="OrangeRed">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="Calendar2Fill" />
             </mah:Tile>
-            <mah:Tile Title="Track Selector" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="2" Background="Orange" Grid.Column="3">
-                <iconPacks:RemixIcon Kind="OrderPlayFill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Track Selector"
+                Grid.Row="2"
+                Grid.Column="3"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Orange">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="OrderPlayFill" />
             </mah:Tile>
-            <mah:Tile Title="Database Misc" Width="190" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="2" Background="Orange" Grid.Column="4">
-                <iconPacks:RemixIcon Kind="Database2Fill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Database Misc"
+                Grid.Row="2"
+                Grid.Column="4"
+                Width="190"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Orange">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="Database2Fill" />
             </mah:Tile>
-            <mah:Tile Title="Track Manager" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="3" Background="Red">
-                <iconPacks:RemixIcon Kind="FileMusicFill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Track Manager"
+                Grid.Row="3"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Red">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="FileMusicFill" />
             </mah:Tile>
-            <mah:Tile Title="Artists Manager" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="3" Grid.Column="1" Background="IndianRed">
-                <iconPacks:RemixIcon Kind="User2Fill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Artists Manager"
+                Grid.Row="3"
+                Grid.Column="1"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="IndianRed">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="User2Fill" />
             </mah:Tile>
-            <mah:Tile Title="Categories Manager" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="3" Grid.Column="2" Background="IndianRed">
-                <iconPacks:RemixIcon Kind="User2Fill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Categories Manager"
+                Grid.Row="3"
+                Grid.Column="2"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="IndianRed">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="User2Fill" />
             </mah:Tile>
-            <mah:Tile Title="Categories Manager" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="3" Grid.Column="2" Background="DarkRed">
-                <iconPacks:RemixIcon Kind="Archive2Fill"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="Categories Manager"
+                Grid.Row="3"
+                Grid.Column="2"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="DarkRed">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="Archive2Fill" />
             </mah:Tile>
-            <mah:Tile Title="FX Manager" Width="260" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="3" Grid.Column="3" Background="MediumVioletRed">
-                <iconPacks:RemixIcon Kind="MagicLine"  Width="80" Height="80"/>
+            <mah:Tile
+                Title="FX Manager"
+                Grid.Row="3"
+                Grid.Column="3"
+                Width="260"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="MediumVioletRed">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="MagicLine" />
             </mah:Tile>
-            <mah:Tile x:Name="AboutTile" Title="About ForgeAir" Width="190" VerticalAlignment="Center" HorizontalAlignment="Center"  
-      Height="130" Grid.Row="3" Grid.Column="4" Background="Black">
-                <iconPacks:RemixIcon Kind="Information2Fill"  Width="80" Height="80"/>
+            <mah:Tile
+                x:Name="AboutTile"
+                Title="About ForgeAir"
+                Grid.Row="3"
+                Grid.Column="4"
+                Width="190"
+                Height="130"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Black">
+                <iconPacks:RemixIcon
+                    Width="80"
+                    Height="80"
+                    Kind="Information2Fill" />
             </mah:Tile>
         </Grid>
     </Grid>

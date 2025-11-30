@@ -1,8 +1,13 @@
 ﻿using Caliburn.Micro;
+using Castle.Core.Logging;
 using ForgeAir.Core.CustomCollections;
 using ForgeAir.Core.DTO;
+using ForgeAir.Core.Events;
 using ForgeAir.Core.Helpers;
 using ForgeAir.Core.Helpers.Interfaces;
+using ForgeAir.Core.Jobs;
+using ForgeAir.Core.MetadataExports;
+using ForgeAir.Core.Models;
 using ForgeAir.Core.Services.AudioPlayout;
 using ForgeAir.Core.Services.AudioPlayout.DSP.VST;
 using ForgeAir.Core.Services.AudioPlayout.DSP.VST.Interfaces;
@@ -10,46 +15,64 @@ using ForgeAir.Core.Services.AudioPlayout.Interfaces;
 using ForgeAir.Core.Services.AudioPlayout.Players;
 using ForgeAir.Core.Services.AudioPlayout.Players.Interfaces;
 using ForgeAir.Core.Services.Database;
+using ForgeAir.Core.Services.Database.Interfaces;
+using ForgeAir.Core.Services.Database.RepositoryServices;
 using ForgeAir.Core.Services.Importers;
 using ForgeAir.Core.Services.Importers.Interfaces;
 using ForgeAir.Core.Services.Scheduler;
 using ForgeAir.Core.Services.Scheduler.Interfaces;
+using ForgeAir.Core.Services.StreamingClient;
+using ForgeAir.Core.Services.StreamingClient.Interfaces;
 using ForgeAir.Core.Services.TrackSelector;
 using ForgeAir.Core.Services.TrackSelector.Interfaces;
 using ForgeAir.Core.Services.Weather;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
+using ForgeAir.Playout.Helpers;
 using ForgeAir.Playout.Services;
+using ForgeAir.Playout.UserControls;
 using ForgeAir.Playout.UserControls.ViewModels;
+using ForgeAir.Playout.UserControls.Views;
 using ForgeAir.Playout.ViewModels;
 using ForgeAir.Playout.ViewModels.PlayoutWindows;
 using ForgeAir.Playout.ViewModels.Settings;
+using ForgeAir.Playout.ViewModels.Settings.Generals;
 using ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing;
 using ForgeAir.Playout.Views;
+using ForgeAir.UI.Core.Controls;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.ML;
 using MySqlConnector;
+using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Common;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace ForgeAir.Playout.Bootstrappers
 {
 
     public class StationBootstrapper
     {
+        // for station selector viewmodel - dont wanna deal with making new models as the station selector pulls data from here anyways
         public string Tag { get; private set; }
+        public BitmapImage LogoPath { get; private set; }
+        public string DisplayName { get; private set; }
+
         public IServiceProvider Services { get; private set; }
         private readonly IServiceProvider _globalProvider;
-
-
+        private readonly ISchedulerFactory _schedulerFactory;
         public StationBootstrapper(string iniPath, IServiceProvider globalProvider)
         {
             _globalProvider = globalProvider;
@@ -69,12 +92,16 @@ namespace ForgeAir.Playout.Bootstrappers
             {
                 services.AddDbContext<ForgeAirDbContext>(options =>
                 {
+                    options.UseLazyLoadingProxies();
+
                     options.UseMySql(
                         $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={config.Get("Database", "Password")};",
                         new MySqlServerVersion(new Version(9, 1, 0)));
                 });
                 services.AddDbContextFactory<ForgeAirDbContext>(options =>
                 {
+                    options.UseLazyLoadingProxies();
+
                     options.UseMySql(
                         $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={config.Get("Database", "Password")};",
                         new MySqlServerVersion(new Version(9, 1, 0)));
@@ -86,6 +113,8 @@ namespace ForgeAir.Playout.Bootstrappers
                 {
                     services.AddDbContext<ForgeAirDbContext>(options =>
                     {
+                        options.UseLazyLoadingProxies();
+
                         options.UseMySql(
                             $"Server={dbHost};Port={dbPort};Database={dbName};User={dbUser};Password={config.Get("Database", "Password")};",
                             new MySqlServerVersion(new Version(9, 1, 0)));
@@ -102,11 +131,13 @@ namespace ForgeAir.Playout.Bootstrappers
                     MessageBox.Show("Not able to access/create database!. \nPlease check your database configuration", "Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
                 }
             }
+            services.AddSingleton<ISearchService, SearchService>();
+            services.AddSingleton<ITracksService, TrackService>();
+            services.AddSingleton<StationMetadataEditorViewModel>();
             services.AddSingleton<IWindowManager, WindowManager>();
             services.AddSingleton<ISchedulerService, SchedulerService>();
-            services.AddTransient<IAudioService, AudioPlayerService>();
-            services.AddSingleton<RepositoryService<ArtistDTO>>();
-            services.AddSingleton<RepositoryService<CategoryDTO>>();
+            services.AddSingleton<Repository<ArtistDTO>>();
+            services.AddSingleton<Repository<CategoryDTO>>();
             services.AddSingleton<ObservableCollection<TrackDTO>>();
             services.AddSingleton<ObservableCollection<LinkedListQueueItem>>();
             services.AddSingleton<LinkedListQueue<LinkedListQueueItem>>();
@@ -115,18 +146,27 @@ namespace ForgeAir.Playout.Bootstrappers
             services.AddTransient<ActivityCenterViewModel>();
             services.AddSingleton<IWeatherService, WeatherService>();
             services.AddTransient<CategoryManipulatorViewModel>();
-            services.AddSingleton<RepositoryService<Track>>();
-            services.AddSingleton<RepositoryService<TrackDTO>>();
-            services.AddSingleton<RepositoryService<Artist>>();
-            services.AddSingleton<RepositoryService<Category>>();
-            services.AddSingleton<RepositoryService<ArtistTrack>>();
+            services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            services.AddTransient<ITracksService, TrackService>();
             services.AddSingleton<ObservableCollection<CategoryDTO>>();
             services.AddSingleton<ObservableCollection<Category>>();
             services.AddSingleton<ObservableCollection<ArtistTrackDTO>>();
             services.AddSingleton<ObservableCollection<ArtistTrack>>();
+            services.AddSingleton<Caliburn.Micro.IEventAggregator, Caliburn.Micro.EventAggregator>();
+            services.AddSingleton<QueueUpdatedEvent>();
+            services.AddSingleton<TrackChangedEvent>();
+            services.AddSingleton<StationInformationChangedEvent>();
+            services.AddTransient<TrackLibraryViewModel>();
+            //services.AddSingleton(globalProvider.GetRequiredService<ILogger>());
+            services.AddLogging(logging =>
+            {
+                logging.AddConsole(); 
+                logging.SetMinimumLevel(LogLevel.Debug);
+            });
             services.AddTransient<ShellView>();
             services.AddTransient<AboutViewModel>();
             services.AddSingleton<TrackQueueViewModel>();
+            services.AddSingleton<OnAirViewModel>();
             services.AddSingleton<Core.Helpers.Interfaces.IEventAggregator, SimpleEventAggregator>();
             services.AddSingleton<IWindowManager, WindowManager>();
             services.AddTransient<ImportingProcessViewModel>();
@@ -138,19 +178,77 @@ namespace ForgeAir.Playout.Bootstrappers
             services.AddTransient<ActivityCenterViewModel>();
             services.AddSingleton<IWeatherService, WeatherService>();
             services.AddTransient<CategoryManipulatorViewModel>();
-            services.AddSingleton<RepositoryService<FX>>();
-            services.AddSingleton<Core.Helpers.Interfaces.IEventAggregator, SimpleEventAggregator>();
-            services.AddSingleton<IVSTService, BassVSTService>();
+            services.AddTransient<Core.Helpers.Interfaces.IEventAggregator, SimpleEventAggregator>();
+            services.AddTransient<IVSTService, BassVSTService>();
             services.AddSingleton<ITrackImporter, TrackImporter>();
-            services.AddSingleton<ITrackSelector, RandomTrackSelector>(); //todo: make this configurable
-            services.AddSingleton<IQueueService, QueueService>();
-            services.AddSingleton<TrackStateUpdater>();
-            services.AddSingleton<QueueStateUpdater>();
+            services.AddTransient<ClockTrackSelector>();
+            services.AddTransient<RandomTrackSelector>();
+            services.AddTransient<ManualTrackSelector>();
+            services.AddSingleton<TrackSelectorFactory>();
+            services.AddSingleton<TrackSelectorService>();
+            services.AddTransient<IQueueService, QueueService>();
+           // services.AddSingleton<TrackChangedEvent>();
+            services.AddTransient<VUMeter>();
+            services.AddTransient<TimeAnnouncementJob>();
+
+            services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionJobFactory(); // important!
+                q.ScheduleJob<TimeAnnouncementJob>(
+                    trigger => trigger
+                        .WithIdentity("TimeAnnouncementTrigger", "Jingles")
+                        .WithCronSchedule("0 0 * * * ?"), //  top-of-hour
+                    job => job
+                        .WithIdentity("TimeAnnouncementJob", "Jingles")
+                );
+            });
+            services.AddQuartzHostedService(options =>
+            {
+                // when shutting down we want jobs to complete gracefully
+                options.WaitForJobsToComplete = true;
+            });
+
+            services.AddTransient<StereoVUMeterControl>();
+            services.AddTransient<WaveformCanvasControl>();
+
+            services.AddTransient<StreamingEncoder>(s =>
+            {
+                var config = s.GetRequiredService<IConfigurationManager>();
+
+                return new StreamingEncoder
+                {
+                    Autoconnect = config.GetBool("Streaming", "Autoconnect", true),
+                    Bitrate = config.GetInt("Streaming", "Bitrate", 128),
+                    DisplayName = config.Get("Streaming", "DisplayName", "ForgeAir Stream"),
+                    Format = Enum.TryParse(config.Get("Streaming", "Format"), true, out Core.Models.Enums.StreamingEncoderFormat format)
+                        ? format
+                        : Core.Models.Enums.StreamingEncoderFormat.MP3,
+                    Genre = config.Get("Streaming", "Genre"),
+                    Mountpoint = config.Get("Streaming", "Mountpoint"),
+                    Password = config.Get("Streaming", "Password"),
+                    Protocol = Enum.TryParse(config.Get("Streaming", "Protocol"), true, out Core.Models.Enums.StreamingEncoderProtocol protocol)
+                        ? protocol
+                        : Core.Models.Enums.StreamingEncoderProtocol.Icecast,
+                    PullDataFromStationInfo = config.GetBool("Streaming", "UseStationMetadata", false),
+                    ServerPort = config.Get("Streaming", "Port"),
+                    ServerURL = config.Get("Streaming", "Server"),
+                };
+            });
+
+
+            services.AddTransient<StreamingClientService>();
+            services.AddSingleton<IAudioService, AudioPlayerService>();
             services.AddSingleton<IPlayerFactory, PlayerFactory>();
             services.AddSingleton<IPlayer>(sp =>
             {
+                var config = sp.GetRequiredService<IConfigurationManager>();
+                if (config.Get("MainOutput", "AudioEngine") == "Bass" && !SystemHelper.BassExists())
+                {
+                    MessageBox.Show("BASS libraries not found.\nInstall them or switch the audio engine to NAudio", "BASS Initialization failed", MessageBoxButton.OK, icon: MessageBoxImage.Warning);
+                    Environment.Exit(1);
+                }
                 var factory = sp.GetRequiredService<IPlayerFactory>();
-                return factory.CreatePlayer();
+                return factory.CreatePlayer(Core.AudioEngine.Enums.DeviceTypeEnum.Main); // todo: make this configurable/loop through all device types
             });
 
             services.AddSingleton<IConfigurationManager>(provider =>
@@ -159,6 +257,16 @@ namespace ForgeAir.Playout.Bootstrappers
                 return new ConfigurationManager(configFile);
             });
 
+            services.AddSingleton<StationPaths>(provider =>
+            {
+                return new StationPaths() { ExportsPath = new FileInfo(iniPath).Directory.FullName + "\\Metadata" };
+            });
+            services.AddSingleton<NowPlayingModel>();
+            services.AddSingleton<MetadataExporter>();
+
+            //todo: remove after test
+            services.AddTransient<TestViewModel>();
+            services.AddTransient<TestView>();
 
             Services = services.BuildServiceProvider();
         }
@@ -166,31 +274,81 @@ namespace ForgeAir.Playout.Bootstrappers
         private void InitializeDatabase()
         {
             var context = Services.GetRequiredService<ForgeAirDbContext>();
-            context.Database.Migrate();
+            try
+            {
+                context.Database.Migrate();
+
+                var station = context.Stations.Where(x => x.NameTag == Tag).FirstOrDefault(); // retrieve station info based on tag
+                if (station != null)
+                {
+                    DisplayName = station.Name;
+                    if (station.LogoFilePath == null)
+                    {
+                        LogoPath = ImageHelper.BitmapToBitmapImage(Core.Properties.Resources.ImageResources.StationDefaultImage);
+                    }
+                    else
+                    {
+                        LogoPath = ImageHelper.LoadBitmapImage(station.LogoFilePath);
+                    }
+                }
+                else if (station == null)
+                {
+                    MessageBox.Show($"Station '{Tag}' was not found in the database.\nPlease check ForgeAir's configuration and try again.", "Database Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
+                    // warn 
+                }
+
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("Access denied", StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("The database server refused the connection. \nPlease check ForgeAir or database server's configuration and try again.", "Database Error", MessageBoxButton.OK, icon: MessageBoxImage.Warning);
+                    Environment.Exit(1);
+                }
+            }
 
             if (!context.Database.EnsureCreated())
             {
                 if (context.Stations.Any()) return;
                 context.Stations.Add(new Station() { Name = "My Radio Station!", Slogan = "Powered by ForgeAir", Website = "www.example.com", Genre = "None Assigned", Email = "example@example.com", Id = 0, NameTag = "default_station" });
                 context.SaveChanges();
-                context.ChangeTracker.Clear();
             }
+
             context.ChangeTracker.Clear();
             context = null;
             return;
 
         }
+
+        private void UpdateStationInfo(Station station)
+        {
+            DisplayName = station.Name;
+            if (station.LogoFilePath == null)
+            {
+                LogoPath = ImageHelper.BitmapToBitmapImage(Core.Properties.Resources.ImageResources.StationDefaultImage);
+            }
+            else
+            {
+                LogoPath = ImageHelper.LoadBitmapImage(station.LogoFilePath);
+            }
+        }
         public async Task Initialize()
         {
+            Services.GetRequiredService<StationInformationChangedEvent>().StationUpdated += UpdateStationInfo;
+
             var dbFactory = Services.GetRequiredService<IDbContextFactory<ForgeAirDbContext>>();
             dbFactory.CreateDbContext();
             InitializeDatabase();
-            Services.GetRequiredService<IPlayerFactory>().CreatePlayer();
+
             var weather = Services.GetRequiredService<IWeatherService>();
+            var metadata = Services.GetRequiredService<MetadataExporter>();
             if (_globalProvider != null)
             {
                 weather.CurrentWeather = await Task.Run(() => weather.GetWeather(_globalProvider.GetRequiredService<IConfigurationManager>().Get("Weather", "City") + " " + _globalProvider.GetRequiredService<IConfigurationManager>().Get("Weather", "Country")));
             }
+            var schedulerFactory = Services.GetRequiredService<ISchedulerFactory>();
+            var scheduler = await schedulerFactory.GetScheduler();
+            await scheduler.Start();
             return;
         }
 

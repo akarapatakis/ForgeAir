@@ -18,6 +18,8 @@ namespace ForgeAir.Database
         public DbSet<FX> Fx { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Video> Videos { get; set; }
+        public DbSet<FxBank> FxBanks { get; set; }
+        public DbSet<Bank> Banks { get; set; }
 
 
         public ForgeAirDbContext(DbContextOptions<ForgeAirDbContext> options) : base(options)
@@ -34,7 +36,8 @@ namespace ForgeAir.Database
             modelBuilder.ApplyConfiguration(new CategoryConfig());
             modelBuilder.ApplyConfiguration(new VideoConfig());
             modelBuilder.ApplyConfiguration(new PlaylistToWatchConfig());
-
+            modelBuilder.ApplyConfiguration(new  FXBankConfig());
+            modelBuilder.ApplyConfiguration(new FXConfig());
             modelBuilder.Entity<Track>().ToTable("Tracks");
             modelBuilder.Entity<Artist>().ToTable("Artists");
             modelBuilder.Entity<Category>().ToTable("Category");
@@ -42,6 +45,8 @@ namespace ForgeAir.Database
             modelBuilder.Entity<PlaylistToWatch>().ToTable("PlaylistsToWatch");
             modelBuilder.Entity<Video>().ToTable("Videos");
             modelBuilder.Entity<FX>().ToTable("FX");
+            modelBuilder.Entity<Bank>().ToTable("Banks");
+            modelBuilder.Entity<FxBank>().ToTable("FX_Banks");
             modelBuilder.Entity<Station>().ToTable("Stations");
             modelBuilder.Entity<User>().ToTable("Users");
 

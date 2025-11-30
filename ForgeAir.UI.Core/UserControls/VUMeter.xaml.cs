@@ -10,13 +10,13 @@ namespace ForgeAir.UI.Core.Controls
     {
         private const double MaxLevel = 100.0;
 
-        private double _currentValue = 0;
+        private double CurrentValue = 0;
 
         public VUMeter()
         {
             InitializeComponent();
             UpdateGradient(0);
-            UpdateFillHeight(0);
+            UpdateFillWidth(0);
         }
 
         public double Level
@@ -47,7 +47,8 @@ namespace ForgeAir.UI.Core.Controls
             // Animate the height and update gradient stops based on newValue
 
             // Animate _currentValue to newValue smoothly over 200 ms
-            var animation = new DoubleAnimation(_currentValue, newValue, new Duration(TimeSpan.FromMilliseconds(200)))
+            if (newValue == double.NaN) return;
+            var animation = new DoubleAnimation(CurrentValue, newValue, new Duration(TimeSpan.FromMilliseconds(200)))
             {
                 EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
             };
@@ -58,18 +59,18 @@ namespace ForgeAir.UI.Core.Controls
                 if (clock.CurrentProgress.HasValue)
                 {
                     // Interpolated value
-                    double animValue = _currentValue + (newValue - _currentValue) * clock.CurrentProgress.Value;
+                    double animValue = CurrentValue + (newValue - CurrentValue) * clock.CurrentProgress.Value;
 
-                    UpdateFillHeight(animValue);
+                    UpdateFillWidth(animValue);
                     UpdateGradient(animValue);
                 }
             };
 
             animation.Completed += (s, e) =>
             {
-                _currentValue = newValue;
-                UpdateFillHeight(_currentValue);
-                UpdateGradient(_currentValue);
+                CurrentValue = newValue;
+                UpdateFillWidth(CurrentValue);
+                UpdateGradient(CurrentValue);
             };
 
             this.BeginAnimation(DummyAnimationProperty, animation, HandoffBehavior.SnapshotAndReplace);
@@ -79,39 +80,31 @@ namespace ForgeAir.UI.Core.Controls
         public static readonly DependencyProperty DummyAnimationProperty =
             DependencyProperty.Register("DummyAnimation", typeof(double), typeof(VUMeter), new PropertyMetadata(0d));
 
-        private void UpdateFillHeight(double level)
+        private void UpdateFillWidth(double level)
         {
-            // Height of FillBar = proportional to level (0..100) of UserControl height minus margin
-            double maxHeight = this.ActualHeight - 16; // 8 top + 8 bottom margin approx
-
-            if (maxHeight < 0)
-                maxHeight = 0;
-
-            double fillHeight = (level / MaxLevel) * maxHeight;
-
-            FillBar.Height = fillHeight;
+            double maxWidth = this.ActualWidth - 16;
+            double fillWidth = (level / MaxLevel) * maxWidth;
+            FillBar.Width = fillWidth;
         }
+
 
         private void UpdateGradient(double level)
         {
             var brush = new LinearGradientBrush
             {
-                StartPoint = new Point(0, 1),
-                EndPoint = new Point(0, 0)
+                StartPoint = new Point(0, 0),
+                EndPoint = new Point(1, 0)
             };
 
+
             // Green zone: 0% - 60%
-            brush.GradientStops.Add(new GradientStop(Colors.Green, 0.0));
-            brush.GradientStops.Add(new GradientStop(Colors.Green, 0.6));
+            brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#32D700"), 0.0));
+            brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#32D700"), 0.4));
+
 
             // Yellow/Orange zone: 60% - 85%
-            brush.GradientStops.Add(new GradientStop(Colors.Yellow, 0.6));
-            brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FFC107"), 0.75)); // Amber-ish
-            brush.GradientStops.Add(new GradientStop(Colors.Orange, 0.85));
+            brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#E1FF00"), 0.8));
 
-            // Orange/Red-ish zone: 85% - 95%
-            brush.GradientStops.Add(new GradientStop(Colors.OrangeRed, 0.85));
-            brush.GradientStops.Add(new GradientStop(Colors.OrangeRed, 0.95));
 
             if (level >= 95)
             {
@@ -122,7 +115,7 @@ namespace ForgeAir.UI.Core.Controls
             else
             {
                 // If below 95%, extend OrangeRed to the top so Red is hidden
-                brush.GradientStops.Add(new GradientStop(Colors.OrangeRed, 1.0));
+                brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#E1FF00"), 1.0));
             }
 
             FillBar.Fill = brush;
@@ -132,7 +125,8 @@ namespace ForgeAir.UI.Core.Controls
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo)
         {
             base.OnRenderSizeChanged(sizeInfo);
-            UpdateFillHeight(_currentValue);
+            UpdateFillWidth(CurrentValue);
         }
+
     }
 }

@@ -16,6 +16,6 @@ namespace ForgeAir.Database.Models
         [MaxLength(100)]
         public string? Name { get; set; }
 
-        public ICollection<ArtistTrack>? ArtistTracks { get; set; }
+        public virtual ICollection<ArtistTrack>? ArtistTracks { get; set; }
     }
 }

@@ -12,6 +12,7 @@ namespace ForgeAir.Core.Tracks.Enums
         TrackAlreadyExists = 1,
         TrackFileNotFound = 2,
         DbError = 3,
-        UnknownError = 4
+        UnknownError = 4,
+        TagError = 5
     }
 }

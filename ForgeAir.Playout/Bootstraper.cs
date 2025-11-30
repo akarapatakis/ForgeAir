@@ -39,9 +39,11 @@ using ForgeAir.Playout.Views.PlayoutWindows;
 using ForgePlugin.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 using NAudio.Midi;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -73,7 +75,6 @@ namespace ForgeAir.Playout
 
         protected override void Configure()
         {
-            services.AddSingleton<AppState>();
             services.AddSingleton<ForgeTrayIcon>();
             
             services.AddSingleton<IConfigurationManager>(provider =>
@@ -85,6 +86,8 @@ namespace ForgeAir.Playout
             services.AddSingleton<Core.Helpers.Interfaces.IEventAggregator, SimpleEventAggregator>();
             services.AddSingleton<IWindowManager, WindowManager>();
             services.AddSingleton<CrashReporterService>();
+            //services.AddSingleton<IHost>();
+
             services.AddTransient<StationSelectorViewModel>();
 
 
@@ -105,12 +108,25 @@ namespace ForgeAir.Playout
         {
             _serviceProvider.GetRequiredService(instance.GetType());
         }
+        private async void LaunchWebInterface()
+        {
 
+
+        }
+        private static readonly Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
+            Logger.Debug("Starting ForgeAir@Bootstrapper...");
+            Logger.Info("Starting ForgeAir...");
+            NLog.LogManager.Flush();
+
+
             splashScreen.Show();
-            await Task.Delay(500); // wait for splashscreen to render
+            await Task.Delay(100); // wait for splashscreen to render
             var crash = _serviceProvider.GetRequiredService<CrashReporterService>();
+
+
+#if !(DEBUG)
 
             System.Windows.Forms.Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
 
@@ -140,32 +156,62 @@ namespace ForgeAir.Playout
                 crash.Report(ex);
                 exArgs.SetObserved();
             };
+#endif
             await Task.Run(async () =>
             {
+                if (!File.Exists("configuration.ini"))
+                {
+                    Logger.Debug("configuration.ini not found in directory. ");
+                    Logger.Fatal("Configuration file doesn't exist.");
+                    HandyControl.Controls.MessageBox.Show("Configuration file doesn't exist.\nPlease check the installation.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    Environment.Exit(1);
+
+                }
                 var stationTags = _serviceProvider.GetRequiredService<IConfigurationManager>().GetAll("Stations").FirstOrDefault()?.Values.ToList();
                 if (stationTags == null)
                 {
+                    Logger.Debug("stationTags returned null. (probably configuration.ini )");
+                    Logger.Error("No Stations declared in configuration.ini. ");
                     HandyControl.Controls.MessageBox.Show("No Stations found.\nPlease add a Station.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Environment.Exit(0);
+                    Environment.Exit(1);
                 }
                 foreach (var tag in stationTags)
                 {
+                    Logger.Info($"Launching station '{tag}'...");
+
                     string stationConfigPath = $"Stations/{tag}/{tag}.ini";
 
                     if (!File.Exists(stationConfigPath))
                     {
-                        Debug.WriteLine($" Station config for '{tag}' not found.");
+                        Logger.Warn($"Station configuration file for '{tag}' not found.");
                         continue;
                     }
 
                     var bootstrapper = new StationBootstrapper(stationConfigPath, _serviceProvider);
                     await bootstrapper.Initialize();
+                    var player = bootstrapper.Services.GetRequiredService<IAudioService>();
+                    var config = bootstrapper.Services.GetRequiredService<IConfigurationManager>();
+                    if (config.GetBool("Behavior", "AutoPlay"))
+                    {
+                        Logger.Warn($"'{tag}': Autoplay is enabled based on configuration. Attempting to start.");
+
+                        player.Play(true);
+                    }
+
                     StationsInstance.Instance.Stations.Add(bootstrapper);
                 }
 
+                NLog.LogManager.Flush();
+
+
+                Logger.Info($"General initialization complete.");
+
             });
             _serviceProvider.GetRequiredService<ForgeTrayIcon>();
-            await DisplayRootViewForAsync<StationSelectorViewModel>();
+           // var wI = await Task.Run(() => WebInterface.Host.Start(services));
+
+            //await Task.Run(() => wI.Run());
+            //await DisplayRootViewForAsync<StationSelectorViewModel>();
             splashScreen.Close();
 
         }

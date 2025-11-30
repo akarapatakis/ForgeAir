@@ -9,12 +9,15 @@ namespace ForgeAir.Core.Events
 {
     public class TrackChangedEvent
     {
-        public TrackDTO CurrentTrack { get; }
-
-        public TrackChangedEvent(TrackDTO newTrack)
+        public event Action<TrackDTO>? TrackChanged;
+        public TrackDTO CurrentTrack { get; set; }
+        public void RaiseTrackChanged(TrackDTO track)
         {
-            CurrentTrack = newTrack;
+            CurrentTrack = track;
+            TrackChanged?.Invoke(track);
         }
     }
+
+
 
 }

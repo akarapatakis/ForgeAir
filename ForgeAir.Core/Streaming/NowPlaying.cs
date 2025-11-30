@@ -11,11 +11,7 @@ namespace ForgeAir.Core.WebEncoder
     public class NowPlaying
     {
 
-        private readonly AppState _appState;
-        public NowPlaying(AppState appState) {
 
-            _appState = appState;
-        }
 
        /*
         public Task<String> CreateString() {

@@ -72,8 +72,8 @@ namespace ForgeAir.Database.Models
         public DateTime? DateModified { get; set; }
         public DateTime? DateDeleted { get; set; }
 
-        public ICollection<ArtistTrack>? TrackArtists { get; set; }
-        public ICollection<Category>? Categories { get; set; }
+        public virtual ICollection<ArtistTrack>? TrackArtists { get; set; }
+        public virtual ICollection<Category>? Categories { get; set; }
 
         [Required]
         public bool containsVideoTrack { get; set; }

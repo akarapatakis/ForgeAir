@@ -1,17 +1,20 @@
-﻿using System;
+﻿using ForgeAir.Core.DTO;
+using ForgeAir.Core.Models;
+using ForgeAir.Core.Services.TrackSelector.Enums;
+using ForgeAir.Core.Services.TrackSelector.Interfaces;
+using ForgeAir.Database.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ForgeAir.Core.DTO;
-using ForgeAir.Core.Models;
-using ForgeAir.Core.Services.TrackSelector.Interfaces;
 
 namespace ForgeAir.Core.Services.TrackSelector
 {
     public class MLTrackSelector : ITrackSelector
     {
-        public Task<TrackDTO> GetBestTrackAsync(ClockItem item, DateTime time)
+        public TrackSelectionMode SelectionMode => TrackSelectionMode.ML;
+        public Task<TrackDTO> GetBestTrackAsync(ClockItem item, DateTime time, TrackType trackType = TrackType.None)
         {
             throw new NotImplementedException();
         }

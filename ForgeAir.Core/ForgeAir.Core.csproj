@@ -6,41 +6,51 @@
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
 		  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+
       </PropertyGroup>
+
+      <ItemGroup>
+        <None Remove="Properties\Resources\DefaultAlbumArt.png" />
+        <None Remove="Properties\Resources\DefaultRebroadcastImage.png" />
+        <None Remove="Properties\Resources\StationDefaultImage.png" />
+      </ItemGroup>
 
       <ItemGroup>
         <PackageReference Include="DotNetEnv" Version="3.1.1" />
         <PackageReference Include="m3uParser.NET" Version="1.0.17" />
-        <PackageReference Include="ManagedBass" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Aac" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Ac3" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Alac" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Asio" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Dsd" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Flac" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Fx" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Hls" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Mix" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Opus" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Vst" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Wasapi" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Winamp" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Wma" Version="3.1.1" />
-        <PackageReference Include="ManagedBass.Wv" Version="3.1.1" />
+        <PackageReference Include="MahApps.Metro.IconPacks.RemixIcon" Version="6.2.1" />
+        <PackageReference Include="ManagedBass" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Aac" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Alac" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Asio" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Dsd" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Enc" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Flac" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Fx" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Hls" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Mix" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Opus" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Vst" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Wasapi" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Winamp" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Wma" Version="4.0.2" />
+        <PackageReference Include="ManagedBass.Wv" Version="4.0.2" />
         <PackageReference Include="Microsoft.ML" Version="4.0.2" />
         <PackageReference Include="NAudio" Version="2.2.1" />
         <PackageReference Include="NAudio.Core" Version="2.2.1" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="NLog" Version="6.0.5" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="6.0.5" />
+        <PackageReference Include="NLog.Targets.Loki" Version="2.2.0" />
         <PackageReference Include="OpenSky.Core" Version="1.0.1" />
-        <PackageReference Include="System.Management" Version="9.0.6" />
-        <PackageReference Include="System.Speech" Version="9.0.7" />
+        <PackageReference Include="Quartz" Version="3.15.1" />
+        <PackageReference Include="System.Management" Version="9.0.9" />
+        <PackageReference Include="System.Speech" Version="9.0.9" />
         <PackageReference Include="TagLibSharp" Version="2.3.0" />
       </ItemGroup>
 
       <ItemGroup>
         <Folder Include="Services\AudioPlayout\DSP\Interfaces\" />
-        <Folder Include="Services\AudioPlayout\Players\Enums\" />
         <Folder Include="Tracks\Exceptions\" />
       </ItemGroup>
 
@@ -48,6 +58,30 @@
       <ItemGroup>
         <ProjectReference Include="..\..\ForgePluginSDK\SDK\Forge Plugin SDK.csproj" />
         <ProjectReference Include="..\ForgeAir.Database\ForgeAir.Database.csproj" />
+      </ItemGroup>
+
+
+      <ItemGroup>
+        <Resource Include="Properties\Resources\DefaultAlbumArt.png" />
+        <Resource Include="Properties\Resources\DefaultRebroadcastImage.png" />
+        <Resource Include="Properties\Resources\StationDefaultImage.png" />
+      </ItemGroup>
+
+
+      <ItemGroup>
+        <Compile Update="Properties\Resources\ImageResources.Designer.cs">
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+          <DependentUpon>ImageResources.resx</DependentUpon>
+        </Compile>
+      </ItemGroup>
+
+
+      <ItemGroup>
+        <EmbeddedResource Update="Properties\Resources\ImageResources.resx">
+          <Generator>PublicResXFileCodeGenerator</Generator>
+          <LastGenOutput>ImageResources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
       </ItemGroup>
 
     </Project>
