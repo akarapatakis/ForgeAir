@@ -123,22 +123,18 @@ namespace ForgeAir.Core.DTO
                             return new MemoryStream(_albumart);
                         else
                         {
-                            ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt.Save(_m, ImageFormat.Png);
-                            return _m;
+                            return new MemoryStream(ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt);
                         }
                     }
                     catch
                     {
-                        MemoryStream _m = new MemoryStream();
-                        ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt.Save(_m, ImageFormat.Png);
-                        return _m;
+                        return new MemoryStream(ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt);
                     }
                 }
                 else
                 {
-                    MemoryStream _m = new MemoryStream();
-                    ForgeAir.Core.Properties.Resources.ImageResources.DefaultRebroadcastImage.Save(_m, ImageFormat.Png);
-                    return _m;
+                    return new MemoryStream(ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt);
+
                 }
             } }
 

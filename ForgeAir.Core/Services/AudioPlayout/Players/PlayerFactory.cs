@@ -76,8 +76,11 @@ namespace ForgeAir.Core.Services.AudioPlayout.Players
             {
                 TargetDevice = LoadTargetDeviceFromConfig(outType)
             };
+            #if WINDOWS
             NAudioManagerFactory.Create(device).InitDevice();
             return new NAudioPlayer(device, _events, _queue, _scheduler, _provider.GetRequiredService<TrackChangedEvent>());
+            #endif
+            throw new Exception("NAudio is not supported on non-Windows platform");
         }
 
         private OutputDevice LoadTargetDeviceFromConfig(DeviceTypeEnum type)

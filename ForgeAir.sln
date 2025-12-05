@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeAir.UI.Win32", "ForgeA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeAir.Tests", "ForgeAir.Tests\ForgeAir.Tests.csproj", "{9BA16966-65E7-438F-9999-A0A3EDC5C33A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFSoundVisualizationLib", "C:\Users\choco\source\repos\akarapatakis\wpfsvl-core\Source\WPFSoundVisualizationLibrary\WPFSoundVisualizationLib.csproj", "{4BF02CD2-B416-4F1E-2F55-EB63FF59AB3B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -53,10 +51,6 @@ Global
 		{9BA16966-65E7-438F-9999-A0A3EDC5C33A}.Debug|x64.Build.0 = Debug|Any CPU
 		{9BA16966-65E7-438F-9999-A0A3EDC5C33A}.Release|x64.ActiveCfg = Release|Any CPU
 		{9BA16966-65E7-438F-9999-A0A3EDC5C33A}.Release|x64.Build.0 = Release|Any CPU
-		{4BF02CD2-B416-4F1E-2F55-EB63FF59AB3B}.Debug|x64.ActiveCfg = Debug|x64
-		{4BF02CD2-B416-4F1E-2F55-EB63FF59AB3B}.Debug|x64.Build.0 = Debug|x64
-		{4BF02CD2-B416-4F1E-2F55-EB63FF59AB3B}.Release|x64.ActiveCfg = Release|Any CPU
-		{4BF02CD2-B416-4F1E-2F55-EB63FF59AB3B}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

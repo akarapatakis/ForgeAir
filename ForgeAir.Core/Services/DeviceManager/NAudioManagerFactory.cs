@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace ForgeAir.Core.Services.DeviceManager
 {
+#if WINDOWS
     public class NAudioManagerFactory
     {
         public static NAudioManager Create(NAudioDevice outputDevice)
@@ -15,4 +16,5 @@ namespace ForgeAir.Core.Services.DeviceManager
             return new NAudioManager(outputDevice);
         }
     }
+#endif
 }

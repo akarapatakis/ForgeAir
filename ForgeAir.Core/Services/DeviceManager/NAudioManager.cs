@@ -11,6 +11,8 @@ using NAudio.Wave;
 
 namespace ForgeAir.Core.Services.DeviceManager
 {
+#if WINDOWS
+
     public class NAudioManager : IDeviceManager, IDisposable
     {
         private WaveOutEvent? _wvOut;
@@ -157,4 +159,6 @@ namespace ForgeAir.Core.Services.DeviceManager
             throw new NotImplementedException();
         }
     }
+#endif
+
 }

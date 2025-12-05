@@ -1,7 +1,7 @@
 ﻿    <Project Sdk="Microsoft.NET.Sdk">
 
       <PropertyGroup>
-		  <TargetFramework>net8.0-windows</TargetFramework>
+		  <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Platforms>x64</Platforms>
@@ -16,6 +16,7 @@
       </ItemGroup>
 
       <ItemGroup>
+        <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
         <PackageReference Include="DotNetEnv" Version="3.1.1" />
         <PackageReference Include="m3uParser.NET" Version="1.0.17" />
         <PackageReference Include="MahApps.Metro.IconPacks.RemixIcon" Version="6.2.1" />

@@ -1,5 +1,4 @@
-﻿using CredentialManagement;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +9,7 @@ namespace ForgeAir.Database.Repositories
     public static class CredentialsRepository
     {
 
+        /*
         public static void SavePassword(string dbName, string password)
         {
             using (var cred = new Credential())
@@ -31,5 +31,6 @@ namespace ForgeAir.Database.Repositories
                 return cred.Password;
             }
         }
+        */
     }
 }

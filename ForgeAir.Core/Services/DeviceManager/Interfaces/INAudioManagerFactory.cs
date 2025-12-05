@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace ForgeAir.Core.Services.DeviceManager.Interfaces
 {
+#if WINDOWS
     public interface INAudioManagerFactory
     {
         NAudioManager Create(NAudioDevice device);
     }
+#endif
 }
