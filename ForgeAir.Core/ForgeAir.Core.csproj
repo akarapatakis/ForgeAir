@@ -13,6 +13,7 @@
         <None Remove="Properties\Resources\DefaultAlbumArt.png" />
         <None Remove="Properties\Resources\DefaultRebroadcastImage.png" />
         <None Remove="Properties\Resources\StationDefaultImage.png" />
+        <None Remove="Properties\Resources\DefaultAlbumArt.b64" />
       </ItemGroup>
 
       <ItemGroup>

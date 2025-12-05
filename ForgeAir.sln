@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeAir.UI.Win32", "ForgeA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeAir.Tests", "ForgeAir.Tests\ForgeAir.Tests.csproj", "{9BA16966-65E7-438F-9999-A0A3EDC5C33A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForgeAir.Playout.App", "ForgeAir.Playout.App\ForgeAir.Playout.App.csproj", "{7FEE8942-4C16-4985-AE43-6EFAD8689AEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,6 +53,10 @@ Global
 		{9BA16966-65E7-438F-9999-A0A3EDC5C33A}.Debug|x64.Build.0 = Debug|Any CPU
 		{9BA16966-65E7-438F-9999-A0A3EDC5C33A}.Release|x64.ActiveCfg = Release|Any CPU
 		{9BA16966-65E7-438F-9999-A0A3EDC5C33A}.Release|x64.Build.0 = Release|Any CPU
+		{7FEE8942-4C16-4985-AE43-6EFAD8689AEB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7FEE8942-4C16-4985-AE43-6EFAD8689AEB}.Debug|x64.Build.0 = Debug|Any CPU
+		{7FEE8942-4C16-4985-AE43-6EFAD8689AEB}.Release|x64.ActiveCfg = Release|Any CPU
+		{7FEE8942-4C16-4985-AE43-6EFAD8689AEB}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
