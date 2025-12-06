@@ -42,14 +42,16 @@ Thanks to these people/groups for helping through ForgeAir's development:
 ### Requirements
 
 - x64 CPU and host
-- Windows 10 1809 (17763) or better
+- Windows 10 (1809 or greater for legacy WPF app)/Linux
 - .NET 8 SDK
-- Visual Studio 2022
+- Visual Studio 2022+/Jetbrains Rider
 - Telegram Bot
 - WeatherAPI Account
 - MySQL/MariaDB server
 
 ### Building
+⚠️ Buildng from Visual Studio Code has been tested in Windows for the legacy WPF project only
+❌ Building in macOS is not suppoted yet
 
 - You need to create an account to [WeatherAPI](https://www.weatherapi.com/) in
 order to make use of the temperature feature in ForgeAir
