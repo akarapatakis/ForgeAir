@@ -51,6 +51,7 @@ Thanks to these people/groups for helping through ForgeAir's development:
 
 ### Building
 ⚠️ Buildng from Visual Studio Code has been tested in Windows for the legacy WPF project only
+<br>
 ❌ Building in macOS is not suppoted yet
 
 - You need to create an account to [WeatherAPI](https://www.weatherapi.com/) in
