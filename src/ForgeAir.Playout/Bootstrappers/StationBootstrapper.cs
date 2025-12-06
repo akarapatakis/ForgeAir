@@ -310,7 +310,7 @@ namespace ForgeAir.Playout.Bootstrappers
             if (!context.Database.EnsureCreated())
             {
                 if (context.Stations.Any()) return;
-                context.Stations.Add(new Station() { Name = "My Radio Station!", Slogan = "Powered by ForgeAir", Website = "www.example.com", Genre = "None Assigned", Email = "example@example.com", Id = 0, NameTag = "default_station" });
+                context.Stations.Add(new Station() { Name = "My Radio Station!", Slogan = "Powered by ForgeAir", Website = "www.example.com", Genre = "None Assigned", Email = "example@example.com", Id = 0, NameTag = Tag });
                 context.SaveChanges();
             }
 
