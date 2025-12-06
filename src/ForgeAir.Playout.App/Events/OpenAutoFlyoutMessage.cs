@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ForgeAir.Core.Models
+namespace ForgeAir.Playout.App.Events
 {
-    public class InputDevice
-    {
-    }
+    public class OpenAutoFlyoutMessage { }
+
 }

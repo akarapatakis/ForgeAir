@@ -3,7 +3,11 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="ForgeAir.Playout.App/App.axaml" value="ForgeAir.Playout.App/ForgeAir.Playout.App.csproj" />
         <entry key="ForgeAir.Playout.App/MainWindow.axaml" value="ForgeAir.Playout.App/ForgeAir.Playout.App.csproj" />
+        <entry key="ForgeAir.Playout.App/Services/TrayIconService.axaml" value="ForgeAir.Playout.App/ForgeAir.Playout.App.csproj" />
+        <entry key="ForgeAir.Playout.App/UserControls/VUMeter.axaml" value="ForgeAir.Playout.App/ForgeAir.Playout.App.csproj" />
+        <entry key="ForgeAir.Playout.App/Views/SplashScreenView.axaml" value="ForgeAir.Playout.App/ForgeAir.Playout.App.csproj" />
       </map>
     </option>
   </component>

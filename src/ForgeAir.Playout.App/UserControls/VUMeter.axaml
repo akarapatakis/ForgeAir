@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ForgeAir.Playout.App.UserControls.VUMeter">
+    <Grid>
+        <!-- Background -->
+        <Border Background="#222" CornerRadius="4" BorderBrush="#555" BorderThickness="1"/>
+
+        <!-- Fill bar with animated width -->
+        <Border x:Name="FillBar"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="20"
+                CornerRadius="4">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#32D700" Offset="0.0"/>
+                    <GradientStop Color="#32D700" Offset="0.4"/>
+                    <GradientStop Color="#E1FF00" Offset="0.8"/>
+                    <GradientStop Color="#FF0000" Offset="0.95"/>
+                    <GradientStop Color="#FF0000" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+    </Grid>
+</UserControl>

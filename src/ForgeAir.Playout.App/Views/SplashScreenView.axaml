@@ -1,0 +1,28 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ForgeAir.Playout.App.Views.SplashScreenView"
+        Width="600" Height="300"
+        WindowStartupLocation="CenterScreen"
+        CanResize="False"
+        SystemDecorations="None"
+        Topmost="False"
+        Cursor="Wait"
+        Title="ForgeAir Radio Automation Software">
+
+    <Window.Background>
+        <ImageBrush Source="avares://ForgeAir.Playout.App/Assets/Splash/splashscreen_new.png"/>
+    </Window.Background>
+
+    <Grid>
+        <StackPanel>
+            <TextBlock Text="by Karapatakis Angelos"
+                       FontSize="11"
+                       Margin="10"
+                       TextAlignment="Right"
+                       FontWeight="SemiBold"
+                       Foreground="White"/>
+        </StackPanel>
+
+        <ProgressBar IsIndeterminate="True" Height="10" VerticalAlignment="Bottom"/>
+    </Grid>
+</Window>
