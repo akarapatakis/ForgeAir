@@ -367,3 +367,4 @@ FodyWeavers.xsd
 /src/*.env
 
 /src/ForgeAir.Playout/nlog.config
+*.ghost-ntfs-3g-00000000000000000003
