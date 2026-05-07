@@ -56,6 +56,7 @@ namespace ForgeAir.Playout.Helpers
                 bitmapimage.StreamSource = memory;
                 bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapimage.EndInit();
+                bitmapimage.Freeze(); //fuck you bitmap
                 return bitmapimage;
             }
         }
