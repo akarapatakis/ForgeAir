@@ -1,11 +1,13 @@
 ﻿using Caliburn.Micro;
 using ForgeAir.Core.Events;
+using ForgeAir.Core.Helpers.Interfaces;
 using ForgeAir.Core.Services.Database.Interfaces;
 using ForgeAir.Core.Services.DeviceManager.Interfaces;
 using ForgeAir.Database;
 using ForgeAir.Database.Models;
 using ForgeAir.Playout.Models;
 using ForgeAir.Playout.ViewModels.Settings;
+using ForgeAir.Playout.ViewModels.Settings.Ads;
 using ForgeAir.Playout.ViewModels.Settings.Audio;
 using ForgeAir.Playout.ViewModels.Settings.Generals;
 using ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing;
@@ -28,15 +30,21 @@ namespace ForgeAir.Playout.ViewModels.PlayoutWindows
         public override bool Closeable => true;
         private readonly IServiceProvider _provider;
         private readonly ISearchService _searchService;
+        private readonly IDeviceManager _deviceManager;
+        private readonly IConfigurationManager _configurationManager;
         private readonly IDbContextFactory<ForgeAirDbContext> _dbFactory;
+        private readonly Repository<AdPack> _adPackRepo;
         private readonly StationInformationChangedEvent _stationInformationChangedEvent;
-        public SettingsViewModel(IServiceProvider provider, IWindowManager windowManager, ISearchService searchService, IDbContextFactory<ForgeAirDbContext> dbFactory, StationInformationChangedEvent stationInformationChangedEvent)
+        public SettingsViewModel(IServiceProvider provider, IWindowManager windowManager, ISearchService searchService, IDbContextFactory<ForgeAirDbContext> dbFactory, StationInformationChangedEvent stationInformationChangedEvent, IConfigurationManager configurationManager, Repository<AdPack> adPackRepo)
         {
             _provider = provider;
            _windowManager = windowManager;
             _searchService = searchService;
+            _configurationManager = configurationManager;
             _stationInformationChangedEvent = stationInformationChangedEvent;
             _dbFactory = dbFactory;
+            _adPackRepo = adPackRepo;
+
         }
 
         private Station getStation() // temporary
@@ -76,7 +84,7 @@ namespace ForgeAir.Playout.ViewModels.PlayoutWindows
         }
         public async void AudioConfig()
         {
-            await _windowManager.ShowDialogAsync(new AudioIOViewModel(_provider, _windowManager));
+            await _windowManager.ShowDialogAsync(new AudioIOViewModel(_configurationManager, _windowManager));
         }
 
         public async void AddDirectory()
@@ -92,6 +100,11 @@ namespace ForgeAir.Playout.ViewModels.PlayoutWindows
         public async void AddCategory()
         {
            await _windowManager.ShowDialogAsync(new AddCategoryViewModel(_provider, _windowManager));
+        }
+        public async void AdPackMngmnt()
+        {
+            await _windowManager.ShowDialogAsync(new AdPackWizardViewModel(_searchService, _provider, _windowManager, _adPackRepo, _dbFactory));
+
         }
     }
 
