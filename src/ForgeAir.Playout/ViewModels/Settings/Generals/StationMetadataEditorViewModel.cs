@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,14 +51,24 @@ namespace ForgeAir.Playout.ViewModels.Settings.Generals
             NewWebsite = station.Website;
             NewTelephone = station.Telephone;
             NewLogoFilePath = station.LogoFilePath;
-            if (NewLogoFilePath == null || NewLogoFilePath == "")
+            try
             {
-                Logo = ImageHelper.BitmapToBitmapImage(Core.Properties.Resources.ImageResources.StationDefaultImage);
-            }
-            else
-            {
-                Logo = new BitmapImage(new Uri(NewLogoFilePath));
+                if (NewLogoFilePath == null || NewLogoFilePath == "")
+                {
+                    Logo = ImageHelper.BitmapToBitmapImage(Core.Properties.Resources.ImageResources.StationDefaultImage);
+                }
+                else
+                {
+                    Logo = new BitmapImage(new Uri(NewLogoFilePath));
 
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Couldn't locate or load logo image.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                NewLogoFilePath = "";
+                Logo = ImageHelper.BitmapToBitmapImage(Core.Properties.Resources.ImageResources.StationDefaultImage);
             }
             NewGenre = station.Genre;
             NewPI = station.RdsPI.ToString("X4");

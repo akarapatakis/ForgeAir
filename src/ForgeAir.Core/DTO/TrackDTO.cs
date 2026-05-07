@@ -51,7 +51,7 @@ namespace ForgeAir.Core.DTO
 
         public String? ISRC { get; set; }
         public DateTime? ReleaseDate { get; set; }
-        public int? Bpm { get; set; } 
+        public int? Bpm { get; set; }
         public TimeSpan Duration { get; set; }
         public TimeSpan? StartPoint { get; set; }
         public TimeSpan? MixPoint { get; set; }
@@ -112,7 +112,10 @@ namespace ForgeAir.Core.DTO
             }
         }
         public PackIconRemixIconKind Icon => Core.Helpers.TrackTypeIconGen.Generate(TrackType);
-        public MemoryStream AlbumArt { get {
+        public MemoryStream AlbumArt
+        {
+            get
+            {
                 if (TrackType != TrackType.Rebroadcast)
                 {
                     try
@@ -123,20 +126,25 @@ namespace ForgeAir.Core.DTO
                             return new MemoryStream(_albumart);
                         else
                         {
-                            return new MemoryStream(ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt);
+                            ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt.Save(_m, ImageFormat.Png);
+                            return _m;
                         }
                     }
                     catch
                     {
-                        return new MemoryStream(ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt);
+                        MemoryStream _m = new MemoryStream();
+                        ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt.Save(_m, ImageFormat.Png);
+                        return _m;
                     }
                 }
                 else
                 {
-                    return new MemoryStream(ForgeAir.Core.Properties.Resources.ImageResources.DefaultAlbumArt);
-
+                    MemoryStream _m = new MemoryStream();
+                    ForgeAir.Core.Properties.Resources.ImageResources.DefaultRebroadcastImage.Save(_m, ImageFormat.Png);
+                    return _m;
                 }
-            } }
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) =>
