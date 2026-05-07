@@ -29,14 +29,16 @@ namespace ForgeAir.Playout.UserControls.ViewModels
         public IServiceProvider _provider { get; set; }
         public ICommand RemoveFromQueueCommand => new RelayCommand<LinkedListQueueItem>(RemoveFromQueue);
         public ICommand SkipToCommand => new RelayCommand<LinkedListQueueItem>(SkipTo);
-        private QueueUpdatedEvent _queueUpdatedEvent;   
+        private QueueUpdatedEvent _queueUpdatedEvent;
+        private TrackChangedEvent _trackChangedEvent;
         protected void OnPropertyChanged(string propName) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
-
-        public TrackQueueViewModel(IServiceProvider provider, IAudioService audioService, QueueUpdatedEvent queueUpdatedEvent)
+        
+        public TrackQueueViewModel(IServiceProvider provider, IAudioService audioService, QueueUpdatedEvent queueUpdatedEvent, TrackChangedEvent trackChangedEvent)
         {
             _provider = provider;
             _queueUpdatedEvent = queueUpdatedEvent;
+            _trackChangedEvent = trackChangedEvent;
             _audioService = audioService;   
             frontendQueue = _provider.GetRequiredService<ObservableCollection<LinkedListQueueItem>>();
             _queueUpdatedEvent.QueueChanged += OnQueueChanged;
@@ -70,13 +72,34 @@ namespace ForgeAir.Playout.UserControls.ViewModels
         public DateTime CalculateWillPlayTime(LinkedListQueueItem track)
         {
             DateTime dt = DateTime.Now;
-
+            if (track.Track.Duration == null)
+            {
+                return dt;
+            }
+            if (_trackChangedEvent.CurrentTrack == null)
+            {
+                return dt;
+            }
             foreach (var item in frontendQueue)
             {
-                if (item == track)
-                    break;
 
-                dt = dt.Add(item.Track.Duration);
+                
+                if (track.Place == 1)
+                {
+                    if (_trackChangedEvent.CurrentTrack.Duration == null)
+                    {
+                        return dt;
+
+                    }
+                    dt = dt.Add(_trackChangedEvent.CurrentTrack.Duration); // include now playing
+                    dt = dt.Add(item.Track.Duration); 
+                }
+                else
+                {
+
+                    dt = dt.Add(item.Track.Duration);
+
+                }
             }
 
             return dt;
