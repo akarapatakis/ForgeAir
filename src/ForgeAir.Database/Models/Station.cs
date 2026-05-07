@@ -15,7 +15,8 @@ namespace ForgeAir.Database.Models
         [Required]
         [MaxLength(100)]
         public required string Name { get; set; } = "My Radio Station";
-     
+
+        [MaxLength(400)]
         public string? LogoFilePath { get; set; }
         [MaxLength(64)]
         public string? Website { get; set; }

@@ -19,7 +19,7 @@ namespace ForgeAir.Database.Models
         public string? Title { get; set; }
 
         [Required]
-        [MaxLength(191)]
+        [MaxLength(400)]
         public string? FilePath { get; set; }
 
         public int? Bpm { get; set; }

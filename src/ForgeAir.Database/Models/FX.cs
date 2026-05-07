@@ -16,6 +16,8 @@ namespace ForgeAir.Database.Models
         [Required]
         public string Name { get; set; }
         [Required]
+        [MaxLength(400)]
+
         public string FilePath { get; set; }
         [Required]
         public string Color { get; set; }

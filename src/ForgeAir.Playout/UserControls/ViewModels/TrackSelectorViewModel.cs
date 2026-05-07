@@ -4,6 +4,7 @@ using DynamicData.Binding;
 using ForgeAir.Core.DTO;
 using ForgeAir.Core.Events;
 using ForgeAir.Core.Services.Database.Interfaces;
+using ForgeAir.Core.Tracks.Enums;
 using ForgeAir.Database.Models.Enums;
 using ForgeAir.Playout.UserControls.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
@@ -123,38 +124,63 @@ namespace ForgeAir.Playout.UserControls.ViewModels
 
         private bool FilterTrack(TrackDTO t)
         {
-            bool typeMatch = _selectedTrackType == TrackType.None || t.TrackType == _selectedTrackType;
             if (string.IsNullOrWhiteSpace(SearchText))
-                return typeMatch;
+                return true;
 
             string lowerSearch = _searchText.ToLowerInvariant();
-            bool textMatch =
-                (!string.IsNullOrEmpty(t.Title) && t.Title.ToLowerInvariant().Contains(lowerSearch)) ||
-                (!string.IsNullOrEmpty(t.DisplayArtists) && t.DisplayArtists.ToLowerInvariant().Contains(lowerSearch)) ||
-                (!string.IsNullOrEmpty(t.Album) && t.Album.ToLowerInvariant().Contains(lowerSearch)) ||
-                (t.ISRC != null && t.ISRC.ToLowerInvariant() == (lowerSearch)) ||
-                (t.Bpm != null && t.Bpm.ToString() == (lowerSearch)) ||
-                (t.Id.ToString() == (lowerSearch));
 
-            return typeMatch && textMatch;
+            return
+                (!string.IsNullOrEmpty(t.Title) &&
+                    t.Title.ToLowerInvariant().Contains(lowerSearch)) ||
+
+                (!string.IsNullOrEmpty(t.DisplayArtists) &&
+                    t.DisplayArtists.ToLowerInvariant().Contains(lowerSearch)) ||
+
+                (!string.IsNullOrEmpty(t.DisplayCategories) &&
+                    t.DisplayArtists.ToLowerInvariant().Contains(lowerSearch)) ||
+
+                (!string.IsNullOrEmpty(t.Album) &&
+                    t.Album.ToLowerInvariant().Contains(lowerSearch)) ||
+
+                (t.ISRC != null &&
+                    t.ISRC.ToLowerInvariant() == lowerSearch) ||
+
+                (t.Bpm != null &&
+                    t.Bpm.ToString() == lowerSearch) ||
+
+                (t.Id.ToString() == lowerSearch);
         }
 
         public async Task LoadNextPage()
         {
-            // quick guard to prevent overlapping loads
-            if (_isLoading) return;
+            if (_isLoading)
+                return;
 
             lock (_loadLock)
             {
-                if (_isLoading) return;
+                if (_isLoading)
+                    return;
+
                 _isLoading = true;
             }
 
             try
             {
-                var newTracks = await _tracksService.GetTracks(_currentSkip, _pageSize);
+                var selectedType = _selectedTrackType;
 
-                await Application.Current.Dispatcher.InvokeAsync(() => _items.AddRange(newTracks));
+                var newTracks = await _tracksService.GetByConditionAsync(
+                    ModelTypesEnum.Track,
+                    t =>
+                        (selectedType == TrackType.None || t.TrackType == selectedType)
+                );
+
+                var paged = newTracks
+                    .Skip(_currentSkip)
+                    .Take(_pageSize)
+                    .ToList();
+
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                    _items.AddRange(paged));
 
                 _currentSkip += _pageSize;
             }

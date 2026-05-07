@@ -76,7 +76,7 @@ namespace ForgeAir.Playout
         protected override void Configure()
         {
             services.AddSingleton<ForgeTrayIcon>();
-            
+
             services.AddSingleton<IConfigurationManager>(provider =>
             {
                 var configFile = "configuration.ini";
@@ -106,7 +106,7 @@ namespace ForgeAir.Playout
 
         protected override void BuildUp(object instance)
         {
-            _serviceProvider.GetRequiredService(instance.GetType());
+           // _serviceProvider.GetRequiredService(instance.GetType());
         }
         private async void LaunchWebInterface()
         {
@@ -208,7 +208,7 @@ namespace ForgeAir.Playout
 
             });
             _serviceProvider.GetRequiredService<ForgeTrayIcon>();
-           // var wI = await Task.Run(() => WebInterface.Host.Start(services));
+            // var wI = await Task.Run(() => WebInterface.Host.Start(services));
 
             //await Task.Run(() => wI.Run());
             //await DisplayRootViewForAsync<StationSelectorViewModel>();

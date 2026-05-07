@@ -10,8 +10,12 @@ namespace ForgeAir.Core.Services.Database.Interfaces
     public interface IRepository<T> where T : class
     {
         Task<T?> GetByIdAsync(int id);
+        Task<List<T>> GetAllAsync(
+        Func<IQueryable<T>, IQueryable<T>> include = null);
         Task<List<T>> GetAllAsync();
         Task<List<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<List<T>> GetAllAsync(
+        params Expression<Func<T, object>>[] includes);
         Task AddAsync(T entity);
         Task DeleteAsync(T entity);
         Task UpdateAsync(T entity);

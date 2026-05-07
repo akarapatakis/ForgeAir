@@ -15,9 +15,9 @@
             <RowDefinition Height="63*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="93*"/>
-            <ColumnDefinition Width="224*"/>
-            <ColumnDefinition Width="83*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <ListBox BorderThickness="0" Grid.Column="1" Style="{DynamicResource WrapPanelHorizontalListBox}" ItemsSource="{Binding DataList}" Background="{x:Null}" Grid.Row="1">
             <ListBox.ItemTemplate>
