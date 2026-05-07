@@ -4,6 +4,7 @@ using ForgeAir.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForgeAir.Database.Migrations
 {
     [DbContext(typeof(ForgeAirDbContext))]
-    partial class ForgeAirDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260216200217_AddRepeatInAdPacks")]
+    partial class AddRepeatInAdPacks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,20 +90,23 @@ namespace ForgeAir.Database.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AdPackId")
+                    b.Property<int?>("AdPackId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PlayOrder")
+                    b.Property<int>("AdTrackId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrackId")
+                    b.Property<bool>("IsEnabled")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Order")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AdPackId");
 
-                    b.HasIndex("TrackId");
+                    b.HasIndex("AdTrackId");
 
                     b.ToTable("AdPackItem");
                 });
@@ -546,21 +552,17 @@ namespace ForgeAir.Database.Migrations
 
             modelBuilder.Entity("ForgeAir.Database.Models.AdPackItem", b =>
                 {
-                    b.HasOne("ForgeAir.Database.Models.AdPack", "AdPack")
+                    b.HasOne("ForgeAir.Database.Models.AdPack", null)
                         .WithMany("Ads")
-                        .HasForeignKey("AdPackId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AdPackId");
 
-                    b.HasOne("ForgeAir.Database.Models.Track", "Track")
+                    b.HasOne("ForgeAir.Database.Models.Track", "AdTrack")
                         .WithMany()
-                        .HasForeignKey("TrackId")
+                        .HasForeignKey("AdTrackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AdPack");
-
-                    b.Navigation("Track");
+                    b.Navigation("AdTrack");
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.ArtistTrack", b =>

@@ -4,6 +4,7 @@ using ForgeAir.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ForgeAir.Database.Migrations
 {
     [DbContext(typeof(ForgeAirDbContext))]
-    partial class ForgeAirDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251221153238_FixFilePathLengths")]
+    partial class FixFilePathLengths
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,59 +53,6 @@ namespace ForgeAir.Database.Migrations
                     b.HasIndex("PlaylistToWatchId");
 
                     b.ToTable("PlaylistToWatchCategories", (string)null);
-                });
-
-            modelBuilder.Entity("ForgeAir.Database.Models.AdPack", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("RepeatEveryDay")
-                        .HasColumnType("tinyint(1)");
-
-                    b.PrimitiveCollection<string>("ScheduledDateTimes")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AdPacks", (string)null);
-                });
-
-            modelBuilder.Entity("ForgeAir.Database.Models.AdPackItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AdPackId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayOrder")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TrackId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AdPackId");
-
-                    b.HasIndex("TrackId");
-
-                    b.ToTable("AdPackItem");
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.Artist", b =>
@@ -544,25 +494,6 @@ namespace ForgeAir.Database.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ForgeAir.Database.Models.AdPackItem", b =>
-                {
-                    b.HasOne("ForgeAir.Database.Models.AdPack", "AdPack")
-                        .WithMany("Ads")
-                        .HasForeignKey("AdPackId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ForgeAir.Database.Models.Track", "Track")
-                        .WithMany()
-                        .HasForeignKey("TrackId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AdPack");
-
-                    b.Navigation("Track");
-                });
-
             modelBuilder.Entity("ForgeAir.Database.Models.ArtistTrack", b =>
                 {
                     b.HasOne("ForgeAir.Database.Models.Artist", "Artist")
@@ -615,11 +546,6 @@ namespace ForgeAir.Database.Migrations
                     b.Navigation("Bank");
 
                     b.Navigation("FX");
-                });
-
-            modelBuilder.Entity("ForgeAir.Database.Models.AdPack", b =>
-                {
-                    b.Navigation("Ads");
                 });
 
             modelBuilder.Entity("ForgeAir.Database.Models.Artist", b =>

@@ -17,8 +17,10 @@ using ForgeAir.Core.Services.AudioPlayout.Players.Interfaces;
 using ForgeAir.Core.Services.Database;
 using ForgeAir.Core.Services.Database.Interfaces;
 using ForgeAir.Core.Services.Database.RepositoryServices;
+using ForgeAir.Core.Services.DeviceManager.Interfaces;
 using ForgeAir.Core.Services.Importers;
 using ForgeAir.Core.Services.Importers.Interfaces;
+using ForgeAir.Core.Services.Managers;
 using ForgeAir.Core.Services.Scheduler;
 using ForgeAir.Core.Services.Scheduler.Interfaces;
 using ForgeAir.Core.Services.StreamingClient;
@@ -36,6 +38,7 @@ using ForgeAir.Playout.UserControls.Views;
 using ForgeAir.Playout.ViewModels;
 using ForgeAir.Playout.ViewModels.PlayoutWindows;
 using ForgeAir.Playout.ViewModels.Settings;
+using ForgeAir.Playout.ViewModels.Settings.Ads;
 using ForgeAir.Playout.ViewModels.Settings.Generals;
 using ForgeAir.Playout.ViewModels.Settings.TrackManagement.Importing;
 using ForgeAir.Playout.Views;
@@ -46,6 +49,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.ML;
 using MySqlConnector;
 using Quartz;
+using Quartz.Util;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -139,6 +143,9 @@ namespace ForgeAir.Playout.Bootstrappers
             services.AddSingleton<Repository<ArtistDTO>>();
             services.AddSingleton<Repository<CategoryDTO>>();
             services.AddSingleton<ObservableCollection<TrackDTO>>();
+            services.AddSingleton<Repository<AdPack>>();
+            services.AddSingleton<Repository<AdPackItem>>();
+
             services.AddSingleton<ObservableCollection<LinkedListQueueItem>>();
             services.AddSingleton<LinkedListQueue<LinkedListQueueItem>>();
             services.AddSingleton<LinkedListQueue<TrackDTO>>();
@@ -165,7 +172,11 @@ namespace ForgeAir.Playout.Bootstrappers
             });
             services.AddTransient<ShellView>();
             services.AddTransient<AboutViewModel>();
+            services.AddSingleton<AdPackManager>();
             services.AddSingleton<TrackQueueViewModel>();
+            services.AddSingleton<EditAdPackViewModel>();
+            services.AddSingleton<AdPackWizardViewModel>();
+            services.AddSingleton<AdPackListViewModel>();
             services.AddSingleton<OnAirViewModel>();
             services.AddSingleton<Core.Helpers.Interfaces.IEventAggregator, SimpleEventAggregator>();
             services.AddSingleton<IWindowManager, WindowManager>();
@@ -184,22 +195,27 @@ namespace ForgeAir.Playout.Bootstrappers
             services.AddTransient<ClockTrackSelector>();
             services.AddTransient<RandomTrackSelector>();
             services.AddTransient<ManualTrackSelector>();
+            services.AddSingleton<AdTracksBrowserViewModel>();
             services.AddSingleton<TrackSelectorFactory>();
             services.AddSingleton<TrackSelectorService>();
             services.AddTransient<IQueueService, QueueService>();
            // services.AddSingleton<TrackChangedEvent>();
             services.AddTransient<VUMeter>();
             services.AddTransient<TimeAnnouncementJob>();
+            services.AddTransient<AdBreakJob>();
 
             services.AddQuartz(q =>
             {
-                q.UseMicrosoftDependencyInjectionJobFactory(); // important!
-                q.ScheduleJob<TimeAnnouncementJob>(
-                    trigger => trigger
-                        .WithIdentity("TimeAnnouncementTrigger", "Jingles")
-                        .WithCronSchedule("0 0 * * * ?"), //  top-of-hour
+                q.UseMicrosoftDependencyInjectionJobFactory();
+
+                q.ScheduleJob<AdBreakJob>(trigger => trigger
+                    .WithIdentity("AdBreakTrigger", "Jingles")
+                    .WithCronSchedule(
+                        "0/10 * * ? * *",
+                        x => x.WithMisfireHandlingInstructionFireAndProceed() // important for small intervals
+                    ),
                     job => job
-                        .WithIdentity("TimeAnnouncementJob", "Jingles")
+                        .WithIdentity("AdBreakJob", "Jingles")
                 );
             });
             services.AddQuartzHostedService(options =>
@@ -247,8 +263,7 @@ namespace ForgeAir.Playout.Bootstrappers
                     MessageBox.Show("BASS libraries not found.\nInstall them or switch the audio engine to NAudio", "BASS Initialization failed", MessageBoxButton.OK, icon: MessageBoxImage.Warning);
                     Environment.Exit(1);
                 }
-                var factory = sp.GetRequiredService<IPlayerFactory>();
-                return factory.CreatePlayer(Core.AudioEngine.Enums.DeviceTypeEnum.Main); // todo: make this configurable/loop through all device types
+                return sp.GetRequiredService<IPlayerFactory>().CreatePlayer(Core.AudioEngine.Enums.DeviceTypeEnum.Main); // todo: make this configurable/loop through all device types
             });
 
             services.AddSingleton<IConfigurationManager>(provider =>
@@ -282,7 +297,7 @@ namespace ForgeAir.Playout.Bootstrappers
                 if (station != null)
                 {
                     DisplayName = station.Name;
-                    if (station.LogoFilePath == null)
+                    if (station.LogoFilePath == null || station.LogoFilePath.IsNullOrWhiteSpace())
                     {
                         LogoPath = ImageHelper.BitmapToBitmapImage(Core.Properties.Resources.ImageResources.StationDefaultImage);
                     }
@@ -293,8 +308,20 @@ namespace ForgeAir.Playout.Bootstrappers
                 }
                 else if (station == null)
                 {
-                    MessageBox.Show($"Station '{Tag}' was not found in the database.\nPlease check ForgeAir's configuration and try again.", "Database Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
-                    // warn 
+                    if (!context.Database.EnsureCreated())
+                    {
+                        if (context.Stations.Any()) return;
+                        context.Stations.Add(new Station() { Name = "My Radio Station!", Slogan = "Powered by ForgeAir", Website = "www.example.com", Genre = "None Assigned", Email = "example@example.com", Id = 0, LogoFilePath="", NameTag = Tag });
+                        
+                        context.SaveChanges();
+                        InitializeDatabase(); //run again to bind properly
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Station '{Tag}' was not found in the database.\nPlease check ForgeAir's configuration and try again.", "Database Error", MessageBoxButton.OK, icon: MessageBoxImage.Error);
+                        // warn 
+                    }
+
                 }
 
             }
@@ -307,12 +334,7 @@ namespace ForgeAir.Playout.Bootstrappers
                 }
             }
 
-            if (!context.Database.EnsureCreated())
-            {
-                if (context.Stations.Any()) return;
-                context.Stations.Add(new Station() { Name = "My Radio Station!", Slogan = "Powered by ForgeAir", Website = "www.example.com", Genre = "None Assigned", Email = "example@example.com", Id = 0, NameTag = Tag });
-                context.SaveChanges();
-            }
+
 
             context.ChangeTracker.Clear();
             context = null;

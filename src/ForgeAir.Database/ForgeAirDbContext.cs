@@ -20,7 +20,8 @@ namespace ForgeAir.Database
         public DbSet<Video> Videos { get; set; }
         public DbSet<FxBank> FxBanks { get; set; }
         public DbSet<Bank> Banks { get; set; }
-
+        public DbSet<AdPackItem> AdPackItems { get; set; }
+        public DbSet<AdPack> AdPacks { get; set; }
 
         public ForgeAirDbContext(DbContextOptions<ForgeAirDbContext> options) : base(options)
         {
@@ -49,7 +50,9 @@ namespace ForgeAir.Database
             modelBuilder.Entity<FxBank>().ToTable("FX_Banks");
             modelBuilder.Entity<Station>().ToTable("Stations");
             modelBuilder.Entity<User>().ToTable("Users");
-
+            modelBuilder.Entity<AdPack>().ToTable("AdPacks");
+            modelBuilder.Entity<AdPackItem>()
+                .HasKey(x => new { x.AdPackId, x.TrackId });
 
         }
 
@@ -59,6 +62,7 @@ namespace ForgeAir.Database
 #if DEBUG
             optionsBuilder.EnableSensitiveDataLogging();
 #endif
+
 
         }
 
